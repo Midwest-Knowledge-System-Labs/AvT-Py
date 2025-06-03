@@ -258,12 +258,12 @@ def sort_facts(
     )
 
 
-def purge_facts(
+def erase_facts(
     entity: AvEntity,
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
-    aspects.purge(
+    aspects.erase(
         entity=entity,
         aspect=AvAspect.FACT,
         parameter=parameter,

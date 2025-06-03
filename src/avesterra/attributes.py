@@ -753,12 +753,12 @@ def sort_attributes(
     )
 
 
-def purge_attributes(
+def erase_attributes(
     entity: AvEntity,
     authorization: AvAuthorization,
     parameter: AvParameter = NULL_PARAMETER,
 ) -> None:
-    """Purge all attributes on `entity`
+    """Erase all attributes on `entity`
 
     Parameters
     __________
@@ -772,18 +772,18 @@ def purge_attributes(
     Examples
     ________
 
-    >>> import avesterra.attributes as attributes # Purge all attributes on `entity`
+    >>> import avesterra.attributes as attributes # Erase all attributes on `entity`
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributes
     >>> authorization: AvAuthorization
     >>> attributes.set_attribute(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
     >>> attributes.set_attribute(entity=entity, attribute=AvAttribute.WIDTH, value=AvValue.encode_integer(2), authorization=authorization)
     >>> attributes.set_attribute(entity=entity, attribute=AvAttribute.WEIGHT, value=AvValue.encode_integer(3), authorization=authorization)
-    >>> attributes.purge_attributes(entity=entity, authorization=authorization)
+    >>> attributes.erase_attributes(entity=entity, authorization=authorization)
     >>> print(attributes.attribute_count(entity=entity, authorization=authorization))
     0
 
     """
-    aspects.purge(
+    aspects.erase(
         aspect=AvAspect.ATTRIBUTE,
         entity=entity,
         parameter=parameter,

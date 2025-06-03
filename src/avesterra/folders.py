@@ -162,10 +162,10 @@ def save_folder(folder: AvFolder, authorization: AvAuthorization = NULL_AUTHORIZ
     save_entity(entity=folder, authorization=authorization)
 
 
-def purge_registry(
+def erase_registry(
     folder: AvFolder, authorization: AvAuthorization = NULL_AUTHORIZATION
 ):
-    properties.purge_properties(entity=folder, authorization=authorization)
+    properties.erase_properties(entity=folder, authorization=authorization)
 
 
 def sort_registry(

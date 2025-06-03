@@ -320,14 +320,14 @@ def sort_fields(
     )
 
 
-def purge_fields(
+def erase_fields(
     entity: AvEntity,
     attribute: AvAttribute = NULL_ATTRIBUTE,
     instance: AvInstance = NULL_INSTANCE,
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
-    aspects.purge(
+    aspects.erase(
         entity=entity,
         aspect=AvAspect.FIELD,
         attribute=attribute,

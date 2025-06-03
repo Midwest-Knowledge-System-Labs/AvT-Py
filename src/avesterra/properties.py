@@ -820,12 +820,12 @@ def sort_properties(
     )
 
 
-def purge_properties(
+def erase_properties(
     entity: AvEntity,
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
-    """Purge all properties from property table
+    """Erase all properties from property table
 
     Parameters
     __________
@@ -845,10 +845,10 @@ def purge_properties(
     >>> properties.insert_property(entity=entity, name="Name 2", key="key_2", value=AvValue.encode_text("Value 2"), authorization=authorization)
     >>> properties.insert_property(entity=entity, name="Name 3", key="key_3", value=AvValue.encode_text("Value 3"), authorization=authorization)
     >>> properties.insert_property(entity=entity, name="Name 1", key="key_1", value=AvValue.encode_text("Value 1"), authorization=authorization)
-    >>> properties.purge_properties(entity=entity, authorization=authorization)
+    >>> properties.erase_properties(entity=entity, authorization=authorization)
 
     """
-    aspects.purge(
+    aspects.erase(
         entity=entity,
         aspect=AvAspect.PROPERTY,
         parameter=parameter,

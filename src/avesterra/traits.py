@@ -1013,14 +1013,14 @@ def sort_traits(
     )
 
 
-def purge_traits(
+def erase_traits(
     entity: AvEntity,
     authorization: AvAuthorization,
     attribute: AvAttribute = NULL_ATTRIBUTE,
     parameter: AvParameter = NULL_PARAMETER,
     instance: AvInstance = NULL_INSTANCE,
 ) -> None:
-    """Purge traits on `attribute` or `instance` on `entity`; purges all traits from all attributes if NULL_ATTRIBUTE given
+    """Erase traits on `attribute` or `instance` on `entity`; erases all traits from all attributes if NULL_ATTRIBUTE given
 
     Parameters
     __________
@@ -1050,10 +1050,10 @@ def purge_traits(
     >>> traits.set_trait(entity=entity, attribute=AvAttribute.ATTRIBUTE, name="I am a trait", key="3", value=AvValue.encode_text("I am a trait"), authorization=authorization)
     >>> traits.set_trait(entity=entity, attribute=AvAttribute.ATTRIBUTE, name="I am a trait", key="1", value=AvValue.encode_text("I am a trait"), authorization=authorization)
     >>> traits.set_trait(entity=entity, attribute=AvAttribute.ATTRIBUTE, name="I am a trait", key="2", value=AvValue.encode_text("I am a trait"), authorization=authorization)
-    >>> traits.purge_traits(entity=entity, attribute=attribute, authorization=authorization)
+    >>> traits.erase_traits(entity=entity, attribute=attribute, authorization=authorization)
 
     """
-    aspects.purge(
+    aspects.erase(
         aspect=AvAspect.TRAIT,
         attribute=attribute,
         entity=entity,

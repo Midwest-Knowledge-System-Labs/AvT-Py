@@ -346,14 +346,14 @@ def sort_frames(
     )
 
 
-def purge_frames(
+def erase_frames(
     entity: AvEntity,
     attribute: AvAttribute = NULL_ATTRIBUTE,
     instance: AvInstance = NULL_INSTANCE,
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
-    aspects.purge(
+    aspects.erase(
         entity=entity,
         aspect=AvAspect.FRAME,
         attribute=attribute,

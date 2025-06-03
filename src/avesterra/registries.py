@@ -248,15 +248,15 @@ def save_registry(
     avial.save_entity(entity=registry, authorization=authorization)
 
 
-def purge_registry(
+def erase_registry(
     registry: AvRegistry, authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> None:
-    """Purge a registry's contents
+    """Erase a registry's contents
 
     Parameters
     __________
     registry : AvRegistry
-        Entity EUID of registry to purge
+        Entity EUID of registry to erase
     authorization : AvAuthorization
         Authorization to use for the operation; the authorization must be accepted by both the `registry` and Registry Adapter outlet `<x|x|10>`
 
@@ -270,12 +270,12 @@ def purge_registry(
     >>> registries.register_entity(registry=registry, name="entity1", key="entity1", entity=entity1, authorization=authorization) # Register entity1 in registry
     >>> print(registries.registry_member(registry=registry, key="entity1", authorization=authorization)) # entity1 should now be a member of registry
     True
-    >>> registries.purge_registry(registry=registry, authorization=authorization) # Purge registry of all records; doesn't delete registry
+    >>> registries.erase_registry(registry=registry, authorization=authorization) # Erase registry of all records; doesn't delete registry
     >>> print(registries.registry_member(registry=registry, key="entity1", authorization=authorization)) # entity1 should no longer be a member of registry
     False
 
     """
-    properties.purge_properties(entity=registry, authorization=authorization)
+    properties.erase_properties(entity=registry, authorization=authorization)
 
 
 def sort_registry(

@@ -376,7 +376,7 @@ def sort_factors(
     )
 
 
-def purge_factors(
+def erase_factors(
     entity: AvEntity,
     attribute: AvAttribute = NULL_ATTRIBUTE,
     name: AvName = NULL_NAME,
@@ -385,7 +385,7 @@ def purge_factors(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
-    aspects.purge(
+    aspects.erase(
         entity=entity,
         aspect=AvAspect.FACTOR,
         attribute=attribute,

@@ -330,14 +330,14 @@ def sort_features(
     )
 
 
-def purge_features(
+def erase_features(
     entity: AvEntity,
     attribute: AvAttribute = NULL_ATTRIBUTE,
     instance: AvInstance = NULL_INSTANCE,
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
-    aspects.purge(
+    aspects.erase(
         entity=entity,
         aspect=AvAspect.FEATURE,
         attribute=attribute,

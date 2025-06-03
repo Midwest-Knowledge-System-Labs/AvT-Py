@@ -1040,23 +1040,23 @@ def sort_annotation(
     )
 
 
-def purge_annotation(
+def erase_annotation(
     entity: AvEntity,
     key: AvKey = NULL_KEY,
     instance: AvInstance = NULL_INSTANCE,
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
-    """Purges all annotations at key; if key is NULL_KEY, then all annotations will be purged on property table
+    """Erases all annotations at key; if key is NULL_KEY, then all annotations will be erased on property table
 
     Parameters
     __________
     entity : AvEntity
         Target entity euid
     key : AvKey
-        Key of property in which the annotations will be purged
+        Key of property in which the annotations will be erased
     instance : AvInstance
-        Instance(Property Table Index) in which the annotations will be purged
+        Instance(Property Table Index) in which the annotations will be erased
     parameter : AvParameter
         Defer saving changes to disk if set to anything but NULL_PARAMETER
     authorization : AvAuthorization
@@ -1073,7 +1073,7 @@ def purge_annotation(
     >>> annotation.include_annotation(entity=entity, attribute=AvAttribute.ATTRIBUTION, key=key, value=AvValue.encode_text("I have been included"), authorization=authorization)
     >>> annotation.include_annotation(entity=entity, attribute=AvAttribute.ATTRIBUTE, key=key, value=AvValue.encode_text("I have been included"), authorization=authorization)
     >>> annotation.include_annotation(entity=entity, attribute=AvAttribute.HEIGHT, key=key, value=AvValue.encode_text("I have been included"), authorization=authorization)
-    >>> annotation.purge_annotation(entity=entity, key=key, authorization=authorization)
+    >>> annotation.erase_annotation(entity=entity, key=key, authorization=authorization)
     >>> print(annotation.annotation_count(entity=entity, key=key, authorization=authorization))
     0
 
@@ -1083,7 +1083,7 @@ def purge_annotation(
         When property doesn't exist
 
     """
-    aspects.purge(
+    aspects.erase(
         entity=entity,
         aspect=AvAspect.ANNOTATION,
         key=key,

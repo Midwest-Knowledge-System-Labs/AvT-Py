@@ -1540,15 +1540,15 @@ def restore_entity(
     api.invoke(entity=entity, method=AvMethod.LOAD, authorization=authorization)
 
 
-# Avial 4.11 Purge entity now accepts attribute and aspect
-def purge_entity(
+# Avial 4.11 Erase entity now accepts attribute and aspect
+def erase_entity(
     entity: AvEntity,
     attribute: AvAttribute = AvAttribute.NULL,
     instance: AvInstance = NULL_INSTANCE,
     aspect: AvAspect = AvAspect.NULL,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
-    """Purge an entity, removing all of its aspects."""
+    """Erase an entity, removing all of its aspects."""
     Verify.entity(entity)
     Verify.attribute(attribute)
     Verify.natural(instance)
@@ -2718,10 +2718,10 @@ def write_data(
     )
 
 
-def purge_data(
+def erase_data(
     entity: AvEntity, authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> None:
-    """purge_data(entity, auth"""
+    """erase_data(entity, auth"""
     invoke_entity(entity=entity, method=AvMethod.PURGE, authorization=authorization)
 
 

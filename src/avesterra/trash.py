@@ -58,10 +58,10 @@ def empty_trash(trash: AvTrash, authorization: AvAuthorization):
         if entity != trash:
             if entity_references(entity=entity, authorization=authorization) == 0:
                 try:
-                    purge_entity(entity=entity, authorization=authorization)
+                    erase_entity(entity=entity, authorization=authorization)
                 except Exception as e:
                     print(
-                        f"Warning: could not purge entity {entity} found in trash {trash}"
+                        f"Warning: could not erase entity {entity} found in trash {trash}"
                     )
             delete_entity(entity=entity, authorization=authorization)
     save_entity(entity=trash, authorization=authorization)

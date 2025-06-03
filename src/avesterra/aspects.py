@@ -460,7 +460,7 @@ def index(
     )
 
 
-def purge(
+def erase(
     entity: AvEntity,
     aspect: AvAspect,
     attribute: AvAttribute = NULL_ATTRIBUTE,
