@@ -95,6 +95,7 @@ def create(
     event: int = NULL_EVENT,
     precedence: int = NULL_PRECEDENCE,
     timeout: int = NULL_TIMEOUT,
+    authority: AvAuthorization = NULL_AUTHORIZATION,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvEntity:
     frame = hgtp.HGTPFrame()
@@ -113,6 +114,7 @@ def create(
     frame.event_code = event
     frame.precedence = precedence
     frame.timeout = timeout
+    frame.authority = authority
     frame.authorization = authorization
     response = hgtp.post(frame=frame)
     return response.entity
@@ -701,6 +703,7 @@ def subscribe(
     event: int = NULL_EVENT,
     precedence: int = NULL_PRECEDENCE,
     timeout: int = NULL_TIMEOUT,
+    authority: AvAuthorization = NULL_AUTHORIZATION,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
     frame = hgtp.HGTPFrame()
@@ -710,6 +713,7 @@ def subscribe(
     frame.event_code = event
     frame.precedence = precedence
     frame.timeout = timeout
+    frame.authority = authority
     frame.authorization = authorization
     hgtp.post(frame=frame)
 

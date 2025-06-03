@@ -1129,6 +1129,7 @@ def create_entity(
     outlet: AvEntity = NULL_ENTITY,
     server: AvEntity = NULL_ENTITY,
     timeout: AvTimeout = NULL_TIMEOUT,
+    authority: AvAuthorization = NULL_AUTHORIZATION,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvEntity:
     """Create and return a new entity."""
@@ -1144,6 +1145,7 @@ def create_entity(
     Verify.entity(outlet)
     Verify.entity(server)
     Verify.integer(timeout)
+    Verify.authorization(authority)
     Verify.authorization(authorization)
     entity = api.create(
         name=name.encode(ENCODING),
@@ -1158,6 +1160,7 @@ def create_entity(
         server=server,
         outlet=outlet,
         timeout=timeout,
+        authority=authority,
         authorization=authorization,
     )
     return entity
@@ -2128,6 +2131,7 @@ def subscribe_event(
     event: AvEvent = AvEvent.NULL,
     precedence: int = NULL_PRECEDENCE,
     timeout: AvTimeout = NULL_TIMEOUT,
+    authority: AvAuthorization = NULL_AUTHORIZATION,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
     """Subscribe outlet to events."""
@@ -2136,6 +2140,7 @@ def subscribe_event(
     Verify.event(event)
     Verify.precedence(precedence)
     Verify.natural(timeout)
+    Verify.entity(authority)
     Verify.authorization(authorization)
     api.subscribe(
         entity=entity,
@@ -2143,6 +2148,7 @@ def subscribe_event(
         event=event.value,
         precedence=precedence,
         timeout=timeout,
+        authority=authority,
         authorization=authorization,
     )
 
@@ -3117,13 +3123,15 @@ def max_async_connections() -> int:
 def retrieve_avesterra(
     server: AvEntity,
     authorization: AvAuthorization,
+    attribute: AvAttribute = NULL_ATTRIBUTE,
 ) -> Dict:
     result = invoke_entity(
         entity=server,
         method=AvMethod.AVESTERRA,
+        attribute=attribute,
         parameter=TRUE_PARAMETER,
         authorization=authorization,
     )
 
-    avesterra_model: Dict = json.loads(result.decode())
-    return avesterra_model
+    model: Dict = json.loads(result.decode())
+    return model
