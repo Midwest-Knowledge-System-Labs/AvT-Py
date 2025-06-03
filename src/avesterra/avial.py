@@ -3119,3 +3119,119 @@ def retrieve_avesterra(
 
     model: Dict = json.loads(result.decode())
     return model
+
+
+def cover(
+    entity: AvEntity,
+    target: AvEntity,
+    authorization: AvAuthorization,
+    presence: AvPresence = NULL_PRESENCE,
+    timeout: AvTimeout = NULL_TIMEOUT,
+    authority: AvAuthorization = NULL_AUTHORIZATION
+):
+    api.cover(
+        entity=entity,
+        auxiliary=target,
+        authorization=authorization,
+        presence=presence,
+        timeout=timeout,
+        authority=authority
+    )
+
+def uncover(
+    entity: AvEntity,
+    target: AvEntity,
+    authorization: AvAuthorization,
+    presence: AvPresence = NULL_PRESENCE,
+):
+    api.uncover(
+        entity=entity,
+        auxiliary=target,
+        authorization=authorization,
+        presence=presence
+    )
+
+def covering(
+    entity: AvEntity,
+    index: int,
+    authorization: AvAuthorization = NULL_AUTHORIZATION
+) -> Tuple[AvEntity, AvPresence, AvTimeout, AvAuthorization]:
+    return api.covering(
+        entity=entity,
+        index=index,
+        authorization=authorization
+    )
+
+def covered(
+    entity: AvEntity,
+    presence: AvPresence = NULL_PRESENCE,
+    authorization: AvAuthorization = NULL_AUTHORIZATION
+) -> bool:
+    return api.covered(
+        entity=entity,
+        presence=presence,
+        authorization=authorization
+    )
+
+
+
+def fasten(
+    entity: AvEntity,
+    target: AvEntity,
+    authorization: AvAuthorization,
+    attribute: AvAttribute = NULL_ATTRIBUTE,
+    timeout: AvTimeout = NULL_TIMEOUT,
+    authority: AvAuthorization = NULL_AUTHORIZATION
+):
+    api.fasten(
+        entity=entity,
+        auxiliary=target,
+        authorization=authorization,
+        attribute=attribute,
+        timeout=timeout,
+        authority=authority
+    )
+
+def unfasten(
+    entity: AvEntity,
+    target: AvEntity,
+    authorization: AvAuthorization,
+    attribute: AvAttribute = NULL_ATTRIBUTE,
+):
+    api.unfasten(
+        entity=entity,
+        auxiliary=target,
+        attribute=attribute,
+        authorization=authorization,
+    )
+
+def fastener(
+    entity: AvEntity,
+    index: int = NULL_INDEX,
+    authorization: AvAuthorization = NULL_AUTHORIZATION
+) -> Tuple[AvEntity, int, AvTimeout, AvAuthorization]:
+    return api.fastener(
+        entity=entity,
+        index=index,
+        authorization=authorization
+    )
+
+def fastened(
+    entity: AvEntity,
+    attribute: AvAttribute = NULL_ATTRIBUTE,
+    authorization: AvAuthorization = NULL_AUTHORIZATION
+) -> bool:
+    return api.fastened(
+        entity=entity,
+        attribute=attribute,
+        authorization=authorization
+    )
+
+def fasteners(
+    entity: AvEntity,
+    authorization: AvAuthorization = NULL_AUTHORIZATION
+) -> int:
+    return api.fasteners(
+        entity=entity,
+        authorization=authorization
+    )

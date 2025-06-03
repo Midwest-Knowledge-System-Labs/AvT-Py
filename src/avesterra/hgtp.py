@@ -30,7 +30,7 @@ from avesterra.avesterra import AvEntity, AvAuthorization, NULL_AUTHORIZATION
 
 # HGTP message codes:
 class Command(IntEnum):
-    NULL = 0  # Avesterra 7.0: 0 was previously BYE
+    NULL = 0
     CREATE = 1
     DELETE = 2
     CONNECT = 3
@@ -92,6 +92,15 @@ class Command(IntEnum):
     LABEL = 59
     VARIABLE = 60  # AvesTerra 8.0
     FORCE = 61  # AvesTerra 8.0
+    COVER = 62
+    UNCOVER = 63
+    COVERING = 64
+    COVERED = 65
+    FASTEN = 66
+    UNFASTEN = 67
+    FASTENER = 68
+    FASTENED = 69
+    FORWARD = 70
 
 
 class Report(IntEnum):
@@ -135,7 +144,9 @@ class Report(IntEnum):
     INVOKING = 37
     INTERNET = 38
     AUTHORITY = 39
-    ADDRESS = 40  # Avesterra 7.0
+    ADDRESS = 40
+    COVERINGS = 41
+    FASTENERS = 42
 
 
 # same as error_type in Avial.HGTP in reference implementation
@@ -155,7 +166,8 @@ class HGTPException(IntEnum):
     VALUE = 12
     MESSAGE = 13
     EXECUTION = 14
-    SHUTDOWN = 15  # Avial V3.4
+    SHUTDOWN = 15
+    FILE = 16
 
 
 PORT = 20057

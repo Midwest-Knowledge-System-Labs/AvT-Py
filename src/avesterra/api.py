@@ -1635,3 +1635,132 @@ def variable(
     frame.condition_code = condition
     frame.authorization = authorization
     return frame.tag_code, frame._bytes
+
+def cover(
+    entity: AvEntity,
+    auxiliary: AvEntity,
+    authorization: AvAuthorization,
+    presence: int = NULL_PRESENCE,
+    timeout: int = NULL_TIMEOUT,
+    authority: AvAuthorization = NULL_AUTHORIZATION
+):
+    frame = hgtp.HGTPFrame()
+    frame.command_code = hgtp.Command.COVER
+    frame.entity = entity
+    frame.auxiliary = auxiliary
+    frame.presence = presence
+    frame.timeout = timeout
+    frame.authority = authority
+    frame.authorization = authorization
+    hgtp.post(frame=frame)
+
+def uncover(
+    entity: AvEntity,
+    auxiliary: AvEntity,
+    authorization: AvAuthorization,
+    presence: int = NULL_PRESENCE,
+):
+    frame = hgtp.HGTPFrame()
+    frame.command_code = hgtp.Command.UNCOVER
+    frame.entity = entity
+    frame.auxiliary = auxiliary
+    frame.presence = presence
+    frame.authorization = authorization
+    hgtp.post(frame=frame)
+
+def covering(
+    entity: AvEntity,
+    index: int,
+    authorization: AvAuthorization = NULL_AUTHORIZATION
+) -> Tuple[AvEntity, int, int, AvAuthorization]:
+    frame = hgtp.HGTPFrame()
+    frame.command_code = hgtp.Command.COVERING
+    frame.entity = entity
+    frame.index = index
+    frame.authorization = authorization
+    response = hgtp.post(frame=frame)
+    return response.auxiliary, response.presence, response.time, response.authority
+
+def covered(
+    entity: AvEntity,
+    presence: int = NULL_PRESENCE,
+    authorization: AvAuthorization = NULL_AUTHORIZATION
+) -> bool:
+    frame = hgtp.HGTPFrame()
+    frame.command_code = hgtp.Command.COVERED
+    frame.entity = entity
+    frame.presence = presence
+    frame.authorization = authorization
+    response = hgtp.post(frame=frame)
+    return True if response.resultant else False
+
+
+
+
+def fasten(
+    entity: AvEntity,
+    auxiliary: AvEntity,
+    authorization: AvAuthorization,
+    attribute: int = NULL_ATTRIBUTE,
+    timeout: int = NULL_TIMEOUT,
+    authority: AvAuthorization = NULL_AUTHORIZATION
+):
+    frame = hgtp.HGTPFrame()
+    frame.command_code = hgtp.Command.FASTEN
+    frame.entity = entity
+    frame.auxiliary = auxiliary
+    frame.attribute_code = attribute
+    frame.timeout = timeout
+    frame.authority = authority
+    frame.authorization = authorization
+    hgtp.post(frame=frame)
+
+def unfasten(
+    entity: AvEntity,
+    auxiliary: AvEntity,
+    authorization: AvAuthorization,
+    attribute: int = NULL_ATTRIBUTE,
+):
+    frame = hgtp.HGTPFrame()
+    frame.command_code = hgtp.Command.UNFASTEN
+    frame.entity = entity
+    frame.auxiliary = auxiliary
+    frame.attribute_code = attribute
+    frame.authorization = authorization
+    hgtp.post(frame=frame)
+
+def fastener(
+    entity: AvEntity,
+    index: int,
+    authorization: AvAuthorization = NULL_AUTHORIZATION
+) -> Tuple[AvEntity, int, int, AvAuthorization]:
+    frame = hgtp.HGTPFrame()
+    frame.command_code = hgtp.Command.FASTENER
+    frame.entity = entity
+    frame.index = index
+    frame.authorization = authorization
+    response = hgtp.post(frame=frame)
+    return response.auxiliary, response.attribute_code, response.time, response.authority
+
+def fastened(
+    entity: AvEntity,
+    attribute: int = NULL_ATTRIBUTE,
+    authorization: AvAuthorization = NULL_AUTHORIZATION
+) -> bool:
+    frame = hgtp.HGTPFrame()
+    frame.command_code = hgtp.Command.FASTENED
+    frame.entity = entity
+    frame.attribute_code = attribute
+    frame.authorization = authorization
+    response = hgtp.post(frame=frame)
+    return True if response.resultant else False
+
+def fasteners(
+    entity: AvEntity,
+    authorization: AvAuthorization = NULL_AUTHORIZATION
+) -> int:
+    frame = hgtp.HGTPFrame()
+    frame.command_code = hgtp.Report.FASTENERS
+    frame.entity = entity
+    frame.authorization = authorization
+    return hgtp.post(frame=frame).count
