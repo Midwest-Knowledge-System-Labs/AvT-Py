@@ -10,7 +10,7 @@ import avesterra.compartments as compartments
 from avesterra.outlets import delete_outlet, create_outlet
 import avesterra.features as features
 from avesterra.avial import *
-from avesterra.predefined import authentication_outlet
+from avesterra.predefined import access_outlet
 import avesterra.facts as facts
 import avesterra.tokens as tokens
 
@@ -31,7 +31,7 @@ def create_identity(
         raise ValueError("null identity key not allowed")
 
     if not features.feature_member(
-        entity=authentication_outlet,
+        entity=access_outlet,
         attribute=AvAttribute.IDENTITY,
         key=key,
         authorization=authorization,
@@ -43,7 +43,7 @@ def create_identity(
             context=AvContext.AVESTERRA,
             category=AvCategory.AVESTERRA,
             klass=AvClass.IDENTITY,
-            outlet=authentication_outlet,
+            outlet=access_outlet,
             authorization=authorization,
         )
 
@@ -51,7 +51,7 @@ def create_identity(
 
         # Connect compartment adapter to identity
         connect_method(
-            entity=identity, outlet=authentication_outlet, authorization=authorization
+            entity=identity, outlet=access_outlet, authorization=authorization
         )
 
         # Reference identity so it can survive a reboot
@@ -137,7 +137,7 @@ def create_identity(
 
         # Put reference to identity in the authentication outlet
         features.set_feature(
-            entity=authentication_outlet,
+            entity=access_outlet,
             attribute=AvAttribute.IDENTITY,
             name=name,
             key=key,
@@ -208,7 +208,7 @@ def delete_identity(identity: AvEntity, authorization: AvAuthorization):
 
         # Remove identity from the compartment adapter
         features.exclude_feature(
-            entity=authentication_outlet,
+            entity=access_outlet,
             attribute=AvAttribute.IDENTITY,
             key=identity_key,
             authorization=authorization,
@@ -288,7 +288,7 @@ def authenticated_authority(
 ) -> AvAuthorization:
     return AvAuthorization(
         invoke_entity(
-            entity=authentication_outlet,
+            entity=access_outlet,
             method=AvMethod.GET,
             attribute=AvAttribute.AUTHENTICATION,
             key=identity_key,
@@ -316,7 +316,7 @@ def identity_token(
 def authenticated_token(identity_key: AvKey, password: str) -> AvAuthorization:
     return AvAuthorization(
         invoke_entity(
-            entity=authentication_outlet,
+            entity=access_outlet,
             method=AvMethod.GET,
             attribute=AvAttribute.IDENTITY,
             key=identity_key,
@@ -344,7 +344,7 @@ def change_password(
     password = f"{old_password.ljust(32, ' ')}{new_password.ljust(32, ' ')}"
 
     invoke_entity(
-        entity=authentication_outlet,
+        entity=access_outlet,
         method=AvMethod.SET,
         name=password,
         key=identity_key,
@@ -364,13 +364,13 @@ def validate_identity_trick(identity: AvEntity, authorization: AvAuthorization):
 
 def lookup_identity(key: str, authorization: AvAuthorization) -> AvEntity:
     if features.feature_member(
-        entity=authentication_outlet,
+        entity=access_outlet,
         attribute=AvAttribute.IDENTITY,
         key=key,
         authorization=authorization,
     ):
         return features.feature_value(
-            entity=authentication_outlet,
+            entity=access_outlet,
             attribute=AvAttribute.IDENTITY,
             key=key,
             authorization=authorization,
@@ -397,7 +397,7 @@ def identity_state(identity: AvEntity, authorization: AvAuthorization) -> AvStat
 
 def authenticated_outlet(identity_key: str, ident_token: AvAuthorization) -> AvEntity:
     return invoke_entity(
-        entity=authentication_outlet,
+        entity=access_outlet,
         method=AvMethod.GET,
         attribute=AvAttribute.OUTLET,
         name=identity_key,

@@ -11,7 +11,7 @@ from avesterra.outlets import delete_outlet
 import avesterra.identities as identities
 import avesterra.features as features
 from avesterra.avial import *
-from avesterra.predefined import authentication_outlet
+from avesterra.predefined import access_outlet
 import avesterra.facts as facts
 import avesterra.tokens as tokens
 
@@ -20,7 +20,7 @@ AvCompartment = AvEntity
 
 def create_compartment(name: str, key: str, authorization: AvAuthorization) -> AvEntity:
     if not features.feature_member(
-        entity=authentication_outlet,
+        entity=access_outlet,
         attribute=AvAttribute.COMPARTMENT,
         key=key,
         authorization=authorization,
@@ -35,14 +35,14 @@ def create_compartment(name: str, key: str, authorization: AvAuthorization) -> A
             context=AvContext.AVESTERRA,
             category=AvCategory.AVESTERRA,
             klass=AvClass.COMPARTMENT,
-            outlet=authentication_outlet,
+            outlet=access_outlet,
             authorization=authorization,
         )
 
         # Connect compartment entity to compartment adapter
         connect_method(
             entity=compartment_entity,
-            outlet=authentication_outlet,
+            outlet=access_outlet,
             authorization=authorization,
         )
 
@@ -63,7 +63,7 @@ def create_compartment(name: str, key: str, authorization: AvAuthorization) -> A
             context=AvContext.AVESTERRA,
             category=AvCategory.AVESTERRA,
             klass=AvClass.AVESTERRA,
-            outlet=authentication_outlet,
+            outlet=access_outlet,
             authorization=authorization,
         )
         activate_entity(outlet=comp_outlet, authorization=authorization)
@@ -107,7 +107,7 @@ def create_compartment(name: str, key: str, authorization: AvAuthorization) -> A
         )
 
         features.set_feature(
-            entity=authentication_outlet,
+            entity=access_outlet,
             attribute=AvAttribute.COMPARTMENT,
             name=name,
             key=str(key),
@@ -116,7 +116,7 @@ def create_compartment(name: str, key: str, authorization: AvAuthorization) -> A
         )
 
         features.set_feature(
-            entity=authentication_outlet,
+            entity=access_outlet,
             attribute=AvAttribute.KEY,
             name=name,
             key=str(token),
@@ -201,7 +201,7 @@ def delete_compartment(compartment: AvEntity, authorization: AvAuthorization):
         # Remove compartment from compartment
         # adapter outlet
         features.exclude_feature(
-            entity=authentication_outlet,
+            entity=access_outlet,
             attribute=AvAttribute.COMPARTMENT,
             key=comp_key,
             authorization=authorization,
@@ -430,7 +430,7 @@ def authenticated_authority(
 ) -> AvAuthorization:
     return AvAuthorization(
         invoke_entity(
-            entity=authentication_outlet,
+            entity=access_outlet,
             method=AvMethod.GET,
             attribute=AvAttribute.AUTHORITY,
             name=comp_key,
@@ -443,7 +443,7 @@ def authenticated_authority(
 
 def compartment_key(token: AvAuthorization):
     return invoke_entity(
-        entity=authentication_outlet,
+        entity=access_outlet,
         method=AvMethod.GET,
         attribute=AvAttribute.KEY,
         name=NULL_NAME,
@@ -473,7 +473,7 @@ def authenticated_token(
 ) -> AvAuthorization:
     return AvAuthorization(
         invoke_entity(
-            entity=authentication_outlet,
+            entity=access_outlet,
             method=AvMethod.GET,
             attribute=AvAttribute.COMPARTMENT,
             name=comp_key,
@@ -499,13 +499,13 @@ def compartment_outlet(
 
 def lookup_compartment(key: str, authorization: AvAuthorization) -> AvEntity:
     if features.feature_member(
-        entity=authentication_outlet,
+        entity=access_outlet,
         attribute=AvAttribute.COMPARTMENT,
         key=key,
         authorization=authorization,
     ):
         return features.feature_value(
-            entity=authentication_outlet,
+            entity=access_outlet,
             attribute=AvAttribute.COMPARTMENT,
             key=key,
             authorization=authorization,
@@ -526,10 +526,24 @@ def compartment_valid(compartment: AvEntity, authorization: AvAuthorization) -> 
 
 def authenticated_outlet(comp_key: str, comp_token: AvAuthorization) -> AvEntity:
     return invoke_entity(
-        entity=authentication_outlet,
+        entity=access_outlet,
         method=AvMethod.GET,
         attribute=AvAttribute.OUTLET,
         name=comp_key,
         value=AvValue.encode_string(str(comp_token)),
         authorization=VERIFY_AUTHORIZATION,
     ).decode_entity()
+
+
+def compartment_granted(compartment_key: str,
+                        identity_key: str,
+                        identity_token: AvAuthorization) -> bool:
+    return invoke_entity(
+        entity=access_outlet,
+        method=AvMethod.MEMBER,
+        attribute=AvAttribute.COMPARTMENT,
+        name = compartment_key,
+        key = identity_key,
+        value = AvValue.encode_string(str(identity_token)),
+        authorization=VERIFY_AUTHORIZATION,
+    ).decode_boolean()
