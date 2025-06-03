@@ -248,7 +248,7 @@ def save_registry(
     avial.save_entity(entity=registry, authorization=authorization)
 
 
-def erase_registry(
+def clear_registry(
     registry: AvRegistry, authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> None:
     """Erase a registry's contents
