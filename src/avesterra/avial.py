@@ -23,7 +23,7 @@ import copy
 from dataclasses import dataclass, field
 from ipaddress import IPv4Address, IPv6Address
 from typing import Dict, List, Callable, Tuple
-from datetime import datetime, UTC, timedelta
+from datetime import datetime, UTC, date
 import avesterra.api as api
 from avesterra.avesterra import *
 from avesterra.hgtp import HGTPFrame
@@ -54,6 +54,7 @@ AvWeb = str
 AvEncodable = str | int | AvTime | datetime | float | bytes | AvEntity | AvAuthorization
 AvAddress = int
 AvParameter = int
+AvDate = date
 
 #################
 # Null constant #
@@ -346,8 +347,8 @@ class AvValue:
             return AvValue.encode_time(
                 AvTime.fromtimestamp(int(value_str), tz=UTC).replace(microsecond=0)
             )
-        elif tag == AvTag.DURATION:
-            return AvValue.encode_duration(float(value_str))
+        elif tag == AvTag.DATE:
+            return AvValue.encode_date(date(year=int(value_json["YEAR"]), month=int(value_json["MONTH"]), day=int(value_json["DAY"])))
         elif tag == AvTag.EXCEPTION:
             exception_dict = json.loads(value_str)
             err = exception_dict["ERROR"].removesuffix("_ERROR")
@@ -428,6 +429,14 @@ class AvValue:
             return AvValue(AvTag.ENTITY, str(object).encode(ENCODING))
         elif isinstance(object, AvTime) or isinstance(object, datetime):
             return AvValue(AvTag.TIME, str(int(object.timestamp())).encode(ENCODING))
+        elif isinstance(object, AvDate):
+            return AvValue(AvTag.DATE, json.dumps(
+                {
+                    "YEAR": object.year,
+                    "MONTH": object.month,
+                    "DAY": object.day,
+                }
+            ).encode(ENCODING))
         elif isinstance(object, AvInterchange):
             return AvValue(AvTag.INTERCHANGE, object.encode(ENCODING))
         elif isinstance(object, bytes):
@@ -541,9 +550,16 @@ class AvValue:
         return AvValue(AvTag.AUTHORIZATION, str(data).encode(ENCODING))
 
     @staticmethod
-    def encode_duration(data: float) -> AvValue:
-        """Create an AvValue of tag `AvTag.DURATION`."""
-        return AvValue(AvTag.DURATION, str(data).encode(ENCODING))
+    def encode_date(d: date | AvDate) -> AvValue:
+        """Create an AvValue of tag `AvTag.DATE`."""
+
+        return AvValue(AvTag.DATE, json.dumps(
+            {
+                "YEAR": d.year,
+                "MONTH": d.month,
+                "DAY": d.day,
+            }
+        ).encode(ENCODING))
 
     @staticmethod
     def encode_variable(key: str, data: AvValue) -> AvValue:
@@ -591,8 +607,8 @@ class AvValue:
             return self.decode_entity()
         elif self._tag == AvTag.TIME:
             return self.decode_time()
-        elif self._tag == AvTag.DURATION:
-            return self.decode_duration()
+        elif self._tag == AvTag.DATE:
+            return self.decode_date()
         elif self._tag == AvTag.DATA:
             return self.decode_data()
         elif self._tag == AvTag.CHARACTER.value:
@@ -812,15 +828,16 @@ class AvValue:
         else:
             raise InvalidTagError(AvTag.AUTHORIZATION, self._tag)
 
-    def decode_duration(self) -> float:
+    def decode_date(self) -> date:
         """
-        decode the value as a duration.
-        If the tag is not duration, raise a InvalidTagError.
+        decode the value as a date.
+        If the tag is not date, raise a InvalidTagError.
         """
-        if self._tag == AvTag.DURATION.value:
-            return float(self._bytes.decode(ENCODING))
+        if self._tag == AvTag.DATE.value:
+            d_json = json.loads(self._bytes.decode(ENCODING))
+            return AvDate(year=d_json["YEAR"], month=d_json["MONTH"], day=d_json["DAY"])
         else:
-            raise InvalidTagError(AvTag.DURATION, self._tag)
+            raise InvalidTagError(AvTag.DATE, self._tag)
 
     # TODO: Measurement
     # TODO: Locutor
