@@ -655,7 +655,7 @@ def publish(
     mode: int = NULL_MODE,
     state: int = NULL_STATE,
     condition: int = NULL_CONDITION,
-    precedence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRECEDENCE,
     tag: int = NULL_TAG,
     time: int = NULL_TIME,
     timeout: int = NULL_TIMEOUT,
@@ -688,7 +688,7 @@ def publish(
     frame.event_code = event
     frame.mode_code = mode
     frame.state_code = state
-    frame.precedence = precedence
+    frame.precedence = presence
     frame.tag_code = tag
     frame.time = time
     frame.timeout = timeout
@@ -701,7 +701,6 @@ def subscribe(
     entity: AvEntity,
     outlet: AvEntity,
     event: int = NULL_EVENT,
-    precedence: int = NULL_PRECEDENCE,
     timeout: int = NULL_TIMEOUT,
     authority: AvAuthorization = NULL_AUTHORIZATION,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
@@ -711,7 +710,6 @@ def subscribe(
     frame.entity = entity
     frame.outlet = outlet
     frame.event_code = event
-    frame.precedence = precedence
     frame.timeout = timeout
     frame.authority = authority
     frame.authorization = authorization
@@ -722,7 +720,6 @@ def unsubscribe(
     entity: AvEntity,
     outlet: AvEntity,
     event: int = NULL_EVENT,
-    precedence: int = NULL_PRECEDENCE,
     timeout: int = NULL_TIMEOUT,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
@@ -731,7 +728,6 @@ def unsubscribe(
     frame.entity = entity
     frame.outlet = outlet
     frame.event_code = event
-    frame.precedence = precedence
     frame.timeout = timeout
     frame.authorization = authorization
     hgtp.post(frame=frame)

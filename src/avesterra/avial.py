@@ -2058,7 +2058,7 @@ def publish_event(
     mode: AvMode = AvMode.NULL,
     state: AvState = AvState.NULL,
     condition: AxCondition = AxCondition.NULL,
-    precedence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRECEDENCE,
     time: AvTime = NULL_TIME,
     timeout: AvTimeout = NULL_TIMEOUT,
     auxiliary: AvEntity = NULL_ENTITY,
@@ -2087,7 +2087,6 @@ def publish_event(
     Verify.mode(mode)
     Verify.state(state)
     Verify.condition(condition)
-    Verify.precedence(precedence)
     Verify.natural(timeout)
     Verify.entity(auxiliary)
     Verify.entity(ancillary)
@@ -2116,7 +2115,7 @@ def publish_event(
         mode=mode.value,
         state=state.value,
         condition=condition.value,
-        precedence=precedence,
+        presence=presence,
         tag=value.tag().value,
         time=int(time.timestamp()),
         timeout=timeout,
@@ -2129,7 +2128,6 @@ def subscribe_event(
     entity: AvEntity,
     outlet: AvEntity,
     event: AvEvent = AvEvent.NULL,
-    precedence: int = NULL_PRECEDENCE,
     timeout: AvTimeout = NULL_TIMEOUT,
     authority: AvAuthorization = NULL_AUTHORIZATION,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
@@ -2138,7 +2136,6 @@ def subscribe_event(
     Verify.entity(entity)
     Verify.entity(outlet)
     Verify.event(event)
-    Verify.precedence(precedence)
     Verify.natural(timeout)
     Verify.entity(authority)
     Verify.authorization(authorization)
@@ -2146,7 +2143,6 @@ def subscribe_event(
         entity=entity,
         outlet=outlet,
         event=event.value,
-        precedence=precedence,
         timeout=timeout,
         authority=authority,
         authorization=authorization,
@@ -2157,7 +2153,6 @@ def unsubscribe_event(
     entity: AvEntity,
     outlet: AvEntity,
     event: AvEvent = AvEvent.NULL,
-    precedence: int = NULL_PRECEDENCE,
     timeout: AvTimeout = NULL_TIMEOUT,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
@@ -2165,14 +2160,12 @@ def unsubscribe_event(
     Verify.entity(entity)
     Verify.entity(outlet)
     Verify.event(event)
-    Verify.precedence(precedence)
     Verify.natural(timeout)
     Verify.authorization(authorization)
     api.unsubscribe(
         entity=entity,
         outlet=outlet,
         event=event.value,
-        precedence=precedence,
         timeout=timeout,
         authorization=authorization,
     )
