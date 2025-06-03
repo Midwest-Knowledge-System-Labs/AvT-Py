@@ -12,7 +12,7 @@ from os import getcwd
 import stat
 from avesterra.avial import *
 from avesterra.predefined import file_outlet
-import avesterra.attributes as attributes
+import avesterra.attributions as attributions
 
 # Avial 4.10 Added this module
 
@@ -67,7 +67,7 @@ def download_file(
         )
 
     try:
-        mode = attributes.get_attribute(
+        mode = attributions.get_attribution(
             entity=file, attribute=AvAttribute.MODE, authorization=authorization
         ).decode()
         mode = int(mode)
@@ -91,13 +91,13 @@ def upload_file(
         data = f.read()
 
     try:
-        attributes.set_attribute(
+        attributions.set_attribution(
             entity=file,
             attribute=AvAttribute.MODE,
             value=AvValue.encode_integer(mode),
             authorization=authorization,
         )
-        attributes.set_attribute(
+        attributions.set_attribution(
             entity=file,
             attribute=AvAttribute.TIME,
             value=AvValue.encode_time(file_mod_time),
@@ -105,14 +105,14 @@ def upload_file(
         )
 
         # Avial 4.10 Calculate hash and set it in the KS
-        attributes.set_attribute(
+        attributions.set_attribution(
             entity=file,
             attribute=AvAttribute.HASH,
             value=AvValue.encode_string(hash_file_content(data)),
             authorization=authorization,
         )
-        # Avial 4.11 Version attribute can now be set on file uploads
-        attributes.set_attribute(
+        # Avial 4.11 Version attribution can now be set on file uploads
+        attributions.set_attribution(
             entity=file,
             attribute=AvAttribute.VERSION,
             value=AvValue.encode_string(version),
@@ -133,19 +133,19 @@ def file_size(file: AvFile, authorization: AvAuthorization = NULL_AUTHORIZATION)
 def file_time(
     file: AvFile, authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> AvTime:
-    return attributes.get_attribute(
+    return attributions.get_attribution(
         entity=file, attribute=AvAttribute.TIME, authorization=authorization
     ).decode_time()
 
 
 def file_mode(file: AvFile, authorization: AvAuthorization = NULL_AUTHORIZATION):
-    return attributes.get_attribute(
+    return attributions.get_attribution(
         entity=file, attribute=AvAttribute.MODE, authorization=authorization
     ).decode_integer()
 
 
 def file_hash(file: AvFile, authorization: AvAuthorization = NULL_AUTHORIZATION):
-    return attributes.get_attribute(
+    return attributions.get_attribution(
         entity=file, attribute=AvAttribute.HASH, authorization=authorization
     ).decode_string()
 

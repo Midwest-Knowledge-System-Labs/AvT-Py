@@ -91,7 +91,7 @@ class AvialModel:
         self.name: str = ""
         self.key: str = ""
         self.data: int = 0
-        self.attributes = AttributeList()
+        self.attributions = AttributionList()
         self.facts = FactList()
         self.properties = PropertyList()
 
@@ -100,7 +100,7 @@ class AvialModel:
             self.name == other.name
             and self.key == other.key
             and self.data == other.data
-            and self.attributes == other.attributes
+            and self.attributions == other.attributions
             and self.facts == other.facts
             and self.properties == other.properties
         )
@@ -113,8 +113,8 @@ class AvialModel:
             data_str = f"{indent_str}Data: {self.data}\n"
         else:
             data_str = ""
-        if self.attributes:
-            attributes_str = f"{indent_str}Attributes ({len(self.attributes)}):\n{self.attributes.pretty_str(indent+4)}\n"
+        if self.attributions:
+            attributes_str = f"{indent_str}Attributes ({len(self.attributions)}):\n{self.attributions.pretty_str(indent+4)}\n"
         else:
             attributes_str = ""
         if self.facts:
@@ -156,7 +156,7 @@ class AvialModel:
         model.key = d.get("Key", "")
         model.data = d.get("Data", 0)
 
-        model.attributes = AttributeList.from_json_list(d.get("Attributes", []))
+        model.attributions = AttributionList.from_json_list(d.get("Attributes", []))
         model.facts = FactList.from_json_list(d.get("Facts", []))
         model.properties = PropertyList.from_json_list(d.get("Properties", []))
 
@@ -170,8 +170,8 @@ class AvialModel:
             d["Key"] = self.key
         if self.data:
             d["Data"] = self.data
-        if self.attributes:
-            d["Attributes"] = self.attributes.to_json_list()
+        if self.attributions:
+            d["Attributes"] = self.attributions.to_json_list()
         if self.facts:
             d["Facts"] = self.facts.to_json_list()
         if self.properties:
@@ -1067,7 +1067,7 @@ class FrameList:
         return [f.to_json_list() for f in self.frames]
 
 
-class Attribute:
+class Attribution:
     def __init__(
         self,
         attribute: AvAttribute,
@@ -1086,7 +1086,7 @@ class Attribute:
 
     def pretty_str(self, indent: int = 0):
         indent_str = " " * indent
-        attribute_str = f"{indent_str}Attribute: {self.attribute.name:<15} "
+        attribute_str = f"{indent_str}Attribution: {self.attribute.name:<15} "
         value_str = f"{self.value.tag().name}: {self.value.decode()}\n"
         if self.traits:
             trait_str = f"{indent_str}Traits ({len(self.traits)}):\n{self.traits.pretty_str(indent+4)}\n"
@@ -1096,7 +1096,7 @@ class Attribute:
 
     @staticmethod
     def from_json_list(li: List):
-        f = Attribute(AvAttribute.NULL)
+        f = Attribution(AvAttribute.NULL)
 
         attribute_name = li[0].removesuffix("_ATTRIBUTE")
         f.attribute = AvAttribute[attribute_name]
@@ -1113,65 +1113,65 @@ class Attribute:
         return li
 
 
-class AttributeList:
+class AttributionList:
     def __init__(self):
-        self.attributes: List[Attribute] = []
+        self.attributions: List[Attribution] = []
 
     def __bool__(self):
-        return bool(self.attributes)
+        return bool(self.attributions)
 
     def __len__(self):
-        return len(self.attributes)
+        return len(self.attributions)
 
     def __eq__(self, other):
-        return self.attributes == other.attributes
+        return self.attributions == other.attributions
 
     def __str__(self):
-        return "[" + ", ".join(str(p) for p in self.attributes) + "]"
+        return "[" + ", ".join(str(p) for p in self.attributions) + "]"
 
     def pretty_str(self, indent: int = 0):
-        return "".join([f.pretty_str(indent) for f in self.attributes])
+        return "".join([f.pretty_str(indent) for f in self.attributions])
 
     def __getitem__(self, item: int | AvAttribute):
         res = self.get_opt(item)
         if res is None:
             if not isinstance(item, AvAttribute):
                 raise IndexError()
-            res = Attribute(item)
-            self.attributes.append(res)
+            res = Attribution(item)
+            self.attributions.append(res)
         return res
 
-    def get_opt(self, item: int | str) -> Attribute | None:
+    def get_opt(self, item: int | str) -> Attribution | None:
         """
         Returns None if the item does not exist
         """
         if isinstance(item, AvAttribute):
-            for f in self.attributes:
+            for f in self.attributions:
                 if f.attribute == item:
                     return f
             return None
         elif isinstance(item, int):
             try:
-                return self.attributes[item]
+                return self.attributions[item]
             except IndexError:
                 return None
         else:
             raise TypeError(f"Invalid type for item: {type(item)}")
 
-    def append(self, item: Attribute):
-        self.attributes.append(item)
+    def append(self, item: Attribution):
+        self.attributions.append(item)
 
     def has(self, item: int | str):
         return self.get_opt(item) is not None
 
-    def pop(self, item: int | str) -> Attribute | None:
+    def pop(self, item: int | str) -> Attribution | None:
         res = self.get_opt(item)
         if res is None:
             return None
         if isinstance(item, str):
-            self.attributes.remove(res)
+            self.attributions.remove(res)
         else:
-            del self.attributes[item]
+            del self.attributions[item]
         return res
 
     def remove(self, item: int | str):
@@ -1179,15 +1179,15 @@ class AttributeList:
 
     @staticmethod
     def from_json_list(li: List):
-        model = AttributeList()
+        model = AttributionList()
 
         for f in li:
-            model.attributes.append(Attribute.from_json_list(f))
+            model.attributions.append(Attribution.from_json_list(f))
 
         return model
 
     def to_json_list(self):
-        return [f.to_json_list() for f in self.attributes]
+        return [f.to_json_list() for f in self.attributions]
 
 
 class Trait:

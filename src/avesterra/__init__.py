@@ -34,7 +34,7 @@ from .spaces import *
 from .taxonomy import *
 from .tokens import *
 from .parameters import *
-from .attributes import *
+from .attributions import *
 from .firewall import *
 from .traits import *
 from .trash import *
