@@ -1617,7 +1617,6 @@ def attach_attribute(
     entity: AvEntity,
     outlet: AvEntity,
     attribute: AvAttribute = AvAttribute.NULL,
-    presence: int = NULL_PRESENCE,
     timeout: AvTimeout = NULL_TIMEOUT,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
@@ -1625,14 +1624,12 @@ def attach_attribute(
     Verify.entity(entity)
     Verify.entity(outlet)
     Verify.attribute(attribute)
-    Verify.presence(presence)
     Verify.natural(timeout)
     Verify.authorization(authorization)
     api.attach(
         entity=entity,
         outlet=outlet,
         attribute=attribute.value,
-        presence=presence,
         timeout=timeout,
         authorization=authorization,
     )
@@ -1641,18 +1638,15 @@ def attach_attribute(
 def detach_attribute(
     entity: AvEntity,
     attribute: AvAttribute = AvAttribute.NULL,
-    presence: int = NULL_PRESENCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
     """Detach an attribute from an entity"""
     Verify.entity(entity)
     Verify.attribute(attribute)
-    Verify.presence(presence)
     Verify.authorization(authorization)
     api.detach(
         entity=entity,
         attribute=attribute.value,
-        presence=presence,
         authorization=authorization,
     )
 
@@ -1660,18 +1654,15 @@ def detach_attribute(
 def attribute_attached(
     entity: AvEntity,
     attribute: AvAttribute = AvAttribute.NULL,
-    presence: int = NULL_PRESENCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> bool:
     """Is an attribute attached to an entity?"""
     Verify.entity(entity)
     Verify.attribute(attribute)
-    Verify.presence(presence)
     Verify.authorization(authorization)
     return api.attached(
         entity=entity,
         attribute=attribute.value,
-        presence=presence,
         authorization=authorization,
     )
 
@@ -1689,7 +1680,7 @@ def entity_attachment(
     entity: AvEntity,
     index: int = NULL_INDEX,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
-) -> Tuple[AvEntity, AvAttribute, int, int]:
+) -> Tuple[AvEntity, AvAttribute, int]:
     """Return attachment details (outlet, attribute, presence, and expiration)?"""
     Verify.entity(entity)
     Verify.natural(index)
@@ -1697,13 +1688,11 @@ def entity_attachment(
     (
         result_outlet,
         result_attribute,
-        result_presence,
         result_expiration,
     ) = api.attachment(entity=entity, index=index, authorization=authorization)
     return (
         result_outlet,
         AvAttribute(result_attribute),
-        result_presence,
         result_expiration,
     )
 

@@ -351,7 +351,6 @@ def attach(
     entity: AvEntity,
     outlet: AvEntity,
     attribute: int = NULL_ATTRIBUTE,
-    presence: int = NULL_PRESENCE,
     timeout: int = NULL_TIMEOUT,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
@@ -360,7 +359,6 @@ def attach(
     frame.entity = entity
     frame.outlet = outlet
     frame.attribute_code = attribute
-    frame.presence = presence
     frame.authorization = authorization
     frame.timeout = timeout
     hgtp.post(frame=frame)
@@ -369,14 +367,12 @@ def attach(
 def detach(
     entity: AvEntity,
     attribute: int = NULL_ATTRIBUTE,
-    presence: int = NULL_PRESENCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
     frame = hgtp.HGTPFrame()
     frame.command_code = hgtp.Command.DETACH
     frame.entity = entity
     frame.attribute_code = attribute
-    frame.presence = presence
     frame.authorization = authorization
     hgtp.post(frame=frame)
 
@@ -384,14 +380,12 @@ def detach(
 def attached(
     entity: AvEntity,
     attribute: int = NULL_ATTRIBUTE,
-    presence: int = NULL_PRESENCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> bool:
     frame = hgtp.HGTPFrame()
     frame.command_code = hgtp.Command.ATTACHED
     frame.entity = entity
     frame.attribute_code = attribute
-    frame.presence = presence
     frame.authorization = authorization
     response = hgtp.post(frame=frame)
     return response.resultant == 1
@@ -413,7 +407,7 @@ def attachment(
     entity: AvEntity,
     index: int = NULL_INDEX,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
-) -> Tuple[AvEntity, int, int, int]:
+) -> Tuple[AvEntity, int, int]:
     """Return attachment details (outlet, attribute, presence, and expiration)?"""
     frame = hgtp.HGTPFrame()
     frame.command_code = hgtp.Command.ATTACHMENT
@@ -424,7 +418,6 @@ def attachment(
     return (
         response.outlet,
         response.attribute_code,
-        response.presence,
         response.time,
     )
 
