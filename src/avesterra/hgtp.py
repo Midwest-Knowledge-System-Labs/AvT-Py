@@ -177,7 +177,7 @@ class HGTPFrame:
     context_code: int
     aspect_code: int
     state_code: int
-    precedence: int
+    presence: int
     tag_code: int
     condition_code: int
 
@@ -224,7 +224,7 @@ class HGTPFrame:
         self.context_code = 0
         self.aspect_code = 0
         self.state_code = 0
-        self.precedence = 0
+        self.presence = 0
         self.tag_code = 0
         self.condition_code = 0
 
@@ -273,7 +273,7 @@ class HGTPFrame:
         hgtp_obj.context_code = int.from_bytes(frame[20:22], byteorder="little")
         hgtp_obj.aspect_code = int.from_bytes(frame[22:24], byteorder="little")
         hgtp_obj.state_code = int.from_bytes(frame[24:26], byteorder="little")
-        hgtp_obj.precedence = int.from_bytes(frame[26:28], byteorder="little")
+        hgtp_obj.presence = int.from_bytes(frame[26:28], byteorder="little")
         hgtp_obj.tag_code = int.from_bytes(frame[28:30], byteorder="little")
         hgtp_obj.condition_code = int.from_bytes(frame[30:32], byteorder="little")
 
@@ -334,7 +334,7 @@ class HGTPFrame:
         frame.extend(self.context_code.to_bytes(2, byteorder="little"))
         frame.extend(self.aspect_code.to_bytes(2, byteorder="little"))
         frame.extend(self.state_code.to_bytes(2, byteorder="little"))
-        frame.extend(self.precedence.to_bytes(2, byteorder="little"))
+        frame.extend(self.presence.to_bytes(2, byteorder="little"))
 
         frame.extend(self.tag_code.to_bytes(2, byteorder="little"))
         frame.extend(self.condition_code.to_bytes(2, byteorder="little"))
@@ -395,8 +395,8 @@ class HGTPFrame:
         str_frame += "{}|{} [context_code, aspect_code]\n".format(
             str(self.context_code), str(self.aspect_code)
         )
-        str_frame += "{}|{} [state_code, precedence_code]\n".format(
-            str(self.state_code), str(self.precedence)
+        str_frame += "{}|{} [state_code, presence_code]\n".format(
+            str(self.state_code), str(self.presence)
         )
         str_frame += "{}|{} [tag_code, condition_code]\n".format(
             str(self.tag_code), str(self.condition_code)

@@ -192,7 +192,7 @@ class OrchestraAdapter:
 
         entity, outlet, method, attribute, name, key, value, parameter, index,
         instance, count, aspect, context, category, klass, event, mode,
-        precedence, time, timeout, auxiliary, ancillary, authorization
+        presence, time, timeout, auxiliary, ancillary, authorization
 
         Any argument whose name doesn't match any of these will result in an
         error being raised during initialization of the adapter.
@@ -206,7 +206,7 @@ class OrchestraAdapter:
         parameters will be the one handling it, even if some other routes also
         match the incoming invoke parameters.
         The order follows the order of declaration of the function, the first
-        function declared will take precedence over the following.
+        function declared will take presence over the following.
 
         # Routes function documentation
 
@@ -414,14 +414,14 @@ class OrchestraAdapter:
                     raise ValueError(
                         f"Function '{fn.__name__}': '{param.name}' argument is not supported yet"
                     )
-                elif param.name == "precedence":
+                elif param.name == "presence":
                     if param.annotation != inspect._empty and not issubclass(
                         param.annotation, int
                     ):
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a int but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.PRECEDENCE)
+                    args.append(av.AvAspect.PRESENCE)
                 elif param.name == "time":
                     if param.annotation != inspect._empty and not issubclass(
                         param.annotation, av.AvTime
@@ -829,8 +829,8 @@ class OrchestraAdapter:
                         kwargs["event"] = args.event
                     case av.AvAspect.MODE:
                         kwargs["mode"] = args.mode
-                    case av.AvAspect.PRECEDENCE:
-                        kwargs["precedence"] = args.precedence
+                    case av.AvAspect.PRESENCE:
+                        kwargs["presence"] = args.presence
                     case av.AvAspect.TIME:
                         kwargs["time"] = args.time
                     case av.AvAspect.TIMEOUT:

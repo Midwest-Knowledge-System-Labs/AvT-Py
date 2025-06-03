@@ -47,7 +47,7 @@ AvOffset = int
 AvName = str
 AvKey = str
 AvTimeout = int
-AvPrecedence = int
+AvPresence = int
 AvInterchange = str
 AvText = str
 AvWeb = str
@@ -62,7 +62,7 @@ AvDate = date
 
 NULL_TIME = AvTime.fromtimestamp(0, tz=UTC)
 NULL_TIMEOUT = 0
-NULL_PRECEDENCE = AvPrecedence(0)
+NULL_PRESENCE = AvPresence(0)
 
 NULL_CONTEXT = AvContext.NULL
 NULL_CATEGORY = AvCategory.NULL
@@ -111,7 +111,7 @@ class AvLocutorOpt:
     mode: AvMode | None = None
     state: AvState | None = None
     condition: AxCondition | None = None
-    precedence: AvPrecedence | None = None
+    presence: AvPresence | None = None
     time: AvTime | None = None
     timeout: AvTimeout | None = None
     aspect: AvAspect | None = None
@@ -170,7 +170,7 @@ class AvLocutorOpt:
         if "MODE" in d: loc.mode = AvMode[d["MODE"].removesuffix("_MODE")]
         if "STATE" in d: loc.state = AvState[d["STATE"].removesuffix("_STATE")]
         if "CONDITION" in d: loc.condition = AxCondition[d["CONDITION"].removesuffix("_CONDITION")]
-        if "PRECEDENCE" in d: loc.precedence = int(d["PRECEDENCE"])
+        if "PRESENCE" in d: loc.presence = int(d["PRESENCE"])
         if "TIME" in d: loc.time = AvTime.fromtimestamp(int(d["TIME"]))
         if "TIMEOUT" in d: loc.timeout = int(d["TIMEOUT"])
         if "ASPECT" in d: loc.aspect = AvAspect[d["ASPECT"].removesuffix("_ASPECT")]
@@ -208,7 +208,7 @@ class AvLocutorOpt:
         if self.mode is not None: d["MODE"] = self.mode.name + "_MODE"
         if self.state is not None: d["STATE"] = self.state.name + "_STATE"
         if self.condition is not None: d["CONDITION"] = self.condition.name + "_CONDITION"
-        if self.precedence is not None: d["PRECEDENCE"] = str(self.precedence)
+        if self.presence is not None: d["PRESENCE"] = str(self.presence)
         if self.time is not None: d["TIME"] = self.time.timestamp()
         if self.timeout is not None: d["TIMEOUT"] = self.timeout
         if self.aspect is not None: d["ASPECT"] = self.aspect.name + "_ASPECT"
@@ -255,7 +255,7 @@ class AvLocutor:
     mode: AvMode = AvMode.NULL
     state: AvState = AvState.NULL
     condition: AxCondition = AxCondition.NULL
-    precedence: AvPrecedence = NULL_PRECEDENCE
+    presence: AvPresence = NULL_PRESENCE
     time: AvTime = AvTime.fromtimestamp(0, tz=UTC)
     timeout: AvTimeout = NULL_TIMEOUT
     aspect: AvAspect = AvAspect.NULL
@@ -1001,10 +1001,10 @@ class Verify:
             raise AvesTerraError("{} is not a valid condition".format(obj))
 
     @staticmethod
-    def precedence(obj) -> None:
-        """Raise error if obj is not a valid precedence."""
+    def presence(obj) -> None:
+        """Raise error if obj is not a valid presence."""
         if not isinstance(obj, int):
-            raise AvesTerraError("{} is not a valid precedence".format(obj))
+            raise AvesTerraError("{} is not a valid presence".format(obj))
 
     @staticmethod
     def time(obj) -> None:
@@ -1125,7 +1125,7 @@ def create_entity(
     method: AvMethod = NULL_METHOD,
     attribute: AvAttribute = NULL_ATTRIBUTE,
     event: AvEvent = NULL_EVENT,
-    precedence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRESENCE,
     outlet: AvEntity = NULL_ENTITY,
     server: AvEntity = NULL_ENTITY,
     timeout: AvTimeout = NULL_TIMEOUT,
@@ -1141,7 +1141,7 @@ def create_entity(
     Verify.method(method)
     Verify.attribute(attribute)
     Verify.event(event)
-    Verify.precedence(precedence)
+    Verify.presence(presence)
     Verify.entity(outlet)
     Verify.entity(server)
     Verify.integer(timeout)
@@ -1156,7 +1156,7 @@ def create_entity(
         method=method,
         attribute=attribute,
         event=event,
-        precedence=precedence,
+        presence=presence,
         server=server,
         outlet=outlet,
         timeout=timeout,
@@ -1200,7 +1200,7 @@ def invoke_entity(
     mode: AvMode = AvMode.NULL,
     state: AvState = AvState.NULL,
     condition: AxCondition = AxCondition.NULL,
-    precedence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRESENCE,
     time: AvTime = NULL_TIME,
     timeout: AvTimeout = NULL_TIMEOUT,
     auxiliary: AvEntity = NULL_ENTITY,
@@ -1229,7 +1229,7 @@ def invoke_entity(
     Verify.mode(mode)
     Verify.state(state)
     Verify.condition(condition)
-    Verify.precedence(precedence)
+    Verify.presence(presence)
     Verify.natural(timeout)
     Verify.entity(auxiliary)
     Verify.entity(ancillary)
@@ -1259,7 +1259,7 @@ def invoke_entity(
         mode=mode.value,
         state=state.value,
         condition=condition.value,
-        precedence=precedence,
+        presence=presence,
         tag=value.tag().value,
         time=int(time.timestamp()),
         timeout=timeout,
@@ -1291,7 +1291,7 @@ def invoke_entity_retry_bo(
     mode: AvMode = AvMode.NULL,
     state: AvState = AvState.NULL,
     condition: AxCondition = AxCondition.NULL,
-    precedence: AvPrecedence = NULL_PRECEDENCE,
+    presence: AvPresence = NULL_PRESENCE,
     time: AvTime = NULL_TIME,
     timeout: AvTimeout = 30,
     auxiliary: AvEntity = NULL_ENTITY,
@@ -1330,7 +1330,7 @@ def invoke_entity_retry_bo(
                 mode=mode,
                 state=state,
                 condition=condition,
-                precedence=precedence,
+                presence=presence,
                 time=time,
                 timeout=timeout,
                 auxiliary=auxiliary,
@@ -1364,7 +1364,7 @@ def inquire_entity(
     mode: AvMode = AvMode.NULL,
     state: AvState = AvState.NULL,
     condition: AxCondition = AxCondition.NULL,
-    precedence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRESENCE,
     time: AvTime = NULL_TIME,
     timeout: AvTimeout = NULL_TIMEOUT,
     auxiliary: AvEntity = NULL_ENTITY,
@@ -1392,7 +1392,7 @@ def inquire_entity(
     Verify.mode(mode)
     Verify.state(state)
     Verify.condition(condition)
-    Verify.precedence(precedence)
+    Verify.presence(presence)
     Verify.natural(timeout)
     Verify.entity(auxiliary)
     Verify.entity(ancillary)
@@ -1421,7 +1421,7 @@ def inquire_entity(
         mode=mode.value,
         state=state.value,
         condition=condition.value,
-        precedence=precedence,
+        presence=presence,
         tag=value.tag().value,
         time=int(time.timestamp()),
         timeout=timeout,
@@ -1617,7 +1617,7 @@ def attach_attribute(
     entity: AvEntity,
     outlet: AvEntity,
     attribute: AvAttribute = AvAttribute.NULL,
-    precedence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRESENCE,
     timeout: AvTimeout = NULL_TIMEOUT,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
@@ -1625,14 +1625,14 @@ def attach_attribute(
     Verify.entity(entity)
     Verify.entity(outlet)
     Verify.attribute(attribute)
-    Verify.precedence(precedence)
+    Verify.presence(presence)
     Verify.natural(timeout)
     Verify.authorization(authorization)
     api.attach(
         entity=entity,
         outlet=outlet,
         attribute=attribute.value,
-        precedence=precedence,
+        presence=presence,
         timeout=timeout,
         authorization=authorization,
     )
@@ -1641,18 +1641,18 @@ def attach_attribute(
 def detach_attribute(
     entity: AvEntity,
     attribute: AvAttribute = AvAttribute.NULL,
-    precedence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRESENCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
     """Detach an attribute from an entity"""
     Verify.entity(entity)
     Verify.attribute(attribute)
-    Verify.precedence(precedence)
+    Verify.presence(presence)
     Verify.authorization(authorization)
     api.detach(
         entity=entity,
         attribute=attribute.value,
-        precedence=precedence,
+        presence=presence,
         authorization=authorization,
     )
 
@@ -1660,18 +1660,18 @@ def detach_attribute(
 def attribute_attached(
     entity: AvEntity,
     attribute: AvAttribute = AvAttribute.NULL,
-    precedence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRESENCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> bool:
     """Is an attribute attached to an entity?"""
     Verify.entity(entity)
     Verify.attribute(attribute)
-    Verify.precedence(precedence)
+    Verify.presence(presence)
     Verify.authorization(authorization)
     return api.attached(
         entity=entity,
         attribute=attribute.value,
-        precedence=precedence,
+        presence=presence,
         authorization=authorization,
     )
 
@@ -1690,20 +1690,20 @@ def entity_attachment(
     index: int = NULL_INDEX,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> Tuple[AvEntity, AvAttribute, int, int]:
-    """Return attachment details (outlet, attribute, precedence, and expiration)?"""
+    """Return attachment details (outlet, attribute, presence, and expiration)?"""
     Verify.entity(entity)
     Verify.natural(index)
     Verify.authorization(authorization)
     (
         result_outlet,
         result_attribute,
-        result_precedence,
+        result_presence,
         result_expiration,
     ) = api.attachment(entity=entity, index=index, authorization=authorization)
     return (
         result_outlet,
         AvAttribute(result_attribute),
-        result_precedence,
+        result_presence,
         result_expiration,
     )
 
@@ -1716,23 +1716,20 @@ def entity_attachment(
 def connect_method(
     entity: AvEntity,
     outlet: AvEntity,
-    method: AvMethod = AvMethod.NULL,
-    precedence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRESENCE,
     timeout: AvTimeout = NULL_TIMEOUT,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
     """Connect an outlet to an entity with a particular method."""
     Verify.entity(entity)
     Verify.entity(outlet)
-    Verify.method(method)
-    Verify.precedence(precedence)
+    Verify.presence(presence)
     Verify.natural(timeout)
     Verify.authorization(authorization)
     api.connect(
         entity=entity,
         outlet=outlet,
-        method=method.value,
-        precedence=precedence,
+        presence=presence,
         timeout=timeout,
         authorization=authorization,
     )
@@ -1740,38 +1737,32 @@ def connect_method(
 
 def disconnect_method(
     entity: AvEntity,
-    method: AvMethod = AvMethod.NULL,
-    precedence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRESENCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
     """Disconnect a method from an entity"""
     Verify.entity(entity)
-    Verify.method(method)
-    Verify.precedence(precedence)
+    Verify.presence(presence)
     Verify.authorization(authorization)
     api.disconnect(
         entity=entity,
-        method=method.value,
-        precedence=precedence,
+        presence=presence,
         authorization=authorization,
     )
 
 
 def method_connected(
     entity: AvEntity,
-    method: AvMethod = AvMethod.NULL,
-    precedence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRESENCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> bool:
     """Is a method connected to an entity?"""
     Verify.entity(entity)
-    Verify.method(method)
-    Verify.precedence(precedence)
+    Verify.presence(presence)
     Verify.authorization(authorization)
     return api.connected(
         entity=entity,
-        method=method.value,
-        precedence=precedence,
+        presence=presence,
         authorization=authorization,
     )
 
@@ -1790,20 +1781,20 @@ def entity_connection(
     index: int = NULL_INDEX,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> Tuple[AvEntity, AvMethod, int, AvTime]:
-    """Return connection details (outlet, attribute, precedence, and expiration)?"""
+    """Return connection details (outlet, attribute, presence, and expiration)?"""
     Verify.entity(entity)
     Verify.natural(index)
     Verify.authorization(authorization)
     (
         result_outlet,
         result_method_code,
-        result_precedence_code,
+        result_presence_code,
         result_time,
     ) = api.connection(entity=entity, index=index, authorization=authorization)
     return (
         result_outlet,
         AvMethod(result_method_code),
-        result_precedence_code,
+        result_presence_code,
         AvTime.fromtimestamp(result_time, tz=UTC).replace(microsecond=0),
     )
 
@@ -2058,7 +2049,7 @@ def publish_event(
     mode: AvMode = AvMode.NULL,
     state: AvState = AvState.NULL,
     condition: AxCondition = AxCondition.NULL,
-    presence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRESENCE,
     time: AvTime = NULL_TIME,
     timeout: AvTimeout = NULL_TIMEOUT,
     auxiliary: AvEntity = NULL_ENTITY,
@@ -2203,7 +2194,7 @@ class EventData:
     mode: AvMode
     state: AvState
     condition: AxCondition
-    precedence: AvPrecedence
+    presence: AvPresence
     time: AvTime
     timeout: AvTimeout
     auxiliary: AvEntity
@@ -2246,7 +2237,7 @@ def wait_event(
         mode: int,
         state: int,
         condition: int,
-        precedence: int,
+        presence: int,
         tag: int,
         name: bytes,
         key: bytes,
@@ -2286,7 +2277,7 @@ def wait_event(
             mode=AvMode(mode),
             state=AvState(state),
             condition=AxCondition(condition),
-            precedence=precedence,
+            presence=presence,
             time=AvTime.fromtimestamp(time, tz=UTC).replace(microsecond=0),
             timeout=timeout,
             auxiliary=auxiliary,
@@ -2337,7 +2328,7 @@ def wait_event_sustained(
         mode: int,
         state: int,
         condition: int,
-        precedence: int,
+        presence: int,
         tag: int,
         name: bytes,
         key: bytes,
@@ -2375,7 +2366,7 @@ def wait_event_sustained(
             mode=AvMode(mode),
             state=AvState(state),
             condition=AxCondition(condition),
-            precedence=precedence,
+            presence=presence,
             time=AvTime.fromtimestamp(time, tz=UTC).replace(microsecond=0),
             timeout=timeout,
             auxiliary=auxiliary,
@@ -2405,18 +2396,18 @@ def event_count(
 def event_subscribed(
     entity: AvEntity,
     event: AvEvent = AvEvent.NULL,
-    precedence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRESENCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> bool:
     """Is there an event subscrption for an entity?"""
     Verify.entity(entity)
     Verify.event(event)
-    Verify.precedence(precedence)
+    Verify.presence(presence)
     Verify.authorization(authorization)
     return api.subscribed(
         entity=entity,
         event=event.value,
-        precedence=precedence,
+        presence=presence,
         authorization=authorization,
     )
 
@@ -2435,20 +2426,20 @@ def entity_subscription(
     index: int = NULL_INDEX,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
-    """Details of a subscription (outlet, event, precedence, and expiration)"""
+    """Details of a subscription (outlet, event, presence, and expiration)"""
     Verify.entity(entity)
     Verify.natural(index)
     Verify.authorization(authorization)
     (
         result_entity,
         result_event_code,
-        result_precedence_code,
+        result_presence_code,
         result_time,
     ) = api.subscription(entity, index=index, authorization=authorization)
     return (
         result_entity,
         AvEvent(result_event_code),
-        result_precedence_code,
+        result_presence_code,
         AvTime.fromtimestamp(result_time, tz=UTC).replace(microsecond=0),
     )
 
@@ -2499,7 +2490,7 @@ class InvokeArgs:
     mode: AvMode
     state: AvState
     condition: AxCondition
-    precedence: int
+    presence: int
     time: AvTime
     timeout: AvTimeout
     auxiliary: AvEntity
@@ -2551,7 +2542,7 @@ def adapt_outlet(
             mode=AvMode(msg.mode_code),
             state=AvState(msg.state_code),
             condition=AxCondition(msg.condition_code),
-            precedence=msg.precedence,
+            presence=msg.presence,
             time=AvTime.fromtimestamp(msg.time, tz=UTC).replace(microsecond=0),
             timeout=msg.timeout,
             auxiliary=msg.auxiliary,
@@ -2993,7 +2984,7 @@ def entity_elements(
 def entity_subscriptions(
     entity: AvEntity, authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> int:
-    """Return number of connections on an entity?"""
+    """Return number of subscriptions on an entity?"""
     Verify.entity(entity)
     Verify.authorization(authorization)
     return api.subscriptions(entity=entity, authorization=authorization)

@@ -25,7 +25,7 @@ NULL_NAME = b""
 NULL_KEY = b""
 NULL_PARAMETER = 0
 NULL_RESULTANT = 0
-NULL_PRECEDENCE = 0
+NULL_PRESENCE = 0
 NULL_INDEX = 0
 NULL_COUNT = 0
 NULL_MODE = 0
@@ -93,7 +93,7 @@ def create(
     method: int = NULL_METHOD,
     attribute: int = NULL_ATTRIBUTE,
     event: int = NULL_EVENT,
-    precedence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRESENCE,
     timeout: int = NULL_TIMEOUT,
     authority: AvAuthorization = NULL_AUTHORIZATION,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
@@ -112,7 +112,7 @@ def create(
     frame.method_code = method
     frame.attribute_code = attribute
     frame.event_code = event
-    frame.precedence = precedence
+    frame.presence = presence
     frame.timeout = timeout
     frame.authority = authority
     frame.authorization = authorization
@@ -158,7 +158,7 @@ def invoke(
     mode: int = NULL_MODE,
     state: int = NULL_STATE,
     condition: int = NULL_CONDITION,
-    precedence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRESENCE,
     tag: int = NULL_TAG,
     time: int = NULL_TIME,
     timeout: int = NULL_TIMEOUT,
@@ -191,7 +191,7 @@ def invoke(
     frame.mode_code = mode
     frame.state_code = state
     frame.condition_code = condition
-    frame.precedence = precedence
+    frame.presence = presence
     frame.tag_code = tag
     frame.time = time
     frame.timeout = timeout
@@ -224,7 +224,7 @@ def inquire(
     mode: int = NULL_MODE,
     state: int = NULL_STATE,
     condition: int = NULL_CONDITION,
-    precedence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRESENCE,
     tag: int = NULL_TAG,
     time: int = NULL_TIME,
     timeout: int = NULL_TIMEOUT,
@@ -256,7 +256,7 @@ def inquire(
     frame.event_code = event
     frame.mode_code = mode
     frame.state_code = state
-    frame.precedence = precedence
+    frame.presence = presence
     frame.tag_code = tag
     frame.time = time
     frame.timeout = timeout
@@ -351,7 +351,7 @@ def attach(
     entity: AvEntity,
     outlet: AvEntity,
     attribute: int = NULL_ATTRIBUTE,
-    precedence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRESENCE,
     timeout: int = NULL_TIMEOUT,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
@@ -360,7 +360,7 @@ def attach(
     frame.entity = entity
     frame.outlet = outlet
     frame.attribute_code = attribute
-    frame.precedence = precedence
+    frame.presence = presence
     frame.authorization = authorization
     frame.timeout = timeout
     hgtp.post(frame=frame)
@@ -369,14 +369,14 @@ def attach(
 def detach(
     entity: AvEntity,
     attribute: int = NULL_ATTRIBUTE,
-    precedence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRESENCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
     frame = hgtp.HGTPFrame()
     frame.command_code = hgtp.Command.DETACH
     frame.entity = entity
     frame.attribute_code = attribute
-    frame.precedence = precedence
+    frame.presence = presence
     frame.authorization = authorization
     hgtp.post(frame=frame)
 
@@ -384,14 +384,14 @@ def detach(
 def attached(
     entity: AvEntity,
     attribute: int = NULL_ATTRIBUTE,
-    precedence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRESENCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> bool:
     frame = hgtp.HGTPFrame()
     frame.command_code = hgtp.Command.ATTACHED
     frame.entity = entity
     frame.attribute_code = attribute
-    frame.precedence = precedence
+    frame.presence = presence
     frame.authorization = authorization
     response = hgtp.post(frame=frame)
     return response.resultant == 1
@@ -414,7 +414,7 @@ def attachment(
     index: int = NULL_INDEX,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> Tuple[AvEntity, int, int, int]:
-    """Return attachment details (outlet, attribute, precedence, and expiration)?"""
+    """Return attachment details (outlet, attribute, presence, and expiration)?"""
     frame = hgtp.HGTPFrame()
     frame.command_code = hgtp.Command.ATTACHMENT
     frame.entity = entity
@@ -424,7 +424,7 @@ def attachment(
     return (
         response.outlet,
         response.attribute_code,
-        response.precedence,
+        response.presence,
         response.time,
     )
 
@@ -437,8 +437,7 @@ def attachment(
 def connect(
     entity: AvEntity,
     outlet: AvEntity,
-    method: int = NULL_METHOD,
-    precedence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRESENCE,
     timeout: int = NULL_TIMEOUT,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
@@ -446,39 +445,34 @@ def connect(
     frame.command_code = hgtp.Command.CONNECT
     frame.entity = entity
     frame.outlet = outlet
-    frame.method_code = method
     frame.timeout = timeout
-    frame.precedence = precedence
+    frame.presence = presence
     frame.authorization = authorization
     hgtp.post(frame=frame)
 
 
 def disconnect(
     entity: AvEntity,
-    method: int = NULL_METHOD,
-    precedence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRESENCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
     frame = hgtp.HGTPFrame()
     frame.command_code = hgtp.Command.DISCONNECT
     frame.entity = entity
-    frame.method_code = method
-    frame.precedence = precedence
+    frame.presence = presence
     frame.authorization = authorization
     hgtp.post(frame=frame)
 
 
 def connected(
     entity: AvEntity,
-    method: int = NULL_METHOD,
-    precedence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRESENCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> bool:
     frame = hgtp.HGTPFrame()
     frame.command_code = hgtp.Command.CONNECTED
     frame.entity = entity
-    frame.method_code = method
-    frame.precedence = precedence
+    frame.presence = presence
     frame.authorization = authorization
     response = hgtp.post(frame=frame)
     return response.resultant == 1
@@ -510,7 +504,7 @@ def connection(
     return (
         response.outlet,
         response.method_code,
-        response.precedence,
+        response.presence,
         response.time,
     )
 
@@ -655,7 +649,7 @@ def publish(
     mode: int = NULL_MODE,
     state: int = NULL_STATE,
     condition: int = NULL_CONDITION,
-    presence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRESENCE,
     tag: int = NULL_TAG,
     time: int = NULL_TIME,
     timeout: int = NULL_TIMEOUT,
@@ -688,7 +682,7 @@ def publish(
     frame.event_code = event
     frame.mode_code = mode
     frame.state_code = state
-    frame.precedence = presence
+    frame.presence = presence
     frame.tag_code = tag
     frame.time = time
     frame.timeout = timeout
@@ -786,7 +780,7 @@ def wait(
         mode=response.mode_code,
         state=response.state_code,
         condition=response.condition_code,
-        precedence=response.precedence,
+        presence=response.presence,
         tag=response.tag_code,
         bytes=response._bytes,
         name=response.name,
@@ -843,7 +837,7 @@ def wait_sustained(
             mode=response.mode_code,
             state=response.state_code,
             condition=response.condition_code,
-            precedence=response.precedence,
+            presence=response.presence,
             tag=response.tag_code,
             bytes=response._bytes,
             name=response.name,
@@ -866,14 +860,14 @@ def wait_sustained(
 def subscribed(
     entity: AvEntity,
     event: int = NULL_EVENT,
-    precedence: int = NULL_PRECEDENCE,
+    presence: int = NULL_PRESENCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> bool:
     frame = hgtp.HGTPFrame()
     frame.command_code = hgtp.Command.SUBSCRIBED
     frame.entity = entity
     frame.event_code = event
-    frame.precedence = precedence
+    frame.presence = presence
     frame.authorization = authorization
     response = hgtp.post(frame=frame)
     return response.resultant == 1
@@ -891,7 +885,7 @@ def subscription(
     frame.authorization = authorization
     response = hgtp.post(frame=frame)
 
-    return response.outlet, response.event_code, response.precedence, response.time
+    return response.outlet, response.event_code, response.presence, response.time
 
 
 #####################

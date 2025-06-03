@@ -114,11 +114,11 @@ def outlet(name: str, a: AvAuthorization | None = None) -> AvEntity:
             authorization=auth(a=a)
         )
 
-        # Self connect outlet on precedence level 1
+        # Self connect outlet on presence level 1
         av.connect_method(
             entity=e,
             outlet=e,
-            precedence=1,
+            presence=1,
             authorization=auth(a)
         )
 
