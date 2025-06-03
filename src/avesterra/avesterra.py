@@ -576,6 +576,9 @@ class CommunicationError(AvesTerraError):
 class MessageTooLargeError(AvesTerraError):
     pass
 
+class FileError(AvesTerraError):
+
+
 
 # Perhaps this should just be an init method of Entity?
 def entity_of(s):
