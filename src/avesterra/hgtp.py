@@ -744,7 +744,6 @@ class SocketPool:
                     pass
 
             try:
-                sock.shutdown(socket.SHUT_RDWR)
                 sock.close()
             except Exception:
                 pass
