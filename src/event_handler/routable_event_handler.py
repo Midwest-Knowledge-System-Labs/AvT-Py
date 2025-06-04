@@ -10,7 +10,7 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 
 """
 RoutableEventHandler aims at implementing all the standard Orchestra behavior of an
-adapter and take care of the boilerplate code.
+event_handler and take care of the boilerplate code.
 See documentation of the `RoutableEventHandler` class
 """
 
@@ -20,7 +20,7 @@ from dataclasses import dataclass
 from typing import Callable, Literal
 from dotenv import find_dotenv, load_dotenv
 import avesterra as av
-from avesterra.avesterra import AdapterError
+from avesterra.avesterra import SubscriberError
 from event_handler.event_handler import EventHandler
 from orchestra.interface import Interface, Event, ValueType
 import midwksl
@@ -87,78 +87,76 @@ class RoutableEventHandler:
         self_subscribe: bool = False,
     ):
         """
-        Utility class to implement Orchestra adapters respecting the Orchestra
-        adapter standard, including the declaration of the adapter's interface
+        Utility class to implement Orchestra event_handlers respecting the Orchestra
+        event_handler standard, including the declaration of the event_handler's interface
         see:
         - <https://gitlab.com/ledr/core/dev-platform/developer-resources/-/wikis/The-Orchestra-Platform/Adapters-standard>
         - <https://gitlab.com/groups/ledr/-/wikis/Standard-Adapter-Interface>
 
-        Creating an instance of an RoutableEventHandler will call the `av.initialize`
-        function, and will call `av.finalize` when the adapter is stopped.
-        You can interract with the Orchestra server as soon as the adapter
+        Creating an instance of a RoutableEventHandler will call the `av.initialize`
+        function, and will call `av.finalize` when the event_handler is stopped.
+        You can interract with the Orchestra server as soon as the event_handler
         is created.
-        Creating multiple instances of OrchestraAdaptre in the same process is
+        Creating multiple instances of RoutableEventHandler in the same process is
         not supported and will result in undefined behavior. Adding support for
         it is possible future improvement, but it's unlikely to be useful.
 
         To make the `adapt` call to the Orchestra server and publish the
-        interface of the adapter, remember to call the method `run()` of the
-        adapter after you are done declaring all of the routes.
+        interface of the event_handler, remember to call the method `run()` of the
+        event_handler after you are done declaring all of the routes.
 
         # Routes definition
 
         After creating an instance of RoutableEventHandler, you should define all
-        the routes the adapter will handle.
+        the routes the event_handler will handle.
         Each route is defined by a function with a decorator
-        `@adapter.route("<Route name>")`. The name used in the public interface
-        of the adapter and acts as documentation.
+        `@event_handler.route("<Route name>")`. The name used in the public interface
+        of the event_handler and acts as documentation.
         Other decorators are used to indicate how a invoker can invoke that
         route.
         for example:
         ```py
-        adapter = RoutableEventHandler(
-            mount_key="math adapter",
-            name="Math adapter",
+        event_handler = RoutableEventHandler(
+            name="Math event_handler",
             version="1.0.0",
             description="Basic math utilities",
         )
 
 
-        @adapter.route("Echo")
-        @adapter.method(av.AvMethod.ECHO)
+        @event_handler.route("Echo")
+        @event_handler.method(av.AvMethod.ECHO)
         def echo(value: av.AvValue) -> av.AvValue:
             \"""
             Echoes the given value
             \"""
             return value
 
-        adapter.run()
+        event_handler.run()
         ```
-        The decorator `@adapter.method(av.AvMethod.ECHO)` indicates that this
+        The decorator `@event_handler.method(av.AvMethod.ECHO)` indicates that this
         route is reponsible for handling any invoke call whose 'method'
         parameter is `av.AvMethod.ECHO`.
         The argument `value` of the function `echo` signifies that the route is
         expecting a single parameter of the invoke to be filled, the 'value'
         parameter.
         Knowing which arguments the route expects is needed to advertize the
-        interface of the adapter, it acts as extra documentation.
+        interface of the event_handler, it acts as extra documentation.
 
         A route can have multiple decorators indicating that this route is
         responsible for handling any invoke call whose combination of multiple
         parameters matches.
         for example:
         ```py
-        adapter = RoutableEventHandler(
-            mount_key="pokemon_event_handler",
-            name="Pokémon adapter",
+        event_handler = RoutableEventHandler(
+            name="Pokémon event_handler",
             version="1.0.0",
             description="Represents a Pokémon",
         )
 
 
-        @adapter.route("Get name")
-        @adapter.method(av.AvMethod.GET)
-        @adapter.attribute(av.AvAttribute.NAME)
+        @event_handler.route("Get name")
+        @event_handler.method(av.AvMethod.GET)
+        @event_handler.attribute(av.AvAttribute.NAME)
         def get_name(entity: av.AvEntity) -> av.AvValue:
             \"""
             Get the english name of the pokemon
@@ -166,16 +164,16 @@ class RoutableEventHandler:
             return av.AvValue.encode_text(av.entity_name(entity))
 
 
-        @adapter.route("Get pokedex number")
-        @adapter.method(av.AvMethod.GET)
-        @adapter.attribute(av.AvAttribute.NUMBER)
+        @event_handler.route("Get pokedex number")
+        @event_handler.method(av.AvMethod.GET)
+        @event_handler.attribute(av.AvAttribute.NUMBER)
         def get_pokedex_number(entity: av.AvEntity) -> av.AvValue:
             \"""
             Get the pokedex number of the pokemon
             \"""
             return av.AvValue.encode_integer(42)
 
-        adapter.run()
+        event_handler.run()
         ```
 
         The `get_name` function will be called to handle any invoke to method
@@ -196,7 +194,7 @@ class RoutableEventHandler:
         presence, time, timeout, auxiliary, ancillary, authorization
 
         Any argument whose name doesn't match any of these will result in an
-        error being raised during initialization of the adapter.
+        error being raised during initialization of the event_handler.
         Each argument should also be of the correct type otherwise an error will
         be raised during initialization.
 
@@ -213,25 +211,25 @@ class RoutableEventHandler:
 
         All route must have a docstring and that docstring will be used to
         document what the route does in the interface declaration of the
-        adapter.
+        event_handler.
         The syntax to create the docsring is the regular python syntax to create
         a function docstring. See examples above
 
         # System monitoring
 
-        If the standard 'sysmon' adapter is running, the adapter will 
+        If the standard 'sysmon' event_handler is running, the event_handler will
         automatically periodically report its health status to it.  
-        The decorator @adapter.health_reporter can be used to provide a custom
-        function reporting the current health status of the adapter.  
+        The decorator @event_handler.health_reporter can be used to provide a custom
+        function reporting the current health status of the event_handler.
         The performance, success rate and frequency of invoke of the different
-        routes of the adapters will automatically be monitored and updated in
-        the adapter's outlet model.
+        routes of the event_handlers will automatically be monitored and updated in
+        the event_handler's outlet model.
 
-        :param mount_key: The key with which the adapter will be registered in the mount adapter. If an outlet of that key is already mounted, it will use it, otherwise it will create a new outlet.
-        :param name: The human-friendly name of the adapter as it will appear in the interface.
-        :param version: The version of the adapter as it will appear in the interface. It should follow the semantic versioning standard. (<https://semver.org/>)
-        :param description: A description of the adapter as it will appear in the interface.
-        :param handling_threads: The number of threads the adapter will use to handle requests. Default is 1. More thread thread can be used to handle more requests concurrently, but then be careful about concurrency issues. If the adapter performs CPU-heavy tasks, increasing the number of thread is not useful. If the adapter takes time to respond without using much CPU (such as waiting for network calls), then increasing the number of thread could increase performance when responding to multiple invokes at the same time.
+        :param name: The human-friendly name of the event_handler as it will appear in the interface.
+        :param version: The version of the event_handler as it will appear in the interface. It should follow the semantic versioning standard. (<https://semver.org/>)
+        :param description: A description of the event_handler as it will appear in the interface.
+        :param handling_threads: The number of threads the event_handler will use to handle requests. Default is 1. More thread thread can be used to handle more requests concurrently, but then be careful about concurrency issues. If the event_handler performs CPU-heavy tasks, increasing the number of thread is not useful. If the event_handler takes time to respond without using much CPU (such as waiting for network calls), then increasing the number of thread could increase performance when responding to multiple invokes at the same time.
+        :param self_subscribe: If true, the outlet created to support the event_handler will be self-subscribed; default is True
         """
 
         self._event_handler = _RoutableEventHandler(name, socket_count, handling_threads, self_subscribe)
@@ -666,7 +664,7 @@ class RoutableEventHandler:
 
     def on_outlet_init(self, fn: Callable):
         """
-        This function will be called after the outlet of the adapter is fully
+        This function will be called after the outlet of the event_handler is fully
         initialized, but before we call adapt on it.
         Use this function to do any modication to the outlet
         """
@@ -675,7 +673,7 @@ class RoutableEventHandler:
 
     def on_shutdown(self, fn: Callable):
         """
-        This function will be called when the adapter shuts down, no matter what.
+        This function will be called when the event_handler shuts down, no matter what.
         Use that for whatever cleanup you need to ensure happens.
         This function is called before calling `av.finalize()`.
 
@@ -689,15 +687,15 @@ class RoutableEventHandler:
     def health_reporter(self, fn: Callable[[], Literal["GREEN", "YELLOW", "RED"]]):
         """
         This function will be called regularly to report the health of the
-        adapter.
+        event_handler.
         The function should return a string that will be used as the health
-        report of the adapter.  
+        report of the event_handler.
 
-        "GREEN" means the adapter is healthy.  
-        "YELLOW" means the adapter can function, but a human should investigate
-        why it's not green. Do not report "YELLOW" if the adapter does not
+        "GREEN" means the event_handler is healthy.
+        "YELLOW" means the event_handler can function, but a human should investigate
+        why it's not green. Do not report "YELLOW" if the event_handler does not
         require human investigation.
-        "RED" means the adapter is not healthy and cannot function.
+        "RED" means the event_handler is not healthy and cannot function.
         """
         self._health_reporter = fn
         return fn
@@ -709,13 +707,13 @@ class RoutableEventHandler:
         for fnname, route in self._routes.items():
             if not route.name_set:
                 raise ValueError(
-                    f'{fnname}: Name not set, did you forgot to add the decorator `@adapter.route("<Route name>")` ?'
+                    f'{fnname}: Name not set, did you forgot to add the decorator `@event_handler.route("<Route name>")` ?'
                 )
 
             if av.AvOperator.VALUE in route._method.args:
                 if route._method.value_in.tag == av.AvTag.NULL:
                     raise ValueError(
-                        f"{fnname}: Takes value as parameter but value_in is not set, did you forgot to add the decorator eg. `@adapter.value_in(<value type>)` ?"
+                        f"{fnname}: Takes value as parameter but value_in is not set, did you forgot to add the decorator eg. `@event_handler.value_in(<value type>)` ?"
                     )
 
         return Interface(
@@ -837,4 +835,4 @@ class RoutableEventHandler:
             av.av_log.info(f"calltimer {route._method.name}: Success in {dt:.3f}s")
             return res
 
-        raise AdapterError(f"No matching route found for request {args=}")
+        raise SubscriberError(f"No matching route found for request {args=}")

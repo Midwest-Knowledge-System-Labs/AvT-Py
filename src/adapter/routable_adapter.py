@@ -118,7 +118,6 @@ class RoutableAdapter:
         for example:
         ```py
         adapter = RoutableAdapter(
-            mount_key="math adapter",
             name="Math adapter",
             version="1.0.0",
             description="Basic math utilities",
@@ -150,7 +149,6 @@ class RoutableAdapter:
         for example:
         ```py
         adapter = RoutableAdapter(
-            mount_key="pokemon_adapter",
             name="Pokémon adapter",
             version="1.0.0",
             description="Represents a Pokémon",
@@ -228,11 +226,11 @@ class RoutableAdapter:
         routes of the adapters will automatically be monitored and updated in
         the adapter's outlet model.
 
-        :param mount_key: The key with which the adapter will be registered in the mount adapter. If an outlet of that key is already mounted, it will use it, otherwise it will create a new outlet.
         :param name: The human-friendly name of the adapter as it will appear in the interface.
         :param version: The version of the adapter as it will appear in the interface. It should follow the semantic versioning standard. (<https://semver.org/>)
         :param description: A description of the adapter as it will appear in the interface.
         :param adapting_threads: The number of threads the adapter will use to handle requests. Default is 1. More thread thread can be used to handle more requests concurrently, but then be careful about concurrency issues. If the adapter performs CPU-heavy tasks, increasing the number of thread is not useful. If the adapter takes time to respond without using much CPU (such as waiting for network calls), then increasing the number of thread could increase performance when responding to multiple invokes at the same time.
+        :param self_connect: If true, the outlet created to support the adapter will be self connected; default is True
         """
 
         self._adapter = _RoutableAdapter(name, socket_count, adapting_threads, self_connect=self_connect)
