@@ -2186,9 +2186,10 @@ class EventData:
 
 def wait_event(
     outlet: AvEntity,
+    callback: Callable[[EventData], None],
     timeout: AvTimeout = NULL_TIMEOUT,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
-) -> EventData:
+):
     """
     Wait for a single event
     If saving on network latency, consider using `wait_event_sustained` instead.
@@ -2237,36 +2238,38 @@ def wait_event(
     ) -> None:
         nonlocal res
 
-        res = EventData(
-            entity=entity,
-            outlet=outlet,
-            method=AvMethod(method),
-            attribute=AvAttribute(attribute),
-            name=name.decode(ENCODING),
-            key=key.decode(ENCODING),
-            value=AvValue(tag=AvTag(tag), bytes=bytes),
-            parameter=parameter,
-            resultant=resultant,
-            index=index,
-            instance=instance,
-            offset=offset,
-            count=count,
-            aspect=AvAspect(aspect),
-            context=AvContext(context),
-            category=AvCategory(category),
-            klass=AvClass(klass),
-            event=AvEvent(event),
-            mode=AvMode(mode),
-            state=AvState(state),
-            condition=AxCondition(condition),
-            presence=presence,
-            time=AvTime.fromtimestamp(time, tz=UTC).replace(microsecond=0),
-            timeout=timeout,
-            auxiliary=auxiliary,
-            ancillary=ancillary,
-            authority=authority,
-            authorization=authorization,
-            )
+        callback(
+                EventData(
+                        entity=entity,
+                        outlet=outlet,
+                        method=AvMethod(method),
+                        attribute=AvAttribute(attribute),
+                        name=name.decode(ENCODING),
+                        key=key.decode(ENCODING),
+                        value=AvValue(tag=AvTag(tag), bytes=bytes),
+                        parameter=parameter,
+                        resultant=resultant,
+                        index=index,
+                        instance=instance,
+                        offset=offset,
+                        count=count,
+                        aspect=AvAspect(aspect),
+                        context=AvContext(context),
+                        category=AvCategory(category),
+                        klass=AvClass(klass),
+                        event=AvEvent(event),
+                        mode=AvMode(mode),
+                        state=AvState(state),
+                        condition=AxCondition(condition),
+                        presence=presence,
+                        time=AvTime.fromtimestamp(time, tz=UTC).replace(microsecond=0),
+                        timeout=timeout,
+                        auxiliary=auxiliary,
+                        ancillary=ancillary,
+                        authority=authority,
+                        authorization=authorization,
+                )
+        )
 
     api.wait(
         outlet=outlet,
@@ -2274,8 +2277,6 @@ def wait_event(
         authorization=authorization,
         callback=_local_callback,
     )
-    assert res is not None
-    return res
 
 def wait_event_sustained(
     outlet: AvEntity,

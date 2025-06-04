@@ -6,9 +6,6 @@ The Orchestra library is distributed in the hope that it will be useful, but WIT
 You should have received a copy of the GNU Lesser General Public License along with the Orchestra library. If not, see <https://www.gnu.org/licenses/>.
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
-from avesterra import AvAuthorization
-
-import midwksl
 
 """
 OrchestraAdapter aims at implementing all the standard Orchestra behavior of an
@@ -17,16 +14,15 @@ See documentation of the `OrchestraAdapter` class
 """
 
 import inspect
-from threading import Thread
 import time
 from dataclasses import dataclass
 from typing import Callable, Literal
 from dotenv import find_dotenv, load_dotenv
 import avesterra as av
-from avesterra.avesterra import AdapterError, AvEntity
-from orchestra import env
-from orchestra.adapter import Adapter
-from orchestra.adapter_interface import Interface, Method, ValueType
+from avesterra.avesterra import AdapterError
+from adapter.adapter import Adapter
+from adapter.adapter_interface import Interface, Method, ValueType
+import midwksl
 
 
 class _OrchestraAdapter(Adapter):
@@ -269,7 +265,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvEntity but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.ENTITY)
+                    args.append(av.AvOperator.ENTITY)
                 elif param.name == "outlet":
                     if param.annotation != inspect._empty and not issubclass(
                         param.annotation, av.AvEntity
@@ -277,7 +273,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvEntity but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.OUTLET)
+                    args.append(av.AvOperator.OUTLET)
                 elif param.name == "method":
                     if param.annotation != inspect._empty and not issubclass(
                         param.annotation, av.AvMethod
@@ -285,7 +281,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvMethod but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.METHOD)
+                    args.append(av.AvOperator.METHOD)
                 elif param.name == "attribute":
                     if param.annotation != inspect._empty and not issubclass(
                         param.annotation, av.AvAttribute
@@ -293,7 +289,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvAttribute but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.ATTRIBUTE)
+                    args.append(av.AvOperator.ATTRIBUTE)
                 elif param.name == "name":
                     if param.annotation != inspect._empty and not issubclass(
                         param.annotation, av.AvName
@@ -301,7 +297,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvName but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.NAME)
+                    args.append(av.AvOperator.NAME)
                 elif param.name == "key":
                     if param.annotation != inspect._empty and not issubclass(
                         param.annotation, av.AvKey
@@ -309,7 +305,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvKey but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.KEY)
+                    args.append(av.AvOperator.KEY)
                 elif param.name == "value":
                     if param.annotation != inspect._empty and not issubclass(
                         param.annotation, av.AvValue
@@ -317,7 +313,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvValue but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.VALUE)
+                    args.append(av.AvOperator.VALUE)
                 elif param.name == "parameter":
                     if param.annotation != inspect._empty and not issubclass(
                         param.annotation, av.AvParameter
@@ -325,7 +321,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvParameter but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.PARAMETER)
+                    args.append(av.AvOperator.PARAMETER)
                 elif param.name == "resultant":
                     raise ValueError(
                         f"Function '{fn.__name__}': '{param.name}' argument is not supported yet"
@@ -337,7 +333,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvIndex but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.INDEX)
+                    args.append(av.AvOperator.INDEX)
                 elif param.name == "instance":
                     if param.annotation != inspect._empty and not issubclass(
                         param.annotation, av.AvInstance
@@ -345,7 +341,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvInstance but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.INSTANCE)
+                    args.append(av.AvOperator.INSTANCE)
                 elif param.name == "offset":
                     raise ValueError(
                         f"Function '{fn.__name__}': '{param.name}' argument is not supported yet"
@@ -357,7 +353,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvCount but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.COUNT)
+                    args.append(av.AvOperator.COUNT)
                 elif param.name == "aspect":
                     if param.annotation != inspect._empty and not issubclass(
                         param.annotation, av.AvAspect
@@ -365,7 +361,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvAspect but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.ASPECT)
+                    args.append(av.AvOperator.ASPECT)
                 elif param.name == "context":
                     if param.annotation != inspect._empty and not issubclass(
                         param.annotation, av.AvContext
@@ -373,7 +369,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvContext but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.CONTEXT)
+                    args.append(av.AvOperator.CONTEXT)
                 elif param.name == "category":
                     if param.annotation != inspect._empty and not issubclass(
                         param.annotation, av.AvCategory
@@ -381,7 +377,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvCategory but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.CATEGORY)
+                    args.append(av.AvOperator.CATEGORY)
                 elif param.name == "klass":
                     if param.annotation != inspect._empty and not issubclass(
                         param.annotation, av.AvClass
@@ -389,7 +385,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvClass but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.CLASS)
+                    args.append(av.AvOperator.CLASS)
                 elif param.name == "event":
                     if param.annotation != inspect._empty and not issubclass(
                         param.annotation, av.AvEvent
@@ -397,7 +393,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvEvent but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.EVENT)
+                    args.append(av.AvOperator.EVENT)
                 elif param.name == "mode":
                     if param.annotation != inspect._empty and not issubclass(
                         param.annotation, av.AvMode
@@ -405,7 +401,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvMode but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.MODE)
+                    args.append(av.AvOperator.MODE)
                 elif param.name == "state":
                     raise ValueError(
                         f"Function '{fn.__name__}': '{param.name}' argument is not supported yet"
@@ -421,7 +417,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a int but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.PRESENCE)
+                    args.append(av.AvOperator.PRESENCE)
                 elif param.name == "time":
                     if param.annotation != inspect._empty and not issubclass(
                         param.annotation, av.AvTime
@@ -429,7 +425,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvTime but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.TIME)
+                    args.append(av.AvOperator.TIME)
                 elif param.name == "timeout":
                     if param.annotation != inspect._empty and not issubclass(
                         param.annotation, av.AvTimeout
@@ -437,7 +433,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvTimeout but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.TIMEOUT)
+                    args.append(av.AvOperator.TIMEOUT)
                 elif param.name == "mask":
                     if param.annotation != inspect._empty and not issubclass(
                         param.annotation, av.AvMask
@@ -452,7 +448,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvEntity but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.AUXILIARY)
+                    args.append(av.AvOperator.AUXILIARY)
                 elif param.name == "ancillary":
                     if param.annotation != inspect._empty and not issubclass(
                         param.annotation, av.AvEntity
@@ -460,7 +456,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvEntity but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.ANCILLARY)
+                    args.append(av.AvOperator.ANCILLARY)
                 elif param.name == "credential":
                     raise ValueError(
                         f"Function '{fn.__name__}': '{param.name}' argument is not supported yet"
@@ -472,7 +468,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvAuthorization but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.AUTHORIZATION)
+                    args.append(av.AvOperator.AUTHORIZATION)
                 elif param.name == "authority":
                     if param.annotation != inspect._empty and not issubclass(
                         param.annotation, av.AvAuthorization
@@ -480,7 +476,7 @@ class OrchestraAdapter:
                         raise ValueError(
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvAuthorization but is {param.annotation}"
                         )
-                    args.append(av.AvAspect.AUTHORITY)
+                    args.append(av.AvOperator.AUTHORITY)
                 else:
                     raise ValueError(
                         f"Function '{fn.__name__}': Argument {param.name} is not supported"
@@ -725,7 +721,7 @@ class OrchestraAdapter:
                     f"{fnname}: value_out is not set, did you forgot to add the decorator eg. `@adapter.value_out(<value type>)` ?"
                 )
 
-            if av.AvAspect.VALUE in route._method.args:
+            if av.AvOperator.VALUE in route._method.args:
                 if route._method.value_in.tag == av.AvTag.NULL:
                     raise ValueError(
                         f"{fnname}: Takes value as parameter but value_in is not set, did you forgot to add the decorator eg. `@adapter.value_in(<value type>)` ?"
@@ -795,53 +791,53 @@ class OrchestraAdapter:
 
             for arg in route._method.args:
                 match arg:
-                    case av.AvAspect.ENTITY:
+                    case av.AvOperator.ENTITY:
                         kwargs["entity"] = args.entity
-                    case av.AvAspect.OUTLET:
+                    case av.AvOperator.OUTLET:
                         kwargs["outlet"] = args.outlet
-                    case av.AvAspect.METHOD:
+                    case av.AvOperator.METHOD:
                         kwargs["method"] = args.method
-                    case av.AvAspect.ATTRIBUTE:
+                    case av.AvOperator.ATTRIBUTE:
                         kwargs["attribute"] = args.attribute
-                    case av.AvAspect.NAME:
+                    case av.AvOperator.NAME:
                         kwargs["name"] = args.name
-                    case av.AvAspect.KEY:
+                    case av.AvOperator.KEY:
                         kwargs["key"] = args.key
-                    case av.AvAspect.VALUE:
+                    case av.AvOperator.VALUE:
                         kwargs["value"] = args.value
-                    case av.AvAspect.PARAMETER:
+                    case av.AvOperator.PARAMETER:
                         kwargs["parameter"] = args.parameter
-                    case av.AvAspect.INDEX:
+                    case av.AvOperator.INDEX:
                         kwargs["index"] = args.index
-                    case av.AvAspect.INSTANCE:
+                    case av.AvOperator.INSTANCE:
                         kwargs["instance"] = args.instance
-                    case av.AvAspect.COUNT:
+                    case av.AvOperator.COUNT:
                         kwargs["count"] = args.count
-                    case av.AvAspect.ASPECT:
+                    case av.AvOperator.ASPECT:
                         kwargs["aspect"] = args.aspect
-                    case av.AvAspect.CONTEXT:
+                    case av.AvOperator.CONTEXT:
                         kwargs["context"] = args.context
-                    case av.AvAspect.CATEGORY:
+                    case av.AvOperator.CATEGORY:
                         kwargs["category"] = args.category
-                    case av.AvAspect.CLASS:
+                    case av.AvOperator.CLASS:
                         kwargs["klass"] = args.klass
-                    case av.AvAspect.EVENT:
+                    case av.AvOperator.EVENT:
                         kwargs["event"] = args.event
-                    case av.AvAspect.MODE:
+                    case av.AvOperator.MODE:
                         kwargs["mode"] = args.mode
-                    case av.AvAspect.PRESENCE:
+                    case av.AvOperator.PRESENCE:
                         kwargs["presence"] = args.presence
-                    case av.AvAspect.TIME:
+                    case av.AvOperator.TIME:
                         kwargs["time"] = args.time
-                    case av.AvAspect.TIMEOUT:
+                    case av.AvOperator.TIMEOUT:
                         kwargs["timeout"] = args.timeout
-                    case av.AvAspect.AUXILIARY:
+                    case av.AvOperator.AUXILIARY:
                         kwargs["auxiliary"] = args.auxiliary
-                    case av.AvAspect.ANCILLARY:
+                    case av.AvOperator.ANCILLARY:
                         kwargs["ancillary"] = args.ancillary
-                    case av.AvAspect.AUTHORIZATION:
+                    case av.AvOperator.AUTHORIZATION:
                         kwargs["authorization"] = args.authorization
-                    case av.AvAspect.AUTHORITY:
+                    case av.AvOperator.AUTHORITY:
                         kwargs["authority"] = args.authority
 
             start_time = time.time()
