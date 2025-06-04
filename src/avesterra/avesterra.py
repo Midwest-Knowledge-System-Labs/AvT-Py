@@ -577,7 +577,7 @@ class MessageTooLargeError(AvesTerraError):
     pass
 
 class FileError(AvesTerraError):
-
+    pass
 
 
 # Perhaps this should just be an init method of Entity?
