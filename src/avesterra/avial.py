@@ -8,14 +8,6 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 """
 from __future__ import annotations
 
-# ----------------------------------------------------------
-# --  Module Name: avesterra.avial                        --
-# --  File Name:   avial.py                               --
-# --  Authors:     J. Smart & Dave Bridgelend             --
-# --  Email:       avesterra@georgetown.edu               --
-# --  AvesTerra - Copyright 2022 Georgetown University    --
-# --  US Patent No. 9,996,567                             --
-# ----------------------------------------------------------
 import base64
 import dataclasses
 import json
