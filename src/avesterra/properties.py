@@ -1,4 +1,5 @@
-""" Copyright (c) 2025 Midwest Knowledge System Labs
+""" 
+Copyright (c) 2025 Midwest Knowledge System Labs
 Copyright (c) [LEDR Technologies Inc.] [2024-2025]
 This file is part of the Orchestra library, which helps developer use our Orchestra technology which is based on AvesTerra, owned and developed by Georgetown University, under license agreement with LEDR Technologies Inc.
 The Orchestra library is a free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
