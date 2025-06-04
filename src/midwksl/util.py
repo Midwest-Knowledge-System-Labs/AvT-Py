@@ -99,7 +99,7 @@ def find_outlet(key: str):
     )
 
 @cache
-def outlet(name: str, a: AvAuthorization | None = None) -> AvEntity:
+def outlet(name: str, a: AvAuthorization | None = None, self_subscribe: bool = False, self_connect: bool = False) -> AvEntity:
     key = name.lower().replace(" ", "_")
     if outlet_exists(key):
         e = find_outlet(key)
@@ -114,13 +114,22 @@ def outlet(name: str, a: AvAuthorization | None = None) -> AvEntity:
             authorization=auth(a=a)
         )
 
-        # Self connect outlet on presence level 1
-        av.connect_method(
-            entity=e,
-            outlet=e,
-            presence=1,
-            authorization=auth(a)
-        )
+        if self_connect:
+            # Self connect outlet on presence level 1
+            av.connect_method(
+                entity=e,
+                outlet=e,
+                presence=1,
+                authorization=auth(a)
+            )
+
+        if self_subscribe:
+            # Self subscribe to all events published directly outlet
+            av.subscribe_event(
+                entity=e,
+                outlet=e,
+                authorization=auth(a)
+            )
 
         # Activate object to make outlet
         av.activate_entity(

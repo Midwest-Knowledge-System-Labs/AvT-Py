@@ -57,7 +57,10 @@ def command(in_dir, out_dir):
     for taxon in taxonomy.keys():
         output_py_lines.append(f"\nclass Ax{taxon}(IntEnum):")
         for key, value in taxonomy[taxon].items():
-            output_py_lines.append(f"   {key} = auto()")
+            if key == "NULL":
+                output_py_lines.append(f"   {key} = 0")
+            else:
+                output_py_lines.append(f"   {key} = auto()")
         output_py_lines.append(f"\nAv{taxon} = Ax{taxon}\n")
 
     write_file(py_taxonomy_path, "\n".join(output_py_lines))

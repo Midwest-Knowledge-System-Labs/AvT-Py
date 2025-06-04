@@ -243,6 +243,14 @@ class ValueType:
                     False
                 ), "Value type is either not supported or we forgot to update this"
 
+@dataclass
+class Event:
+    name: str
+    description: str
+    base: av.AvLocutorOpt
+    args: list[av.AvAspect]
+    value_in: ValueType = ValueType.null()
+    value_out: ValueType = ValueType.null()
 
 @dataclass
 class Method:
@@ -322,3 +330,5 @@ class Interface:
             facet.factors["value_in"].value = method.value_in.to_value()
             facet.factors["value_out"].value = method.value_out.to_value()
         return model
+
+

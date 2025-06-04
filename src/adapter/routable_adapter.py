@@ -8,9 +8,9 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 """
 
 """
-OrchestraAdapter aims at implementing all the standard Orchestra behavior of an
+RoutableAdapter aims at implementing all the standard Orchestra behavior of an
 adapter and take care of the boilerplate code.
-See documentation of the `OrchestraAdapter` class
+See documentation of the `RoutableAdapter` class
 """
 
 import inspect
@@ -21,19 +21,23 @@ from dotenv import find_dotenv, load_dotenv
 import avesterra as av
 from avesterra.avesterra import AdapterError
 from adapter.adapter import Adapter
-from adapter.adapter_interface import Interface, Method, ValueType
+from orchestra.interface import Interface, Method, ValueType
 import midwksl
 
 
-class _OrchestraAdapter(Adapter):
+class _RoutableAdapter(Adapter):
     def __init__(
         self,
+        name: str,
         socket_count: int,
         adapting_threads: int,
+        self_connect: bool = True
     ):
         load_dotenv(find_dotenv())
+        self.name = name
         self.interface: Interface | None = None
         self._on_shutdown: Callable | None = None
+        self.self_connect = self_connect
         super().__init__(
             server=midwksl.env_avt_host(),
             directory=midwksl.env_avt_verify_chain_dir(),
@@ -45,7 +49,7 @@ class _OrchestraAdapter(Adapter):
     def init_outlet(self):
         assert self.interface is not None, "Interface not set"
         # Split name by capital letter and replace spaces after trim
-        midwksl.outlet("".join([f" {x}" if x == x.upper() else x for x in self.__class__.__name__.split()]).strip().replace(" ", "_"))
+        self.outlet = midwksl.outlet(self.name.strip().replace(" ", "_"), self_connect = self.self_connect)
         av.exclude_fact(self.outlet, av.AvAttribute.METHOD, authorization=self.auth)
         av.store_entity(
             self.outlet,
@@ -73,13 +77,15 @@ class OARoute:
     value_out_set: bool
 
 
-class OrchestraAdapter:
+class RoutableAdapter:
     def __init__(
         self,
+        name: str,
         version: str,
         description: str,
         adapting_threads: int = 1,
         socket_count: int = 32,
+        self_connect: bool = True,
     ):
         """
         Utility class to implement Orchestra adapters respecting the Orchestra
@@ -88,7 +94,7 @@ class OrchestraAdapter:
         - <https://gitlab.com/ledr/core/dev-platform/developer-resources/-/wikis/The-Orchestra-Platform/Adapters-standard>
         - <https://gitlab.com/groups/ledr/-/wikis/Standard-Adapter-Interface>
 
-        Creating an instance of an OrchestraAdapter will call the `av.initialize`
+        Creating an instance of an RoutableAdapter will call the `av.initialize`
         function, and will call `av.finalize` when the adapter is stopped.
         You can interract with the Orchestra server as soon as the adapter
         is created.
@@ -102,7 +108,7 @@ class OrchestraAdapter:
 
         # Routes definition
 
-        After creating an instance of OrchestraAdapter, you should define all
+        After creating an instance of RoutableAdapter, you should define all
         the routes the adapter will handle.
         Each route is defined by a function with a decorator
         `@adapter.route("<Route name>")`. The name used in the public interface
@@ -111,7 +117,7 @@ class OrchestraAdapter:
         route.
         for example:
         ```py
-        adapter = OrchestraAdapter(
+        adapter = RoutableAdapter(
             mount_key="math adapter",
             name="Math adapter",
             version="1.0.0",
@@ -143,7 +149,7 @@ class OrchestraAdapter:
         parameters matches.
         for example:
         ```py
-        adapter = OrchestraAdapter(
+        adapter = RoutableAdapter(
             mount_key="pokemon_adapter",
             name="Pokémon adapter",
             version="1.0.0",
@@ -229,7 +235,7 @@ class OrchestraAdapter:
         :param adapting_threads: The number of threads the adapter will use to handle requests. Default is 1. More thread thread can be used to handle more requests concurrently, but then be careful about concurrency issues. If the adapter performs CPU-heavy tasks, increasing the number of thread is not useful. If the adapter takes time to respond without using much CPU (such as waiting for network calls), then increasing the number of thread could increase performance when responding to multiple invokes at the same time.
         """
 
-        self._adapter = _OrchestraAdapter(socket_count, adapting_threads)
+        self._adapter = _RoutableAdapter(name, socket_count, adapting_threads, self_connect=self_connect)
         self._adapter.invoke_callback = self.invoke_callback
         self._routes: dict[str, OARoute] = {}
         self._version = version

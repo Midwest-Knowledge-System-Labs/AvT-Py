@@ -22,20 +22,22 @@ from dotenv import find_dotenv, load_dotenv
 import avesterra as av
 from avesterra.avesterra import AdapterError
 from event_handler.event_handler import EventHandler
-from adapter.adapter_interface import Interface, Method, ValueType
+from orchestra.interface import Interface, Event, ValueType
 import midwksl
-
-
 
 class _RoutableEventHandler(EventHandler):
     def __init__(
         self,
+        name: str,
         socket_count: int,
         waiting_threads: int,
+        self_subscribe: bool = False
     ):
         load_dotenv(find_dotenv())
+        self.name = name
         self.interface: Interface | None = None
         self._on_shutdown: Callable | None = None
+        self.self_subscribe = self_subscribe
         super().__init__(
             server=midwksl.env_avt_host(),
             directory=midwksl.env_avt_verify_chain_dir(),
@@ -47,7 +49,7 @@ class _RoutableEventHandler(EventHandler):
     def init_outlet(self):
         assert self.interface is not None, "Interface not set"
         # Split name by capital letter and replace spaces after trim
-        midwksl.outlet("".join([f" {x}" if x == x.upper() else x for x in self.__class__.__name__.split()]).strip().replace(" ", "_"))
+        self.outlet = midwksl.outlet(self.name.strip().replace(" ", "_"), self_subscribe=self.self_subscribe)
         av.exclude_fact(self.outlet, av.AvAttribute.METHOD, authorization=self.auth)
         av.store_entity(
             self.outlet,
@@ -69,19 +71,20 @@ class _RoutableEventHandler(EventHandler):
 
 @dataclass
 class OARoute:
-    _method: Method
+    _method: Event
     callback: Callable[..., av.AvValue]
     name_set: bool
-    value_out_set: bool
 
 
 class RoutableEventHandler:
     def __init__(
         self,
+        name: str,
         version: str,
         description: str,
-        adapting_threads: int = 1,
+        handling_threads: int = 1,
         socket_count: int = 32,
+        self_subscribe: bool = False,
     ):
         """
         Utility class to implement Orchestra adapters respecting the Orchestra
@@ -228,10 +231,10 @@ class RoutableEventHandler:
         :param name: The human-friendly name of the adapter as it will appear in the interface.
         :param version: The version of the adapter as it will appear in the interface. It should follow the semantic versioning standard. (<https://semver.org/>)
         :param description: A description of the adapter as it will appear in the interface.
-        :param adapting_threads: The number of threads the adapter will use to handle requests. Default is 1. More thread thread can be used to handle more requests concurrently, but then be careful about concurrency issues. If the adapter performs CPU-heavy tasks, increasing the number of thread is not useful. If the adapter takes time to respond without using much CPU (such as waiting for network calls), then increasing the number of thread could increase performance when responding to multiple invokes at the same time.
+        :param handling_threads: The number of threads the adapter will use to handle requests. Default is 1. More thread thread can be used to handle more requests concurrently, but then be careful about concurrency issues. If the adapter performs CPU-heavy tasks, increasing the number of thread is not useful. If the adapter takes time to respond without using much CPU (such as waiting for network calls), then increasing the number of thread could increase performance when responding to multiple invokes at the same time.
         """
 
-        self._event_handler = _RoutableEventHandler(socket_count, adapting_threads)
+        self._event_handler = _RoutableEventHandler(name, socket_count, handling_threads, self_subscribe)
         self._event_handler.invoke_callback = self.invoke_callback
         self._routes: dict[str, OARoute] = {}
         self._version = version
@@ -485,7 +488,7 @@ class RoutableEventHandler:
                     )
 
             self._routes[fn.__name__] = OARoute(
-                Method(
+                Event(
                     name="",
                     description=fn.__doc__.strip(),
                     base=av.AvLocutorOpt(),
@@ -493,7 +496,6 @@ class RoutableEventHandler:
                 ),
                 callback=fn,
                 name_set=False,
-                value_out_set=False,
             )
 
         return self._routes[fn.__name__]
@@ -661,14 +663,6 @@ class RoutableEventHandler:
 
         return decorator
 
-    def value_out(self, value_type: ValueType):
-        def decorator(fn: Callable[..., av.AvValue]):
-            route = self._route(fn)
-            route._method.value_out = value_type
-            route.value_out_set = True
-            return fn
-
-        return decorator
 
     def on_outlet_init(self, fn: Callable):
         """
@@ -716,11 +710,6 @@ class RoutableEventHandler:
             if not route.name_set:
                 raise ValueError(
                     f'{fnname}: Name not set, did you forgot to add the decorator `@adapter.route("<Route name>")` ?'
-                )
-
-            if not route.value_out_set:
-                raise ValueError(
-                    f"{fnname}: value_out is not set, did you forgot to add the decorator eg. `@adapter.value_out(<value type>)` ?"
                 )
 
             if av.AvOperator.VALUE in route._method.args:

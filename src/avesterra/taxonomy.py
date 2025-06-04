@@ -1,7 +1,7 @@
 from enum import IntEnum, auto
 
 class AxTaxa(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    ACTION = auto()
    ADAPTER = auto()
@@ -42,7 +42,7 @@ AvTaxa = AxTaxa
 
 
 class AxAvesterra(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    ADDRESS = auto()
    ANCILLARY = auto()
@@ -84,14 +84,14 @@ AvAvesterra = AxAvesterra
 
 
 class AxAction(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
 
 AvAction = AxAction
 
 
 class AxAdapter(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    REGISTRY = auto()
    OBJECT = auto()
@@ -113,7 +113,7 @@ AvAdapter = AxAdapter
 
 
 class AxAspect(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    COLLECTION = auto()
    ITEM = auto()
@@ -175,7 +175,7 @@ AvAspect = AxAspect
 
 
 class AxAttribute(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    CATEGORY = auto()
    CLASS = auto()
@@ -1008,7 +1008,7 @@ AvAttribute = AxAttribute
 
 
 class AxCategory(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    PERSON = auto()
    PLACE = auto()
@@ -1026,7 +1026,7 @@ AvCategory = AxCategory
 
 
 class AxClass(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    SERVER = auto()
    ANALYTIC = auto()
@@ -1497,7 +1497,7 @@ AvClass = AxClass
 
 
 class AxCondition(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    READY = auto()
    ONLINE = auto()
@@ -1515,7 +1515,7 @@ AvCondition = AxCondition
 
 
 class AxConstant(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    PI = auto()
    EULERS_NUMBER = auto()
@@ -1537,7 +1537,7 @@ AvConstant = AxConstant
 
 
 class AxContext(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    ATRA = auto()
    ADMINISTRATION = auto()
@@ -1574,7 +1574,7 @@ AvContext = AxContext
 
 
 class AxError(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    ENTITY = auto()
    OUTLET = auto()
@@ -1604,7 +1604,7 @@ AvError = AxError
 
 
 class AxEvent(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    UPDATE = auto()
    MESSAGE = auto()
@@ -1623,7 +1623,7 @@ AvEvent = AxEvent
 
 
 class AxFormat(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    BOOLEAN = auto()
    STRING = auto()
@@ -1644,14 +1644,14 @@ AvFormat = AxFormat
 
 
 class AxGoal(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
 
 AvGoal = AxGoal
 
 
 class AxInstallation(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    AVU = auto()
    CERTIFICATE = auto()
@@ -1678,7 +1678,7 @@ AvInstallation = AxInstallation
 
 
 class AxLanguage(IntEnum):
-   NULL = auto()
+   NULL = 0
    ADA = auto()
    C = auto()
    JAVA = auto()
@@ -1696,7 +1696,7 @@ AvLanguage = AxLanguage
 
 
 class AxLocutor(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    ENTITY = auto()
    OUTLET = auto()
@@ -1729,7 +1729,7 @@ AvLocutor = AxLocutor
 
 
 class AxMatch(IntEnum):
-   NULL = auto()
+   NULL = 0
    IDENTIFIER = auto()
    FIRST = auto()
    LAST = auto()
@@ -1753,7 +1753,7 @@ AvMatch = AxMatch
 
 
 class AxMethod(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    CREATE = auto()
    DELETE = auto()
@@ -1829,7 +1829,7 @@ AvMethod = AxMethod
 
 
 class AxMode(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    UPDATE = auto()
    APPEND = auto()
@@ -1848,7 +1848,7 @@ AvMode = AxMode
 
 
 class AxModel(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    AVIAL = auto()
 
@@ -1856,7 +1856,7 @@ AvModel = AxModel
 
 
 class AxNotice(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    SUCCESS = auto()
    INFORM = auto()
@@ -1870,7 +1870,7 @@ AvNotice = AxNotice
 
 
 class AxOperator(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    NIL = auto()
    ATOMIC = auto()
@@ -2106,7 +2106,7 @@ AvOperator = AxOperator
 
 
 class AxPattern(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    SYSTEM = auto()
    ENTITY = auto()
@@ -2120,14 +2120,14 @@ AvPattern = AxPattern
 
 
 class AxPercept(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
 
 AvPercept = AxPercept
 
 
 class AxPermission(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    READ = auto()
    WRITE = auto()
@@ -2138,7 +2138,7 @@ AvPermission = AxPermission
 
 
 class AxPlatform(IntEnum):
-   NULL = auto()
+   NULL = 0
    LINUX = auto()
    MAC = auto()
    WINDOWS = auto()
@@ -2147,14 +2147,14 @@ AvPlatform = AxPlatform
 
 
 class AxPrecedence(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
 
 AvPrecedence = AxPrecedence
 
 
 class AxPrefix(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    YOTTA = auto()
    ZETTA = auto()
@@ -2188,7 +2188,7 @@ AvPrefix = AxPrefix
 
 
 class AxPresence(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    PUBLIC = auto()
    PRIVATE = auto()
@@ -2198,7 +2198,7 @@ AvPresence = AxPresence
 
 
 class AxScheme(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    ATTRIBUTE = auto()
    FACT = auto()
@@ -2208,7 +2208,7 @@ AvScheme = AxScheme
 
 
 class AxState(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    ADVISORY = auto()
    SATISFACTORY = auto()
@@ -2222,7 +2222,7 @@ AvState = AxState
 
 
 class AxTag(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    BOOLEAN = auto()
    CHARACTER = auto()
@@ -2251,7 +2251,7 @@ AvTag = AxTag
 
 
 class AxTemplate(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    MODEL = auto()
    RELATIONSHIP = auto()
@@ -2265,7 +2265,7 @@ AvTemplate = AxTemplate
 
 
 class AxUnit(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    RADIAN = auto()
    DEGREE = auto()
@@ -2762,7 +2762,7 @@ AvUnit = AxUnit
 
 
 class AxVersion(IntEnum):
-   NULL = auto()
+   NULL = 0
    AVESTERRA = auto()
    AVIAL = auto()
    AVIONOMY = auto()
