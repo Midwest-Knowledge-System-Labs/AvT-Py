@@ -488,7 +488,7 @@ def connection(
     entity: AvEntity,
     index: int = NULL_INDEX,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
-) -> Tuple[AvEntity, int, int, int]:
+) -> Tuple[AvEntity, int, int]:
     frame = hgtp.HGTPFrame()
     frame.command_code = hgtp.Command.CONNECTION
     frame.entity = entity
@@ -497,7 +497,6 @@ def connection(
     response = hgtp.post(frame=frame)
     return (
         response.outlet,
-        response.method_code,
         response.presence,
         response.time,
     )
@@ -1687,9 +1686,6 @@ def covered(
     frame.authorization = authorization
     response = hgtp.post(frame=frame)
     return True if response.resultant else False
-
-
-
 
 def fasten(
     entity: AvEntity,

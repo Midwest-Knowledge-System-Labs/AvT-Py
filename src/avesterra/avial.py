@@ -1110,15 +1110,15 @@ def local_time() -> AvTime:
 
 # Avial 4.7: Create entity now routable, by supplying the `server` argument
 def create_entity(
-    name: str = NULL_NAME,
-    key: str = NULL_KEY,
+    name: AvName = NULL_NAME,
+    key: AvKey = NULL_KEY,
     context: AvContext = NULL_CONTEXT,
     category: AvCategory = NULL_CATEGORY,
     klass: AvClass = NULL_CLASS,
     method: AvMethod = NULL_METHOD,
     attribute: AvAttribute = NULL_ATTRIBUTE,
     event: AvEvent = NULL_EVENT,
-    presence: int = NULL_PRESENCE,
+    presence: AvPresence = NULL_PRESENCE,
     outlet: AvEntity = NULL_ENTITY,
     server: AvEntity = NULL_ENTITY,
     timeout: AvTimeout = NULL_TIMEOUT,
@@ -1176,8 +1176,8 @@ def invoke_entity(
     entity: AvEntity,
     method: AvMethod = AvMethod.NULL,
     attribute: AvAttribute = AvAttribute.NULL,
-    name: str = NULL_NAME,
-    key: str = NULL_KEY,
+    name: AvName = NULL_NAME,
+    key: AvKey = NULL_KEY,
     value: AvValue = NULL_VALUE,
     parameter: AvParameter = NULL_PARAMETER,
     resultant: int = NULL_RESULTANT,
@@ -1193,7 +1193,7 @@ def invoke_entity(
     mode: AvMode = AvMode.NULL,
     state: AvState = AvState.NULL,
     condition: AxCondition = AxCondition.NULL,
-    presence: int = NULL_PRESENCE,
+    presence: AvPresence = NULL_PRESENCE,
     time: AvTime = NULL_TIME,
     timeout: AvTimeout = NULL_TIMEOUT,
     auxiliary: AvEntity = NULL_ENTITY,
@@ -1267,8 +1267,8 @@ def invoke_entity_retry_bo(
     entity: AvEntity,
     method: AvMethod = AvMethod.NULL,
     attribute: AvAttribute = AvAttribute.NULL,
-    name: str = NULL_NAME,
-    key: str = NULL_KEY,
+    name: AvName = NULL_NAME,
+    key: AvKey = NULL_KEY,
     value: AvValue = NULL_VALUE,
     parameter: AvParameter = NULL_PARAMETER,
     resultant: int = NULL_RESULTANT,
@@ -1340,8 +1340,8 @@ def invoke_entity_retry_bo(
 def inquire_entity(
     entity: AvEntity,
     attribute: AvAttribute = AvAttribute.NULL,
-    name: str = NULL_NAME,
-    key: str = NULL_KEY,
+    name: AvName = NULL_NAME,
+    key: AvKey = NULL_KEY,
     value: AvValue = NULL_VALUE,
     parameter: int = NULL_PARAMETER,
     resultant: int = NULL_RESULTANT,
@@ -1357,7 +1357,7 @@ def inquire_entity(
     mode: AvMode = AvMode.NULL,
     state: AvState = AvState.NULL,
     condition: AxCondition = AxCondition.NULL,
-    presence: int = NULL_PRESENCE,
+    presence: AvPresence = NULL_PRESENCE,
     time: AvTime = NULL_TIME,
     timeout: AvTimeout = NULL_TIMEOUT,
     auxiliary: AvEntity = NULL_ENTITY,
@@ -1464,8 +1464,8 @@ def redirect_entity(
 
 def change_entity(
     entity,
-    name: str = NULL_NAME,
-    key: str = NULL_KEY,
+    name: AvName = NULL_NAME,
+    key: AvKey = NULL_KEY,
     context: AvContext = AvContext.NULL,
     category: AvCategory = AvCategory.NULL,
     klass: AvClass = AvClass.NULL,
@@ -1498,7 +1498,7 @@ def change_entity(
 
 def fetch_entity(
     entity: AvEntity,
-    name: str = NULL_NAME,
+    name: AvName = NULL_NAME,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvValue:
     """Fetch characteristics of an entity."""
@@ -1698,7 +1698,7 @@ def entity_attachment(
 def connect_method(
     entity: AvEntity,
     outlet: AvEntity,
-    presence: int = NULL_PRESENCE,
+    presence: AvPresence = NULL_PRESENCE,
     timeout: AvTimeout = NULL_TIMEOUT,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
@@ -1719,7 +1719,7 @@ def connect_method(
 
 def disconnect_method(
     entity: AvEntity,
-    presence: int = NULL_PRESENCE,
+    presence: AvPresence = NULL_PRESENCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
     """Disconnect a method from an entity"""
@@ -1735,7 +1735,7 @@ def disconnect_method(
 
 def method_connected(
     entity: AvEntity,
-    presence: int = NULL_PRESENCE,
+    presence: AvPresence = NULL_PRESENCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> bool:
     """Is a method connected to an entity?"""
@@ -2014,8 +2014,8 @@ def publish_event(
     entity: AvEntity,
     method: AvMethod = AvMethod.NULL,
     attribute: AvAttribute = AvAttribute.NULL,
-    name: str = NULL_NAME,
-    key: str = NULL_KEY,
+    name: AvName = NULL_NAME,
+    key: AvKey = NULL_KEY,
     value: AvValue = NULL_VALUE,
     parameter: AvParameter = NULL_PARAMETER,
     resultant: int = NULL_RESULTANT,
@@ -2031,7 +2031,7 @@ def publish_event(
     mode: AvMode = AvMode.NULL,
     state: AvState = AvState.NULL,
     condition: AxCondition = AxCondition.NULL,
-    presence: int = NULL_PRESENCE,
+    presence: AvPresence = NULL_PRESENCE,
     time: AvTime = NULL_TIME,
     timeout: AvTimeout = NULL_TIMEOUT,
     auxiliary: AvEntity = NULL_ENTITY,
@@ -2220,7 +2220,7 @@ def wait_event(
         mode: int,
         state: int,
         condition: int,
-        presence: int,
+        presence: AvPresence,
         tag: int,
         name: bytes,
         key: bytes,
@@ -2311,7 +2311,7 @@ def wait_event_sustained(
         mode: int,
         state: int,
         condition: int,
-        presence: int,
+        presence: AvPresence,
         tag: int,
         name: bytes,
         key: bytes,
@@ -2379,7 +2379,7 @@ def event_count(
 def event_subscribed(
     entity: AvEntity,
     event: AvEvent = AvEvent.NULL,
-    presence: int = NULL_PRESENCE,
+    presence: AvPresence = NULL_PRESENCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> bool:
     """Is there an event subscrption for an entity?"""
@@ -2473,7 +2473,7 @@ class InvokeArgs:
     mode: AvMode
     state: AvState
     condition: AxCondition
-    presence: int
+    presence: AvPresence
     time: AvTime
     timeout: AvTimeout
     auxiliary: AvEntity

@@ -175,7 +175,6 @@ PORT = 20057
 
 MESSAGE_SIZE_LIMIT_IN_BYTES = 1_048_575
 
-
 class HGTPFrame:
     command_code: int
     error_code: int
