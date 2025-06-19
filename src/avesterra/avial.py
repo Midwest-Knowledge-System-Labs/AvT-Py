@@ -1463,7 +1463,7 @@ def redirect_entity(
 
 
 def change_entity(
-    entity,
+    entity: AvEntity,
     name: AvName = NULL_NAME,
     key: AvKey = NULL_KEY,
     context: AvContext = AvContext.NULL,
@@ -1733,7 +1733,7 @@ def disconnect_method(
     )
 
 
-def method_connected(
+def entity_connected(
     entity: AvEntity,
     presence: AvPresence = NULL_PRESENCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
@@ -1907,7 +1907,7 @@ def entity_condition(
 def insert_element(
     entity: AvEntity,
     value: AvValue = NULL_VALUE,
-    index: int = NULL_INDEX,
+    index: AvIndex = NULL_INDEX,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
     """Insert a value into an entity"""
@@ -1926,7 +1926,7 @@ def insert_element(
 
 def remove_element(
     entity: AvEntity,
-    index: int = NULL_INDEX,
+    index: AvIndex = NULL_INDEX,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
     """Remove a value from an entity"""
@@ -1939,7 +1939,7 @@ def remove_element(
 def replace_element(
     entity: AvEntity,
     value: AvValue = NULL_VALUE,
-    index: int = NULL_INDEX,
+    index: AvIndex = NULL_INDEX,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
     """Replace a value in an entity"""
@@ -1966,7 +1966,7 @@ def erase_elements(entity, authorization=NULL_AUTHORIZATION) -> None:
 def find_element(
     entity: AvEntity,
     value: AvValue = NULL_VALUE,
-    index: int = NULL_INDEX,
+    index: AvIndex = NULL_INDEX,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> int:
     """Find element in an entity"""
@@ -1985,7 +1985,7 @@ def find_element(
 
 def entity_element(
     entity: AvEntity,
-    index: int = NULL_INDEX,
+    index: AvIndex = NULL_INDEX,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvValue:
     """Return element of an entity?"""
@@ -2688,7 +2688,10 @@ def read_data(
 
 
 def write_data(
-    entity, data: bytes, timeout=NULL_TIMEOUT, authorization=NULL_AUTHORIZATION
+    entity: AvEntity,
+    data: bytes,
+    timeout: AvTimeout = NULL_TIMEOUT,
+    authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> None:
     """Write an entity's data"""
     Verify.bytes(data)
@@ -2702,13 +2705,17 @@ def write_data(
 
 
 def erase_data(
-    entity: AvEntity, authorization: AvAuthorization = NULL_AUTHORIZATION
+    entity: AvEntity,
+    authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> None:
     """erase_data(entity, auth"""
     invoke_entity(entity=entity, method=AvMethod.PURGE, authorization=authorization)
 
 
-def data_count(entity, authorization=NULL_AUTHORIZATION) -> int:
+def data_count(
+    entity: AvEntity,
+    authorization: AvAuthorization = NULL_AUTHORIZATION
+) -> int:
     """Return size of entity's data"""
     return invoke_entity(
         entity=entity, method=AvMethod.COUNT, authorization=authorization
@@ -2866,7 +2873,7 @@ def entity_available(
 def entity_activated(
     entity: AvEntity, authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> bool:
-    """Is entity available?"""
+    """Is entity an outlet?"""
     Verify.entity(entity)
     Verify.authorization(authorization)
     return api.activated(entity=entity, authorization=authorization)
@@ -2882,15 +2889,6 @@ def entity_locked(
 
 
 def entity_armed(
-    entity: AvEntity, authorization: AvAuthorization = NULL_AUTHORIZATION
-) -> bool:
-    """Is entity armed?"""
-    Verify.entity(entity)
-    Verify.authorization(authorization)
-    return api.armed(entity=entity, authorization=authorization)
-
-
-def entity_active(
     entity: AvEntity, authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> bool:
     """Is entity armed?"""
@@ -3003,7 +3001,7 @@ def entity_blocking(
 def entity_pending(
     entity: AvEntity, authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> int:
-    """Return number of timer on an entity?"""
+    """Return number of publishes on an outlet?"""
     Verify.entity(entity)
     Verify.authorization(authorization)
     return api.pending(entity=entity, authorization=authorization)
@@ -3012,7 +3010,7 @@ def entity_pending(
 def entity_waiting(
     entity: AvEntity, authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> int:
-    """Return number of timer on an entity?"""
+    """Return number of wait calls on an outlet?"""
     Verify.entity(entity)
     Verify.authorization(authorization)
     return api.waiting(entity=entity, authorization=authorization)
@@ -3021,7 +3019,7 @@ def entity_waiting(
 def entity_adapting(
     entity: AvEntity, authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> int:
-    """Return number of timer on an entity?"""
+    """Return number of adapt call on an outlet?"""
     Verify.entity(entity)
     Verify.authorization(authorization)
     return api.adapting(entity=entity, authorization=authorization)
