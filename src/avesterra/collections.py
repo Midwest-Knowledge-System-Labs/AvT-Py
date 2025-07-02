@@ -20,6 +20,43 @@ def insert_collection(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Insert a collection into an entity
+
+    Collections are name/value pairs where names are UTF-8 strings (max 256 chars, non-empty)
+    and values are Avial Values. Each collection has an associated Attribute from the
+    Attribute taxonomy.
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    name : AvName
+        Name of the collection (UTF-8 string, max 256 characters, non-empty)
+    key : AvKey
+        Key identifier for the collection (UTF-8 string, max 256 characters, non-empty)
+    value : AvValue
+        Avial value to store in the collection
+    instance : AvInstance
+        Collection instance index for the collection
+    parameter : AvParameter
+        Defer saving changes to disk if set to anything but NULL_PARAMETER
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.collections as collections # Insert a collection
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> collections.insert_collection(entity=entity, name="collection_name", value=AvValue.encode_text("Sample collection value"), authorization=authorization)
+
+    >>> import avesterra.collections as collections # Insert multiple collections with keys
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> collections.insert_collection(entity=entity, name="first_collection", key="key1", value=AvValue.encode_integer(100), authorization=authorization)
+    >>> collections.insert_collection(entity=entity, name="second_collection", key="key2", value=AvValue.encode_text("Another value"), authorization=authorization)
+    """
     aspects.insert(
         entity=entity,
         aspect=AvAspect.COLLECTION,
@@ -39,6 +76,27 @@ def remove_collection(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Remove a collection from an entity
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    instance : AvInstance
+        Collection instance index to remove
+    parameter : AvParameter
+        Defer saving changes to disk if set to anything but NULL_PARAMETER
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.collections as collections # Remove collection by instance
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> collections.remove_collection(entity=entity, instance=1, authorization=authorization)
+    """
     aspects.remove(
         entity=entity,
         aspect=AvAspect.COLLECTION,
@@ -57,6 +115,38 @@ def replace_collection(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Replace an existing collection in an entity
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    name : AvName
+        New name for the collection
+    key : AvKey
+        Key identifier for the collection (UTF-8 string, max 256 characters, non-empty) to replace
+    value : AvValue
+        New Avial value for the collection
+    instance : AvInstance
+        Collection instance index to replace
+    parameter : AvParameter
+        Defer saving changes to disk if set to anything but NULL_PARAMETER
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.collections as collections # Replace collection by key
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> collections.replace_collection(entity=entity, key="existing_key", name="updated_name", value=AvValue.encode_text("Updated value"), authorization=authorization)
+
+    >>> import avesterra.collections as collections # Replace collection by instance
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> collections.replace_collection(entity=entity, instance=1, name="new_name", value=AvValue.encode_integer(999), authorization=authorization)
+    """
     aspects.replace(
         entity=entity,
         aspect=AvAspect.COLLECTION,
@@ -78,6 +168,40 @@ def find_collection(
     instance: AvInstance = NULL_INSTANCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvIndex:
+    """Find the index of a collection based on name or value
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    name : AvName
+        Name of the collection to find
+    value : AvValue
+        Value of the collection to find
+    instance : AvInstance
+        Collection instance to search within
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Returns
+    _______
+    AvIndex
+        Index of the found collection, or appropriate null value if not found
+
+    Examples
+    ________
+
+    >>> import avesterra.collections as collections # Find collection by name
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> index = collections.find_collection(entity=entity, name="target_collection", authorization=authorization)
+    >>> print(f"Found at index: {index}")
+
+    >>> import avesterra.collections as collections # Find collection by value
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> index = collections.find_collection(entity=entity, value=AvValue.encode_text("search_value"), authorization=authorization)
+    """
     return aspects.find(
         entity=entity,
         aspect=AvAspect.COLLECTION,
@@ -97,6 +221,31 @@ def include_collection(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Include a collection, creating it if it doesn't exist
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    name : AvName
+        Name of the collection
+    key : AvKey
+        Key identifier for the collection (UTF-8 string, max 256 characters, non-empty)
+    value : AvValue
+        Avial value for the collection
+    parameter : AvParameter
+        Defer saving changes to disk if set to anything but NULL_PARAMETER
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.collections as collections # Include collection (create if not exists)
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> collections.include_collection(entity=entity, name="ensure_collection", key="ensure_key", value=AvValue.encode_text("Ensured value"), authorization=authorization)
+    """
     aspects.include(
         entity=entity,
         aspect=AvAspect.COLLECTION,
@@ -115,6 +264,27 @@ def exclude_collection(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Exclude (remove) a collection by key
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    key : AvKey
+        Key identifier of the collection to exclude
+    parameter : AvParameter
+        Defer saving changes to disk if set to anything but NULL_PARAMETER
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.collections as collections # Exclude collection by key
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> collections.exclude_collection(entity=entity, key="collection_to_remove", authorization=authorization)
+    """
     aspects.exclude(
         entity=entity,
         aspect=AvAspect.COLLECTION,
@@ -133,6 +303,37 @@ def set_collection(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Set a collection, creating or updating as needed
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    name : AvName
+        Name of the collection
+    key : AvKey
+        Key identifier for the collection (UTF-8 string, max 256 characters, non-empty)
+    value : AvValue
+        Avial value to set for the collection
+    parameter : AvParameter
+        Defer saving changes to disk if set to anything but NULL_PARAMETER
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.collections as collections # Set collection
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> collections.set_collection(entity=entity, name="config_collection", key="config_key", value=AvValue.encode_text("Configuration value"), authorization=authorization)
+
+    >>> import avesterra.collections as collections # Set multiple collections
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> collections.set_collection(entity=entity, name="setting_1", key="key1", value=AvValue.encode_boolean(True), authorization=authorization)
+    >>> collections.set_collection(entity=entity, name="setting_2", key="key2", value=AvValue.encode_real(3.14), authorization=authorization)
+    """
     aspects.set(
         entity=entity,
         aspect=AvAspect.COLLECTION,
@@ -150,6 +351,31 @@ def get_collection(
     key: AvKey = NULL_KEY,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvValue:
+    """Get the value of a collection by key
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    key : AvKey
+        Key identifier of the collection to retrieve
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Returns
+    _______
+    AvValue
+        The Avial value stored in the collection
+
+    Examples
+    ________
+
+    >>> import avesterra.collections as collections # Get collection value
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> value = collections.get_collection(entity=entity, key="my_key", authorization=authorization)
+    >>> print(f"Collection value: {AvValue.decode_text(value)}")
+    """
     return aspects.get(
         entity=entity,
         aspect=AvAspect.COLLECTION,
@@ -165,6 +391,32 @@ def clear_collection(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Clear collections from an entity
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    key : AvKey
+        Specific key to clear, or NULL_KEY to clear all collections
+    parameter : AvParameter
+        Defer saving changes to disk if set to anything but NULL_PARAMETER
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.collections as collections # Clear specific collection
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> collections.clear_collection(entity=entity, key="specific_key", authorization=authorization)
+
+    >>> import avesterra.collections as collections # Clear all collections
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> collections.clear_collection(entity=entity, authorization=authorization)
+    """
     aspects.clear(
         entity=entity,
         aspect=AvAspect.COLLECTION,
@@ -179,6 +431,29 @@ def collection_count(
     entity: AvEntity,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvCount:
+    """Get the count of collections in an entity
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Returns
+    _______
+    AvCount
+        Number of collections in the entity
+
+    Examples
+    ________
+
+    >>> import avesterra.collections as collections # Get collection count
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> count = collections.collection_count(entity=entity, authorization=authorization)
+    >>> print(f"Entity has {count} collections")
+    """
     return aspects.count(
         entity=entity,
         aspect=AvAspect.COLLECTION,
@@ -192,6 +467,34 @@ def collection_member(
     key: AvKey = NULL_KEY,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> bool:
+    """Check if a collection exists for the given key
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    key : AvKey
+        Key identifier to check for membership
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Returns
+    _______
+    bool
+        True if the collection exists, False otherwise
+
+    Examples
+    ________
+
+    >>> import avesterra.collections as collections # Check collection membership
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> exists = collections.collection_member(entity=entity, key="check_key", authorization=authorization)
+    >>> if exists:
+    ...     print("collection exists")
+    ... else:
+    ...     print("collection not found")
+    """
     return aspects.member(
         entity=entity,
         aspect=AvAspect.COLLECTION,
@@ -207,6 +510,38 @@ def collection_name(
     instance: AvInstance = NULL_INSTANCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvName:
+    """Get the name of a collection
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    key : AvKey
+        Key identifier of the collection
+    instance : AvInstance
+        Collection instance index
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Returns
+    _______
+    AvName
+        Name of the collection
+
+    Examples
+    ________
+
+    >>> import avesterra.collections as collections # Get collection name by key
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> name = collections.collection_name(entity=entity, key="my_key", authorization=authorization)
+    >>> print(f"Collection name: {name}")
+
+    >>> import avesterra.collections as collections # Get collection name by instance
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> name = collections.collection_name(entity=entity, instance=1, authorization=authorization)
+    """
     return aspects.name(
         entity=entity,
         aspect=AvAspect.COLLECTION,
@@ -222,6 +557,31 @@ def collection_key(
     instance: AvInstance = NULL_INSTANCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvKey:
+    """Get the key of a collection by instance
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    instance : AvInstance
+        Collection instance index
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Returns
+    _______
+    AvKey
+        Key identifier of the collection
+
+    Examples
+    ________
+
+    >>> import avesterra.collections as collections # Get collection key by instance
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> key = collections.collection_key(entity=entity, instance=1, authorization=authorization)
+    >>> print(f"Collection key: {key}")
+    """
     return aspects.key(
         entity=entity,
         aspect=AvAspect.COLLECTION,
@@ -237,6 +597,37 @@ def collection_value(
     instance: AvInstance = NULL_INSTANCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvValue:
+    """Get the value of a collection
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    key : AvKey
+        Key identifier of the collection
+    instance : AvInstance
+        Collection instance index
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Returns
+    _______
+    AvValue
+        Avial value stored in the collection
+
+    Examples
+    ________
+
+    >>> import avesterra.collections as collections # Get collection value by key
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> value = collections.collection_value(entity=entity, key="my_key", authorization=authorization)
+
+    >>> import avesterra.collections as collections # Get collection value by instance
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> value = collections.collection_value(entity=entity, instance=1, authorization=authorization)
+    """
     return aspects.value(
         entity=entity,
         aspect=AvAspect.COLLECTION,
@@ -252,6 +643,31 @@ def collection_index(
     key: AvKey = NULL_KEY,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvIndex:
+    """Get the index of a collection by key
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    key : AvKey
+        Key identifier of the collection
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Returns
+    _______
+    AvIndex
+        Index position of the collection
+
+    Examples
+    ________
+
+    >>> import avesterra.collections as collections # Get collection index
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> index = collections.collection_index(entity=entity, key="my_key", authorization=authorization)
+    >>> print(f"Collection index: {index}")
+    """
     return aspects.index(
         entity=entity,
         aspect=AvAspect.COLLECTION,
@@ -267,6 +683,39 @@ def collection_attribute(
     instance: AvInstance = NULL_INSTANCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvAttribute:
+    """Get the attribute associated with a collection
+
+    Each collection has an associated Attribute from the Attribute taxonomy.
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    key : AvKey
+        Key identifier of the collection
+    instance : AvInstance
+        Collection instance index
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Returns
+    _______
+    AvAttribute
+        Attribute associated with the collection
+
+    Examples
+    ________
+
+    >>> import avesterra.collections as collections # Get collection attribute by key
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> attribute = collections.collection_attribute(entity=entity, key="my_key", authorization=authorization)
+
+    >>> import avesterra.collections as collections # Get collection attribute by instance
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> attribute = collections.collection_attribute(entity=entity, instance=1, authorization=authorization)
+    """
     return aspects.attribute(
         entity=entity,
         aspect=AvAspect.COLLECTION,
@@ -281,6 +730,25 @@ def sort_collections(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Sort collections in an entity
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    parameter : AvParameter
+        Defer saving changes to disk if set to anything but NULL_PARAMETER
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.collections as collections # Sort collections
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> collections.sort_collections(entity=entity, authorization=authorization)
+    """
     aspects.sort(
         entity=entity,
         aspect=AvAspect.COLLECTION,
@@ -295,6 +763,25 @@ def erase_collections(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Erase all collections from an entity
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    parameter : AvParameter
+        Defer saving changes to disk if set to anything but NULL_PARAMETER
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.collections as collections # Erase all collections
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> collections.erase_collections(entity=entity, authorization=authorization)
+    """
     aspects.erase(
         entity=entity,
         aspect=AvAspect.COLLECTION,
@@ -310,6 +797,40 @@ def retrieve_collections(
     instance: AvInstance = NULL_INSTANCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvInterchange:
+    """Retrieve collections from an entity in AvInterchange format
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    key : AvKey
+        Specific key to retrieve, or NULL_KEY to retrieve all
+    instance : AvInstance
+        Specific instance to retrieve
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Returns
+    _______
+    AvInterchange
+        Collection data in interchange format
+
+    Examples
+    ________
+
+    >>> import avesterra.collections as collections # Retrieve all collections
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> collections.set_collection(entity=entity, name="collection1", key="key1", value=AvValue.encode_text("value1"), authorization=authorization)
+    >>> collections.set_collection(entity=entity, name="collection2", key="key2", value=AvValue.encode_integer(42), authorization=authorization)
+    >>> result = collections.retrieve_collections(entity=entity, authorization=authorization)
+    >>> print(result)
+
+    >>> import avesterra.collections as collections # Retrieve specific collection by key
+    >>> entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> result = collections.retrieve_collections(entity=entity, key="specific_key", authorization=authorization)
+    """
     return aspects.retrieve(
         entity=entity,
         aspect=AvAspect.COLLECTION,
