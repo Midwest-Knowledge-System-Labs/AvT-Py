@@ -35,7 +35,7 @@ def insert_item(
     name : AvName
         Name of the item (UTF-8 string, max 256 characters, non-empty)
     key : AvKey
-        Key identifier for the item (UTF-8 string, max 256 characters, non-empty)
+        Optional key identifier for the item
     value : AvValue
         Avial value to store in the item
     index : AvIndex
@@ -521,6 +521,7 @@ def item_count(
 def item_member(
     entity: AvEntity,
     key: AvKey = NULL_KEY,
+    value: AvValue = NULL_VALUE,
     instance: AvInstance = NULL_INSTANCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> bool:
@@ -532,6 +533,8 @@ def item_member(
         Target collection entity euid
     key : AvKey
         Key identifier to check for membership
+    value : AvValue
+        Value to check for membership
     instance : AvInstance
         Collection instance identifier
     authorization : AvAuthorization
@@ -556,6 +559,7 @@ def item_member(
         aspect=AvAspect.ITEM,
         attribute=NULL_ATTRIBUTE,
         key=key,
+        value=value,
         instance=instance,
         authorization=authorization,
     )
