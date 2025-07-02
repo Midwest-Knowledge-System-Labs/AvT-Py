@@ -50,7 +50,7 @@ def insert_frame(
     >>> import avesterra.frames as frames
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
-    >>> frames.insert_frame(entity=entity, attribute=AvAttribute.DATA_TABLE, key="row_1", authorization=authorization)
+    >>> frames.insert_frame(entity=entity, attribute=AvAttribute.DATA, key="row_1", authorization=authorization)
 
     """
     aspects.insert(
@@ -99,7 +99,7 @@ def remove_frame(
     >>> import avesterra.frames as frames
     >>> entity: AvEntity # Assume entity has existing frames
     >>> authorization: AvAuthorization
-    >>> frames.remove_frame(entity=entity, attribute=AvAttribute.DATA_TABLE, index=1, authorization=authorization)
+    >>> frames.remove_frame(entity=entity, attribute=AvAttribute.DATA, index=1, authorization=authorization)
 
     """
     aspects.remove(
@@ -150,7 +150,7 @@ def replace_frame(
     >>> import avesterra.frames as frames
     >>> entity: AvEntity # Assume entity has existing frames
     >>> authorization: AvAuthorization
-    >>> frames.replace_frame(entity=entity, attribute=AvAttribute.DATA_TABLE, index=1, key="new_row_1", authorization=authorization)
+    >>> frames.replace_frame(entity=entity, attribute=AvAttribute.DATA, index=1, key="new_row_1", authorization=authorization)
 
     """
     aspects.replace(
@@ -213,7 +213,7 @@ def find_frame(
     >>> import avesterra.frames as frames
     >>> entity: AvEntity # Assume entity has frames with data
     >>> authorization: AvAuthorization
-    >>> frame_index = frames.find_frame(entity=entity, attribute=AvAttribute.DATA_TABLE, value=AvValue.encode_text("search_value"), authorization=authorization)
+    >>> frame_index = frames.find_frame(entity=entity, attribute=AvAttribute.DATA, value=AvValue.encode_text("search_value"), authorization=authorization)
     >>> print(frame_index)
     2
 
@@ -263,7 +263,7 @@ def include_frame(
     >>> import avesterra.frames as frames
     >>> entity: AvEntity # Assume entity has frames
     >>> authorization: AvAuthorization
-    >>> frames.include_frame(entity=entity, attribute=AvAttribute.DATA_TABLE, key="row_1", authorization=authorization)
+    >>> frames.include_frame(entity=entity, attribute=AvAttribute.DATA, key="row_1", authorization=authorization)
 
     """
     aspects.include(
@@ -307,7 +307,7 @@ def exclude_frame(
     >>> import avesterra.frames as frames
     >>> entity: AvEntity # Assume entity has frames
     >>> authorization: AvAuthorization
-    >>> frames.exclude_frame(entity=entity, attribute=AvAttribute.DATA_TABLE, key="row_1", authorization=authorization)
+    >>> frames.exclude_frame(entity=entity, attribute=AvAttribute.DATA, key="row_1", authorization=authorization)
 
     """
     aspects.exclude(
@@ -366,7 +366,7 @@ def set_frame(
     >>> import avesterra.frames as frames
     >>> entity: AvEntity # Assume entity has a tabular structure
     >>> authorization: AvAuthorization
-    >>> frames.set_frame(entity=entity, attribute=AvAttribute.DATA_TABLE, name="column_1", key="row_1", value=AvValue.encode_text("cell_value"), authorization=authorization)
+    >>> frames.set_frame(entity=entity, attribute=AvAttribute.DATA, name="column_1", key="row_1", value=AvValue.encode_text("cell_value"), authorization=authorization)
 
     """
     aspects.set(
@@ -429,7 +429,7 @@ def get_frame(
     >>> import avesterra.frames as frames
     >>> entity: AvEntity # Assume entity has a tabular structure with data
     >>> authorization: AvAuthorization
-    >>> cell_value = frames.get_frame(entity=entity, attribute=AvAttribute.DATA_TABLE, name="column_1", key="row_1", authorization=authorization)
+    >>> cell_value = frames.get_frame(entity=entity, attribute=AvAttribute.DATA, name="column_1", key="row_1", authorization=authorization)
     >>> print(AvValue.decode_text(cell_value))
     "cell_value"
 
@@ -491,7 +491,7 @@ def clear_frame(
     >>> import avesterra.frames as frames
     >>> entity: AvEntity # Assume entity has a tabular structure with data
     >>> authorization: AvAuthorization
-    >>> frames.clear_frame(entity=entity, attribute=AvAttribute.DATA_TABLE, name="column_1", key="row_1", authorization=authorization)
+    >>> frames.clear_frame(entity=entity, attribute=AvAttribute.DATA, name="column_1", key="row_1", authorization=authorization)
 
     """
     aspects.clear(
@@ -541,7 +541,7 @@ def frame_count(
     >>> import avesterra.frames as frames
     >>> entity: AvEntity # Assume entity has frames
     >>> authorization: AvAuthorization
-    >>> count = frames.frame_count(entity=entity, attribute=AvAttribute.DATA_TABLE, authorization=authorization)
+    >>> count = frames.frame_count(entity=entity, attribute=AvAttribute.DATA, authorization=authorization)
     >>> print(count)
     5
 
@@ -591,7 +591,7 @@ def frame_member(
     >>> import avesterra.frames as frames
     >>> entity: AvEntity # Assume entity has frames
     >>> authorization: AvAuthorization
-    >>> exists = frames.frame_member(entity=entity, attribute=AvAttribute.DATA_TABLE, key="row_1", authorization=authorization)
+    >>> exists = frames.frame_member(entity=entity, attribute=AvAttribute.DATA, key="row_1", authorization=authorization)
     >>> print(exists)
     True
 
@@ -642,7 +642,7 @@ def frame_name(
     >>> import avesterra.frames as frames
     >>> entity: AvEntity # Assume entity has a tabular structure
     >>> authorization: AvAuthorization
-    >>> column_name = frames.frame_name(entity=entity, attribute=AvAttribute.DATA_TABLE, offset=1, authorization=authorization)
+    >>> column_name = frames.frame_name(entity=entity, attribute=AvAttribute.DATA, offset=1, authorization=authorization)
     >>> print(column_name)
     "column_1"
 
@@ -693,7 +693,7 @@ def frame_key(
     >>> import avesterra.frames as frames
     >>> entity: AvEntity # Assume entity has frames
     >>> authorization: AvAuthorization
-    >>> row_key = frames.frame_key(entity=entity, attribute=AvAttribute.DATA_TABLE, index=1, authorization=authorization)
+    >>> row_key = frames.frame_key(entity=entity, attribute=AvAttribute.DATA, index=1, authorization=authorization)
     >>> print(row_key)
     "row_1"
 
@@ -753,7 +753,7 @@ def frame_value(
     >>> import avesterra.frames as frames
     >>> entity: AvEntity # Assume entity has a tabular structure
     >>> authorization: AvAuthorization
-    >>> value = frames.frame_value(entity=entity, attribute=AvAttribute.DATA_TABLE, name="column_1", key="row_1", authorization=authorization)
+    >>> value = frames.frame_value(entity=entity, attribute=AvAttribute.DATA, name="column_1", key="row_1", authorization=authorization)
     >>> print(AvValue.decode_text(value))
     "cell_data"
 
@@ -806,7 +806,7 @@ def frame_index(
     >>> import avesterra.frames as frames
     >>> entity: AvEntity # Assume entity has frames
     >>> authorization: AvAuthorization
-    >>> index = frames.frame_index(entity=entity, attribute=AvAttribute.DATA_TABLE, key="row_1", authorization=authorization)
+    >>> index = frames.frame_index(entity=entity, attribute=AvAttribute.DATA, key="row_1", authorization=authorization)
     >>> print(index)
     1
 
@@ -859,7 +859,7 @@ def frame_attribute(
     >>> authorization: AvAuthorization
     >>> attr = frames.frame_attribute(entity=entity, key="row_1", authorization=authorization)
     >>> print(attr)
-    AvAttribute.DATA_TABLE
+    AvAttribute.DATA
 
     """
     return aspects.attribute(
@@ -903,7 +903,7 @@ def sort_frames(
     >>> import avesterra.frames as frames
     >>> entity: AvEntity # Assume entity has frames
     >>> authorization: AvAuthorization
-    >>> frames.sort_frames(entity=entity, attribute=AvAttribute.DATA_TABLE, authorization=authorization)
+    >>> frames.sort_frames(entity=entity, attribute=AvAttribute.DATA, authorization=authorization)
 
     """
     aspects.sort(
@@ -947,7 +947,7 @@ def erase_frames(
     >>> import avesterra.frames as frames
     >>> entity: AvEntity # Assume entity has frames
     >>> authorization: AvAuthorization
-    >>> frames.erase_frames(entity=entity, attribute=AvAttribute.DATA_TABLE, authorization=authorization)
+    >>> frames.erase_frames(entity=entity, attribute=AvAttribute.DATA, authorization=authorization)
 
     """
     aspects.erase(
@@ -993,7 +993,7 @@ def retrieve_frames(
     >>> import avesterra.frames as frames
     >>> entity: AvEntity # Assume entity has frames with data
     >>> authorization: AvAuthorization
-    >>> frames_data = frames.retrieve_frames(entity=entity, attribute=AvAttribute.DATA_TABLE, authorization=authorization)
+    >>> frames_data = frames.retrieve_frames(entity=entity, attribute=AvAttribute.DATA, authorization=authorization)
     >>> print(frames_data)
     {"Frames":[["row_1",{"TEXT":"value1"},{"TEXT":"value2"}],["row_2",{"TEXT":"value3"},{"TEXT":"value4"}]]}
 
