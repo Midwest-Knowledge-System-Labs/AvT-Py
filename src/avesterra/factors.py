@@ -1,3 +1,4 @@
+```python
 """ 
 Copyright (c) 2025 Midwest Knowledge System Labs
 Copyright (c) [LEDR Technologies Inc.] [2024-2025]
@@ -24,6 +25,43 @@ def insert_factor(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Insert a factor into a facet within a fact
+    
+    Factors are key/value pairs that belong to facets. Each key within a facet must be unique.
+    Factors provide a means to add uniquely keyed values to facets within the fact construct.
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet containing the factor
+    key : AvKey
+        Unique key identifier for the factor within the facet
+    value : AvValue
+        Value to be stored with the factor
+    index : AvIndex
+        Position in the factor list to insert the factor
+    instance : AvInstance
+        Instance identifier for the fact
+    offset : AvOffset
+        Offset position for the insertion
+    parameter : AvParameter
+        Additional parameter for the insertion operation
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.factors as factors # Insert factor into facet
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
+    >>> authorization: AvAuthorization
+    >>> factors.insert_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="factor_key", value=AvValue.encode_text("Factor Value"), authorization=authorization)
+
+    """
     aspects.insert(
         entity=entity,
         aspect=AvAspect.FACTOR,
@@ -49,6 +87,37 @@ def remove_factor(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Remove a factor from a facet within a fact
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet containing the factor
+    index : AvIndex
+        Index of the factor to remove
+    instance : AvInstance
+        Instance identifier for the fact
+    offset : AvOffset
+        Offset position for the removal
+    parameter : AvParameter
+        Additional parameter for the removal operation
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.factors as factors # Remove factor from facet
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
+    >>> authorization: AvAuthorization
+    >>> factors.insert_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="factor_key", value=AvValue.encode_text("Factor Value"), authorization=authorization)
+    >>> factors.remove_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", index=1, authorization=authorization)
+
+    """
     aspects.remove(
         entity=entity,
         aspect=AvAspect.FACTOR,
@@ -74,6 +143,41 @@ def replace_factor(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Replace an existing factor in a facet within a fact
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet containing the factor
+    key : AvKey
+        Key identifier for the factor within the facet
+    value : AvValue
+        New value to replace the existing factor value
+    index : AvIndex
+        Index of the factor to replace
+    instance : AvInstance
+        Instance identifier for the fact
+    offset : AvOffset
+        Offset position for the replacement
+    parameter : AvParameter
+        Additional parameter for the replacement operation
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.factors as factors # Replace factor value
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
+    >>> authorization: AvAuthorization
+    >>> factors.insert_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="factor_key", value=AvValue.encode_text("Original Value"), authorization=authorization)
+    >>> factors.replace_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="factor_key", value=AvValue.encode_text("Replaced Value"), authorization=authorization)
+
+    """
     aspects.replace(
         entity=entity,
         aspect=AvAspect.FACTOR,
@@ -99,6 +203,46 @@ def find_factor(
     offset: AvOffset = NULL_OFFSET,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvIndex:
+    """Find the index of a factor with the specified value in a facet
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet containing the factor
+    value : AvValue
+        Value to search for
+    index : AvIndex
+        Index to begin the search; front-to-back
+    instance : AvInstance
+        Instance identifier for the fact
+    offset : AvOffset
+        Offset position for the search
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.factors as factors # Find existing factor
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
+    >>> authorization: AvAuthorization
+    >>> factors.insert_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="key1", value=AvValue.encode_text("Value 1"), authorization=authorization)
+    >>> factors.insert_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="key2", value=AvValue.encode_text("Value 2"), authorization=authorization)
+    >>> factors.find_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", value=AvValue.encode_text("Value 2"), authorization=authorization)
+    2
+
+    >>> import avesterra.factors as factors # Find non-existent factor
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
+    >>> authorization: AvAuthorization
+    >>> factors.insert_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="key1", value=AvValue.encode_text("Value 1"), authorization=authorization)
+    >>> factors.find_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", value=AvValue.encode_text("Non-existent"), authorization=authorization)
+    0
+
+    """
     return aspects.find(
         entity=entity,
         aspect=AvAspect.FACTOR,
@@ -121,6 +265,34 @@ def include_factor(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Include a factor in a facet within a fact if it doesn't already exist
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet containing the factor
+    key : AvKey
+        Unique key identifier for the factor within the facet
+    value : AvValue
+        Value to be stored with the factor
+    parameter : AvParameter
+        Additional parameter for the include operation
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.factors as factors # Include new factor
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
+    >>> authorization: AvAuthorization
+    >>> factors.include_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="new_key", value=AvValue.encode_text("New Factor"), authorization=authorization)
+
+    """
     aspects.include(
         entity=entity,
         aspect=AvAspect.FACTOR,
@@ -141,6 +313,33 @@ def exclude_factor(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Exclude a factor from a facet within a fact if it exists
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet containing the factor
+    key : AvKey
+        Key identifier for the factor to exclude
+    parameter : AvParameter
+        Additional parameter for the exclude operation
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.factors as factors # Exclude existing factor
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
+    >>> authorization: AvAuthorization
+    >>> factors.include_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="remove_key", value=AvValue.encode_text("To be removed"), authorization=authorization)
+    >>> factors.exclude_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="remove_key", authorization=authorization)
+
+    """
     aspects.exclude(
         entity=entity,
         aspect=AvAspect.FACTOR,
@@ -161,6 +360,34 @@ def set_factor(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Set the value of a factor in a facet within a fact
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet containing the factor
+    key : AvKey
+        Unique key identifier for the factor within the facet
+    value : AvValue
+        Value to be set for the factor
+    parameter : AvParameter
+        Additional parameter for the set operation
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.factors as factors # Set factor value
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
+    >>> authorization: AvAuthorization
+    >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="set_key", value=AvValue.encode_text("Set Value"), authorization=authorization)
+
+    """
     aspects.set(
         entity=entity,
         aspect=AvAspect.FACTOR,
@@ -180,6 +407,38 @@ def get_factor(
     key: AvKey = NULL_KEY,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvValue:
+    """Get the value of a factor from a facet within a fact
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet containing the factor
+    key : AvKey
+        Key identifier for the factor
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.factors as factors # Get existing factor
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
+    >>> authorization: AvAuthorization
+    >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="get_key", value=AvValue.encode_text("Retrieved Value"), authorization=authorization)
+    >>> print(factors.get_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="get_key", authorization=authorization).decode_text())
+    Retrieved Value
+
+    >>> import avesterra.factors as factors # Get non-existent factor
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
+    >>> authorization: AvAuthorization
+    >>> print(factors.get_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="nonexistent_key", authorization=authorization))
+    {"NULL": ""}
+
+    """
     return aspects.get(
         entity=entity,
         aspect=AvAspect.FACTOR,
@@ -198,6 +457,33 @@ def clear_factor(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Clear a factor from a facet within a fact
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet containing the factor
+    key : AvKey
+        Key identifier for the factor to clear
+    parameter : AvParameter
+        Additional parameter for the clear operation
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.factors as factors # Clear factor
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
+    >>> authorization: AvAuthorization
+    >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="clear_key", value=AvValue.encode_text("To be cleared"), authorization=authorization)
+    >>> factors.clear_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="clear_key", authorization=authorization)
+
+    """
     aspects.clear(
         entity=entity,
         aspect=AvAspect.FACTOR,
@@ -217,6 +503,35 @@ def factor_count(
     offset: AvOffset = NULL_OFFSET,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvCount:
+    """Get the count of factors in a facet within a fact
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet containing the factors
+    instance : AvInstance
+        Instance identifier for the fact
+    offset : AvOffset
+        Offset position for the count
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.factors as factors # Count factors in facet
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
+    >>> authorization: AvAuthorization
+    >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="key1", value=AvValue.encode_text("Value 1"), authorization=authorization)
+    >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="key2", value=AvValue.encode_text("Value 2"), authorization=authorization)
+    >>> print(factors.factor_count(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", authorization=authorization))
+    2
+
+    """
     return aspects.count(
         entity=entity,
         aspect=AvAspect.FACTOR,
@@ -237,6 +552,39 @@ def factor_member(
     offset: AvOffset = NULL_OFFSET,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvBoolean:
+    """Check if a factor is a member of a facet within a fact
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet containing the factor
+    key : AvKey
+        Key identifier for the factor
+    instance : AvInstance
+        Instance identifier for the fact
+    offset : AvOffset
+        Offset position for the membership check
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.factors as factors # Check if factor exists
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
+    >>> authorization: AvAuthorization
+    >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="member_key", value=AvValue.encode_text("Member Value"), authorization=authorization)
+    >>> print(factors.factor_member(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="member_key", authorization=authorization))
+    True
+
+    >>> print(factors.factor_member(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="nonexistent_key", authorization=authorization))
+    False
+
+    """
     return aspects.member(
         entity=entity,
         aspect=AvAspect.FACTOR,
@@ -258,6 +606,36 @@ def factor_name(
     offset: AvOffset = NULL_OFFSET,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvName:
+    """Get the name of the facet containing a factor at the specified position
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    key : AvKey
+        Key identifier for the factor
+    index : AvIndex
+        Index position of the factor
+    instance : AvInstance
+        Instance identifier for the fact
+    offset : AvOffset
+        Offset position
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.factors as factors # Get facet name
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
+    >>> authorization: AvAuthorization
+    >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="test_facet", key="test_key", value=AvValue.encode_text("Test Value"), authorization=authorization)
+    >>> print(factors.factor_name(entity=entity, attribute=AvAttribute.EXAMPLE, key="test_key", authorization=authorization))
+    test_facet
+
+    """
     return aspects.name(
         entity=entity,
         aspect=AvAspect.FACTOR,
@@ -279,6 +657,36 @@ def factor_key(
     offset: AvOffset = NULL_OFFSET,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvKey:
+    """Get the key of a factor at the specified position in a facet
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet containing the factor
+    index : AvIndex
+        Index position of the factor
+    instance : AvInstance
+        Instance identifier for the fact
+    offset : AvOffset
+        Offset position
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.factors as factors # Get factor key by index
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
+    >>> authorization: AvAuthorization
+    >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="indexed_key", value=AvValue.encode_text("Indexed Value"), authorization=authorization)
+    >>> print(factors.factor_key(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", index=1, authorization=authorization))
+    indexed_key
+
+    """
     return aspects.key(
         entity=entity,
         aspect=AvAspect.FACTOR,
@@ -301,6 +709,38 @@ def factor_value(
     offset: AvOffset = NULL_OFFSET,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvValue:
+    """Get the value of a factor at the specified position in a facet
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet containing the factor
+    key : AvKey
+        Key identifier for the factor
+    index : AvIndex
+        Index position of the factor
+    instance : AvInstance
+        Instance identifier for the fact
+    offset : AvOffset
+        Offset position
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.factors as factors # Get factor value by index
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
+    >>> authorization: AvAuthorization
+    >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="value_key", value=AvValue.encode_text("Retrieved by Index"), authorization=authorization)
+    >>> print(factors.factor_value(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", index=1, authorization=authorization).decode_text())
+    Retrieved by Index
+
+    """
     return aspects.value(
         entity=entity,
         aspect=AvAspect.FACTOR,
@@ -323,6 +763,36 @@ def factor_index(
     offset: AvOffset = NULL_OFFSET,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvIndex:
+    """Get the index position of a factor in a facet
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet containing the factor
+    key : AvKey
+        Key identifier for the factor
+    instance : AvInstance
+        Instance identifier for the fact
+    offset : AvOffset
+        Offset position
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.factors as factors # Get factor index
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
+    >>> authorization: AvAuthorization
+    >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="index_key", value=AvValue.encode_text("Find My Index"), authorization=authorization)
+    >>> print(factors.factor_index(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="index_key", authorization=authorization))
+    1
+
+    """
     return aspects.index(
         entity=entity,
         aspect=AvAspect.FACTOR,
@@ -344,6 +814,36 @@ def factor_attribute(
     offset: AvOffset = NULL_OFFSET,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvAttribute:
+    """Get the attribute of the fact containing a factor
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    name : AvName
+        Name of the facet containing the factor
+    key : AvKey
+        Key identifier for the factor
+    index : AvIndex
+        Index position of the factor
+    instance : AvInstance
+        Instance identifier for the fact
+    offset : AvOffset
+        Offset position
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.factors as factors # Get fact attribute
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
+    >>> authorization: AvAuthorization
+    >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="attr_key", value=AvValue.encode_text("Attribute Test"), authorization=authorization)
+    >>> print(factors.factor_attribute(entity=entity, name="example_facet", key="attr_key", authorization=authorization))
+    EXAMPLE
+
+    """
     return aspects.attribute(
         entity=entity,
         aspect=AvAspect.FACTOR,
@@ -365,6 +865,36 @@ def sort_factors(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Sort the factors within a facet
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet containing the factors to sort
+    instance : AvInstance
+        Instance identifier for the fact
+    offset : AvOffset
+        Offset position for the sort
+    parameter : AvParameter
+        Additional parameter for the sort operation
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.factors as factors # Sort factors in facet
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
+    >>> authorization: AvAuthorization
+    >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="z_key", value=AvValue.encode_text("Z Value"), authorization=authorization)
+    >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="a_key", value=AvValue.encode_text("A Value"), authorization=authorization)
+    >>> factors.sort_factors(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", authorization=authorization)
+
+    """
     aspects.sort(
         entity=entity,
         aspect=AvAspect.FACTOR,
@@ -386,6 +916,36 @@ def erase_factors(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Erase all factors from a facet within a fact
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet containing the factors to erase
+    instance : AvInstance
+        Instance identifier for the fact
+    offset : AvOffset
+        Offset position for the erase
+    parameter : AvParameter
+        Additional parameter for the erase operation
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.factors as factors # Erase all factors from facet
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
+    >>> authorization: AvAuthorization
+    >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="key1", value=AvValue.encode_text("Value 1"), authorization=authorization)
+    >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="key2", value=AvValue.encode_text("Value 2"), authorization=authorization)
+    >>> factors.erase_factors(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", authorization=authorization)
+
+    """
     aspects.erase(
         entity=entity,
         aspect=AvAspect.FACTOR,
@@ -406,12 +966,13 @@ def retrieve_factors(
     offset: AvOffset = NULL_OFFSET,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvInterchange:
-    return aspects.retrieve(
-        entity=entity,
-        aspect=AvAspect.FACTOR,
-        attribute=attribute,
-        name=name,
-        instance=instance,
-        offset=offset,
-        authorization=authorization,
-    )
+    """Return contents of factors in a facet as an Interchange(JSON)
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet containing the
