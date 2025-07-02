@@ -17,6 +17,31 @@ def allow_rule(
     index: AvIndex = NULL_INDEX,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Allow access to `server` from an `address` by placing the rule at index `index` of the firewall rules
+
+        Parameters
+        __________
+        address : AvAddress
+            Integer IPv4 address
+        server : AvEntity
+            Server to apply firewall rule to
+        index : AvIndex
+            Index to place the new firewall rule at
+        authorization : AvAuthorization
+            Root authorization of the server
+
+        Returns
+        _______
+        None
+
+        Examples
+        ________
+
+        >>> import avesterra.firewall as firewall
+        >>> authorization: AvAuthorization
+        >>> firewall.allow_rule(address=2130706433, index=1, authorization=authorization) # 2130706433 = 127.0.0.1
+        """
+
     invoke_entity(
         entity=server,
         method=AvMethod.AVESTERRA,
@@ -33,6 +58,30 @@ def deny_rule(
     index: AvIndex = NULL_INDEX,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Deny access to `server` from an `address` by placing the rule at index `index` of the firewall rules
+
+            Parameters
+            __________
+            address : AvAddress
+                Integer IPv4 address
+            server : AvEntity
+                Server to apply firewall rule to
+            index : AvIndex
+                Index to place the new firewall rule at
+            authorization : AvAuthorization
+                Root authorization of the server
+
+            Returns
+            _______
+            None
+
+            Examples
+            ________
+
+            >>> import avesterra.firewall as firewall
+            >>> authorization: AvAuthorization
+            >>> firewall.deny_rule(address=3232235786, index=1, authorization=authorization) # 3232235786 = 192.168.1.10
+            """
     invoke_entity(
         entity=server,
         method=AvMethod.AVESTERRA,
@@ -48,6 +97,29 @@ def void_rule(
     index: AvIndex = NULL_INDEX,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Remove rule at index `index` of the firewall rules
+
+                Parameters
+                __________
+                server : AvEntity
+                    Server to apply firewall rule to
+                index : AvIndex
+                    Index to place the new firewall rule at
+                authorization : AvAuthorization
+                    Root authorization of the server
+
+                Returns
+                _______
+                None
+
+                Examples
+                ________
+
+                >>> import avesterra.firewall as firewall
+                >>> authorization: AvAuthorization
+                >>> firewall.deny_rule(address=3232235786, index=1, authorization=authorization) # 3232235786 = 192.168.1.10
+                >>> firewall.void_rule(index=1, authorization=authorization) # 3232235786 = 192.168.1.10
+                """
     invoke_entity(
         entity=server,
         method=AvMethod.AVESTERRA,
