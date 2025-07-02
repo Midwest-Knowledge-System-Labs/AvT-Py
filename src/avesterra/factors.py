@@ -974,14 +974,33 @@ def retrieve_factors(
     attribute : AvAttribute
         Attribute of the fact containing the facet
     name : AvName
-        Name of the facet containing the
+        Name of the facet containing the factors
+    instance : AvInstance
+        Instance identifier for the fact
+    offset : AvOffset
+        Offset position for the retrieval
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.factors as factors # Retrieve factors from facet
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
+    >>> authorization: AvAuthorization
+    >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="key1", value=AvValue.encode_text("Value 1"), authorization=authorization)
+    >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="key2", value=AvValue.encode_text("Value 2"), authorization=authorization)
+    >>> print(factors.retrieve_factors(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", authorization=authorization))
+    {"Factors":[["key1",{"TEXT":"Value 1"}],["key2",{"TEXT":"Value 2"}]]}
+
     """
     return aspects.retrieve(
-            entity=entity,
-            aspect=AvAspect.FACTOR,
-            attribute=attribute,
-            name=name,
-            instance=instance,
-            offset=offset,
-            authorization=authorization,
+        entity=entity,
+        aspect=AvAspect.FACTOR,
+        attribute=attribute,
+        name=name,
+        instance=instance,
+        offset=offset,
+        authorization=authorization,
     )
+
