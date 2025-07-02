@@ -22,6 +22,40 @@ def insert_facet(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Insert a facet at a specified index in a fact's facet list
+
+    Facets are name/value pairs where each name, if not null, must be unique. 
+    Facets provide a convenient way to represent multiple named instances of a fact attribute.
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet to insert
+    value : AvValue
+        Value to be associated with the facet
+    index : AvIndex
+        Position at which to insert the facet
+    instance : AvInstance
+        Instance (fact index) containing the facet
+    parameter : AvParameter
+        Additional parameter for the operation
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.facets as facets # Insert facet at specific index
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> facets.insert_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="facet_1", value=AvValue.encode_text("First Facet"), index=1, authorization=authorization)
+    >>> facets.insert_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="facet_2", value=AvValue.encode_text("Second Facet"), index=2, authorization=authorization)
+
+    """
     aspects.insert(
         entity=entity,
         aspect=AvAspect.FACET,
@@ -43,6 +77,33 @@ def remove_facet(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Remove a facet at a specified index from a fact's facet list
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    index : AvIndex
+        Position of the facet to remove
+    instance : AvInstance
+        Instance (fact index) containing the facet
+    parameter : AvParameter
+        Additional parameter for the operation
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.facets as facets # Remove facet by index
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> facets.insert_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="facet_1", value=AvValue.encode_text("To be removed"), index=1, authorization=authorization)
+    >>> facets.remove_facet(entity=entity, attribute=AvAttribute.EXAMPLE, index=1, authorization=authorization)
+
+    """
     aspects.remove(
         entity=entity,
         aspect=AvAspect.FACET,
@@ -64,6 +125,37 @@ def replace_facet(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Replace a facet at a specified index in a fact's facet list
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        New name for the facet
+    value : AvValue
+        New value for the facet
+    index : AvIndex
+        Position of the facet to replace
+    instance : AvInstance
+        Instance (fact index) containing the facet
+    parameter : AvParameter
+        Additional parameter for the operation
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.facets as facets # Replace existing facet
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> facets.insert_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="old_facet", value=AvValue.encode_text("Old Value"), index=1, authorization=authorization)
+    >>> facets.replace_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="new_facet", value=AvValue.encode_text("New Value"), index=1, authorization=authorization)
+
+    """
     aspects.replace(
         entity=entity,
         aspect=AvAspect.FACET,
@@ -85,6 +177,47 @@ def find_facet(
     instance: AvInstance = NULL_INSTANCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvIndex:
+    """Find the index of a facet with the specified value in a fact's facet list
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    value : AvValue
+        Value to search for
+    index : AvIndex
+        Index to start searching from (front-to-back)
+    instance : AvInstance
+        Instance (fact index) containing the facet
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Returns
+    _______
+    AvIndex
+        Index of the facet with matching value, or 0 if not found
+
+    Examples
+    ________
+
+    >>> import avesterra.facets as facets # Find existing facet
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> facets.insert_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="facet_1", value=AvValue.encode_text("Find me"), authorization=authorization)
+    >>> index = facets.find_facet(entity=entity, attribute=AvAttribute.EXAMPLE, value=AvValue.encode_text("Find me"), authorization=authorization)
+    >>> print(index)
+    1
+
+    >>> import avesterra.facets as facets # Find non-existent facet
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> index = facets.find_facet(entity=entity, attribute=AvAttribute.EXAMPLE, value=AvValue.encode_text("Not here"), authorization=authorization)
+    >>> print(index)
+    0
+
+    """
     return aspects.find(
         entity=entity,
         aspect=AvAspect.FACET,
@@ -104,6 +237,40 @@ def include_facet(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Include a facet in a fact's facet list, ensuring unique names
+
+    If a facet with the same name already exists, it will be updated with the new value.
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet to include
+    value : AvValue
+        Value to be associated with the facet
+    parameter : AvParameter
+        Additional parameter for the operation
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.facets as facets # Include new facet
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="unique_facet", value=AvValue.encode_text("Unique Value"), authorization=authorization)
+
+    >>> import avesterra.facets as facets # Update existing facet
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="update_me", value=AvValue.encode_text("Old Value"), authorization=authorization)
+    >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="update_me", value=AvValue.encode_text("New Value"), authorization=authorization)
+
+    """
     aspects.include(
         entity=entity,
         aspect=AvAspect.FACET,
@@ -122,6 +289,31 @@ def exclude_facet(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Exclude (remove) a facet by name from a fact's facet list
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet to exclude
+    parameter : AvParameter
+        Additional parameter for the operation
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.facets as facets # Exclude facet by name
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="remove_me", value=AvValue.encode_text("To be removed"), authorization=authorization)
+    >>> facets.exclude_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="remove_me", authorization=authorization)
+
+    """
     aspects.exclude(
         entity=entity,
         aspect=AvAspect.FACET,
@@ -140,6 +332,40 @@ def set_facet(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Set the value of a facet by name in a fact's facet list
+
+    If the facet doesn't exist, it will be created. If it exists, its value will be updated.
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet to set
+    value : AvValue
+        Value to assign to the facet
+    parameter : AvParameter
+        Additional parameter for the operation
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.facets as facets # Set new facet value
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> facets.set_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="my_facet", value=AvValue.encode_text("My Value"), authorization=authorization)
+
+    >>> import avesterra.facets as facets # Update existing facet value
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> facets.set_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="my_facet", value=AvValue.encode_text("First Value"), authorization=authorization)
+    >>> facets.set_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="my_facet", value=AvValue.encode_text("Updated Value"), authorization=authorization)
+
+    """
     aspects.set(
         entity=entity,
         aspect=AvAspect.FACET,
@@ -157,6 +383,41 @@ def get_facet(
     name: AvName = NULL_NAME,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvValue:
+    """Get the value of a facet by name from a fact's facet list
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet to retrieve
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Returns
+    _______
+    AvValue
+        Value of the specified facet, or NULL_VALUE if not found
+
+    Examples
+    ________
+
+    >>> import avesterra.facets as facets # Get existing facet
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> facets.set_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="my_facet", value=AvValue.encode_text("Retrieved Value"), authorization=authorization)
+    >>> print(facets.get_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="my_facet", authorization=authorization).decode_text())
+    Retrieved Value
+
+    >>> import avesterra.facets as facets # Get non-existent facet
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> print(facets.get_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="nonexistent", authorization=authorization))
+    {"NULL": ""}
+
+    """
     return aspects.get(
         entity=entity,
         aspect=AvAspect.FACET,
@@ -173,6 +434,33 @@ def clear_facet(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Clear the value of a facet by name, setting it to NULL_VALUE
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet to clear
+    parameter : AvParameter
+        Additional parameter for the operation
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.facets as facets # Clear facet value
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> facets.set_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="clear_me", value=AvValue.encode_text("Will be cleared"), authorization=authorization)
+    >>> facets.clear_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="clear_me", authorization=authorization)
+    >>> print(facets.get_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="clear_me", authorization=authorization))
+    {"NULL": ""}
+
+    """
     aspects.clear(
         entity=entity,
         aspect=AvAspect.FACET,
@@ -189,6 +477,36 @@ def facet_count(
     instance: AvInstance = NULL_INSTANCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvCount:
+    """Get the count of facets in a fact's facet list
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facets
+    instance : AvInstance
+        Instance (fact index) containing the facets
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Returns
+    _______
+    AvCount
+        Number of facets in the specified fact
+
+    Examples
+    ________
+
+    >>> import avesterra.facets as facets # Count facets
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="facet_1", value=AvValue.encode_text("Value 1"), authorization=authorization)
+    >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="facet_2", value=AvValue.encode_text("Value 2"), authorization=authorization)
+    >>> print(facets.facet_count(entity=entity, attribute=AvAttribute.EXAMPLE, authorization=authorization))
+    2
+
+    """
     return aspects.count(
         entity=entity,
         aspect=AvAspect.FACET,
@@ -205,6 +523,43 @@ def facet_member(
     instance: AvInstance = NULL_INSTANCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvBoolean:
+    """Check if a facet with the specified name exists in a fact's facet list
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet to check for
+    instance : AvInstance
+        Instance (fact index) containing the facet
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Returns
+    _______
+    AvBoolean
+        True if the facet exists, False otherwise
+
+    Examples
+    ________
+
+    >>> import avesterra.facets as facets # Check for existing facet
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="exists", value=AvValue.encode_text("I exist"), authorization=authorization)
+    >>> print(facets.facet_member(entity=entity, attribute=AvAttribute.EXAMPLE, name="exists", authorization=authorization))
+    True
+
+    >>> import avesterra.facets as facets # Check for non-existent facet
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> print(facets.facet_member(entity=entity, attribute=AvAttribute.EXAMPLE, name="nonexistent", authorization=authorization))
+    False
+
+    """
     return aspects.member(
         entity=entity,
         aspect=AvAspect.FACET,
@@ -222,6 +577,37 @@ def facet_name(
     instance: AvInstance = NULL_INSTANCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvName:
+    """Get the name of a facet at a specified index in a fact's facet list
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    index : AvIndex
+        Index of the facet to get the name from
+    instance : AvInstance
+        Instance (fact index) containing the facet
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Returns
+    _______
+    AvName
+        Name of the facet at the specified index
+
+    Examples
+    ________
+
+    >>> import avesterra.facets as facets # Get facet name by index
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="first_facet", value=AvValue.encode_text("Value"), authorization=authorization)
+    >>> print(facets.facet_name(entity=entity, attribute=AvAttribute.EXAMPLE, index=1, authorization=authorization))
+    first_facet
+
+    """
     return aspects.name(
         entity=entity,
         aspect=AvAspect.FACET,
@@ -240,6 +626,39 @@ def facet_key(
     instance: AvInstance = NULL_INSTANCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvKey:
+    """Get the key of a facet by name or index in a fact's facet list
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet to get the key from
+    index : AvIndex
+        Index of the facet to get the key from
+    instance : AvInstance
+        Instance (fact index) containing the facet
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Returns
+    _______
+    AvKey
+        Key of the specified facet
+
+    Examples
+    ________
+
+    >>> import avesterra.facets as facets # Get facet key by name
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="keyed_facet", value=AvValue.encode_text("Value"), authorization=authorization)
+    >>> print(facets.facet_key(entity=entity, attribute=AvAttribute.EXAMPLE, name="keyed_facet", authorization=authorization))
+    keyed_facet
+
+    """
     return aspects.key(
         entity=entity,
         aspect=AvAspect.FACET,
@@ -259,6 +678,46 @@ def facet_value(
     instance: AvInstance = NULL_INSTANCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvValue:
+    """Get the value of a facet by name or index in a fact's facet list
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet to get the value from
+    index : AvIndex
+        Index of the facet to get the value from
+    instance : AvInstance
+        Instance (fact index) containing the facet
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Returns
+    _______
+    AvValue
+        Value of the specified facet
+
+    Examples
+    ________
+
+    >>> import avesterra.facets as facets # Get facet value by name
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="valued_facet", value=AvValue.encode_text("Retrieved Value"), authorization=authorization)
+    >>> print(facets.facet_value(entity=entity, attribute=AvAttribute.EXAMPLE, name="valued_facet", authorization=authorization).decode_text())
+    Retrieved Value
+
+    >>> import avesterra.facets as facets # Get facet value by index
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="indexed_facet", value=AvValue.encode_text("Indexed Value"), authorization=authorization)
+    >>> print(facets.facet_value(entity=entity, attribute=AvAttribute.EXAMPLE, index=1, authorization=authorization).decode_text())
+    Indexed Value
+
+    """
     return aspects.value(
         entity=entity,
         aspect=AvAspect.FACET,
@@ -277,6 +736,37 @@ def facet_index(
     instance: AvInstance = NULL_INSTANCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvIndex:
+    """Get the index of a facet by name in a fact's facet list
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facet
+    name : AvName
+        Name of the facet to get the index for
+    instance : AvInstance
+        Instance (fact index) containing the facet
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Returns
+    _______
+    AvIndex
+        Index of the specified facet, or 0 if not found
+
+    Examples
+    ________
+
+    >>> import avesterra.facets as facets # Get facet index by name
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="find_my_index", value=AvValue.encode_text("Value"), authorization=authorization)
+    >>> print(facets.facet_index(entity=entity, attribute=AvAttribute.EXAMPLE, name="find_my_index", authorization=authorization))
+    1
+
+    """
     return aspects.index(
         entity=entity,
         aspect=AvAspect.FACET,
@@ -294,6 +784,37 @@ def facet_attribute(
     instance: AvInstance = NULL_INSTANCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvAttribute:
+    """Get the attribute of the fact containing a facet by name or index
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    name : AvName
+        Name of the facet to get the attribute for
+    index : AvIndex
+        Index of the facet to get the attribute for
+    instance : AvInstance
+        Instance (fact index) containing the facet
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Returns
+    _______
+    AvAttribute
+        Attribute of the fact containing the specified facet
+
+    Examples
+    ________
+
+    >>> import avesterra.facets as facets # Get facet attribute by name
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="my_facet", value=AvValue.encode_text("Value"), authorization=authorization)
+    >>> print(facets.facet_attribute(entity=entity, name="my_facet", authorization=authorization))
+    EXAMPLE
+
+    """
     return aspects.attribute(
         entity=entity,
         aspect=AvAspect.FACET,
@@ -311,6 +832,32 @@ def sort_facets(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Sort facets in a fact's facet list
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facets
+    instance : AvInstance
+        Instance (fact index) containing the facets
+    parameter : AvParameter
+        Sort parameter (e.g., sort order)
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.facets as facets # Sort facets
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="zebra", value=AvValue.encode_text("Last"), authorization=authorization)
+    >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="alpha", value=AvValue.encode_text("First"), authorization=authorization)
+    >>> facets.sort_facets(entity=entity, attribute=AvAttribute.EXAMPLE, authorization=authorization)
+
+    """
     aspects.sort(
         entity=entity,
         aspect=AvAspect.FACET,
@@ -328,6 +875,34 @@ def erase_facets(
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
+    """Erase all facets from a fact's facet list
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facets
+    instance : AvInstance
+        Instance (fact index) containing the facets
+    parameter : AvParameter
+        Additional parameter for the operation
+    authorization : AvAuthorization
+        An authorization that is able to write to the `entity`
+
+    Examples
+    ________
+
+    >>> import avesterra.facets as facets # Erase all facets
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="facet_1", value=AvValue.encode_text("Value 1"), authorization=authorization)
+    >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="facet_2", value=AvValue.encode_text("Value 2"), authorization=authorization)
+    >>> facets.erase_facets(entity=entity, attribute=AvAttribute.EXAMPLE, authorization=authorization)
+    >>> print(facets.facet_count(entity=entity, attribute=AvAttribute.EXAMPLE, authorization=authorization))
+    0
+
+    """
     aspects.erase(
         entity=entity,
         aspect=AvAspect.FACET,
@@ -344,6 +919,36 @@ def retrieve_facets(
     instance: AvInstance = NULL_INSTANCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvInterchange:
+    """Return contents of a fact's facet list as an Interchange (JSON)
+
+    Parameters
+    __________
+    entity : AvEntity
+        Target entity euid
+    attribute : AvAttribute
+        Attribute of the fact containing the facets
+    instance : AvInstance
+        Instance (fact index) containing the facets
+    authorization : AvAuthorization
+        An authorization that is able to read from the `entity`
+
+    Returns
+    _______
+    AvInterchange
+        JSON representation of the facet list
+
+    Examples
+    ________
+
+    >>> import avesterra.facets as facets # Retrieve facets as JSON
+    >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
+    >>> authorization: AvAuthorization
+    >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="facet_1", value=AvValue.encode_text("Value 1"), authorization=authorization)
+    >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="facet_2", value=AvValue.encode_text("Value 2"), authorization=authorization)
+    >>> print(facets.retrieve_facets(entity=entity, attribute=AvAttribute.EXAMPLE, authorization=authorization))
+    {"Facets":[["facet_1",{"TEXT":"Value 1"}],["facet_2",{"TEXT":"Value 2"}]]}
+
+    """
     return aspects.retrieve(
         entity=entity,
         aspect=AvAspect.FACET,
