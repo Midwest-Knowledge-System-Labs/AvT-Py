@@ -1,5 +1,4 @@
-```python
-""" 
+"""
 Copyright (c) 2025 Midwest Knowledge System Labs
 Copyright (c) [LEDR Technologies Inc.] [2024-2025]
 This file is part of the Orchestra library, which helps developer use our Orchestra technology which is based on AvesTerra, owned and developed by Georgetown University, under license agreement with LEDR Technologies Inc.
@@ -976,3 +975,13 @@ def retrieve_factors(
         Attribute of the fact containing the facet
     name : AvName
         Name of the facet containing the
+    """
+    return aspects.retrieve(
+            entity=entity,
+            aspect=AvAspect.FACTOR,
+            attribute=attribute,
+            name=name,
+            instance=instance,
+            offset=offset,
+            authorization=authorization,
+    )
