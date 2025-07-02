@@ -25,8 +25,6 @@ def insert_item(
     """Insert an item into a collection at a specific index
 
     Items are name/value pairs with an associated attribute from the Attribute taxonomy.
-    Collections can contain any number of items, where each item's name is a UTF-8 string
-    (max 256 characters, non-empty) and value is an Avial Value.
 
     Parameters
     __________
@@ -37,7 +35,7 @@ def insert_item(
     name : AvName
         Name of the item (UTF-8 string, max 256 characters, non-empty)
     key : AvKey
-        Optional key identifier for the item
+        Key identifier for the item (UTF-8 string, max 256 characters, non-empty)
     value : AvValue
         Avial value to store in the item
     index : AvIndex
