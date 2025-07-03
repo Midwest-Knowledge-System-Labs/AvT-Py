@@ -11,6 +11,7 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 from dataclasses import dataclass
 from typing import Union
 import avesterra as av
+from avesterra import AvDate
 
 
 class ValueType:
@@ -108,8 +109,8 @@ class ValueType:
         return cls._init(av.AvTag.AUTHORIZATION)
 
     @classmethod
-    def duration(cls):
-        return cls._init(av.AvTag.DURATION)
+    def date(cls):
+        return cls._init(av.AvTag.DATE)
 
     @classmethod
     def variable(cls, content: "ValueType"):
@@ -161,8 +162,8 @@ class ValueType:
                 return av.AvValue.encode_locutor(av.AvLocutor())
             case av.AvTag.AUTHORIZATION:
                 return av.AvValue.encode_authorization(av.NULL_AUTHORIZATION)
-            case av.AvTag.DURATION:
-                return av.AvValue.encode_duration(0)
+            case av.AvTag.DATE:
+                return av.AvValue.encode_date(AvDate.fromtimestamp(0))
             case av.AvTag.VARIABLE:
                 assert isinstance(self.nested, ValueType)
                 return av.AvValue.encode_variable("", self.nested.to_value())
@@ -220,8 +221,8 @@ class ValueType:
                 return ValueType.locutor()
             case av.AvTag.AUTHORIZATION:
                 return ValueType.authorization()
-            case av.AvTag.DURATION:
-                return ValueType.duration()
+            case av.AvTag.DATE:
+                return ValueType.date()
             case av.AvTag.VARIABLE:
                 (_, nestedval) = val.decode_variable()
                 return ValueType.variable(ValueType.from_value(nestedval))
