@@ -74,42 +74,6 @@ def retrieve(
     return token_mapping
 
 
-def resolve(
-    token: AvAuthorization | str,
-    authorization: AvAuthorization,
-    token_map: List[Tuple[AvAuthorization, AvAuthorization]] | None = None,
-):
-    if isinstance(token, str):
-        token = AvAuthorization(token)
-
-    # If no token map was given, get one from the server
-    if token_map is None:
-        token_map = retrieve(authorization=authorization)
-
-    # Search for auth that maps to
-    # given token
-    for map_token, map_auth in token_map:
-        if map_token == token:
-            return map_auth
-
-    # If token not found, return empty token list
-    return []
-
-
-def display(token_map: List[Tuple[AvAuthorization, AvAuthorization]]) -> Dict[str, str]:
-    mapping: Dict[str, str] = {}
-
-    # Build mapping
-    for token, auth in token_map:
-        mapping[f"{str(token)}"] = str(auth)
-
-    # Print formatted JSON string for easy reading
-    print(json.dumps(mapping, indent=1))
-
-    # Return mapping
-    return mapping
-
-
 def couple(
     network: AvEntity,
     token: AvToken,
@@ -213,3 +177,38 @@ def unmap(
         authority=authority,
         authorization=authorization,
     )
+
+def resolve(
+    token: AvAuthorization | str,
+    authorization: AvAuthorization,
+    token_map: List[Tuple[AvAuthorization, AvAuthorization]] | None = None,
+):
+    if isinstance(token, str):
+        token = AvAuthorization(token)
+
+    # If no token map was given, get one from the server
+    if token_map is None:
+        token_map = retrieve(authorization=authorization)
+
+    # Search for auth that maps to
+    # given token
+    for map_token, map_auth in token_map:
+        if map_token == token:
+            return map_auth
+
+    # If token not found, return empty token list
+    return []
+
+
+def display(token_map: List[Tuple[AvAuthorization, AvAuthorization]]) -> Dict[str, str]:
+    mapping: Dict[str, str] = {}
+
+    # Build mapping
+    for token, auth in token_map:
+        mapping[f"{str(token)}"] = str(auth)
+
+    # Print formatted JSON string for easy reading
+    print(json.dumps(mapping, indent=1))
+
+    # Return mapping
+    return mapping
