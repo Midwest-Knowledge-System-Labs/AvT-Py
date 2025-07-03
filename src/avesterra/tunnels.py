@@ -236,13 +236,13 @@ def parse_portals(server_model: Dict) -> Dict[str, str]:
     >>> import avesterra.tunnels as tunnels
     >>> server_model = {
     ...     "Attributes": [
-    ...         ["PORTAL_ATTRIBUTE", {"value": "data"}, [("portal1", "entity1", None)]],
+    ...         ["PORTAL_ATTRIBUTE", {"value": "data"}, [("portal1", "entity1", <1|1100|0>)]],
     ...         ["OTHER_ATTRIBUTE", {"value": "other"}, []]
     ...     ]
     ... }
     >>> portal_info = tunnels.parse_portals(server_model)
     >>> print(portal_info)
-    {'entity1': 'portal1'}
+    {'<1|1100|0>': 'portal1'}
     """
     attributes = server_model["Attributes"]
     portal_info: Dict[str, str] = {}
