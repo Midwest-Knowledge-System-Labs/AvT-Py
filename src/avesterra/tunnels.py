@@ -29,7 +29,7 @@ def create_tunnel(
         method=AvMethod.CREATE,
         name=name,
         context=AvContext.AVESTERRA,
-        category=AvCategory.TUNNEL,
+        category=AvCategory.AVESTERRA,
         klass=AvClass.TUNNEL,
         value=AvValue.encode_authorization(authority),
         auxiliary=portal,
@@ -64,7 +64,6 @@ def open_portal(
         authority=authority,
         authorization=authorization,
     )
-
 
 def close_portal(
     portal: AvPortal,
