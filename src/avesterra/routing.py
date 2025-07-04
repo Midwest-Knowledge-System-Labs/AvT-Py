@@ -11,6 +11,11 @@ from avesterra.avial import *
 
 
 class Routing(IntEnum):
+    """Enumeration for routing types in AvesTerra network infrastructure
+    
+    This enumeration defines the different types of routing that can be enabled
+    on an AvesTerra server to control network traffic flow and connectivity.
+    """
     NULL = NULL_PARAMETER
     LOGICAL = LOGICAL_PARAMETER
     PHYSICAL = PHYSICAL_PARAMETER
@@ -24,6 +29,46 @@ def route_host(
     address: AvAddress = NULL_ADDRESS,
     trusted: bool = False,
 ):
+    """Configure routing for a specific host on the AvesTerra server
+    
+    This function establishes or modifies routing configuration for a host entity
+    on the specified AvesTerra server. It allows setting network addresses and
+    trust relationships for host-to-host communication.
+
+    Parameters
+    __________
+    server : AvEntity
+        The AvesTerra server entity that will handle the routing
+    host : AvEntity
+        The host entity to be routed
+    authorization : AvAuthorization
+            Root authorizations of the `server`
+    address : AvAddress, optional
+        Integer network address for the host routing configuration (default: NULL_ADDRESS)
+    trusted : bool, optional
+        Whether the host should be marked as trusted (default: False)
+
+    Returns
+    _______
+    AvValue
+        Result of the routing configuration operation
+
+    Examples
+    ________
+
+    >>> import avesterra.routing as routing # Configure trusted host routing
+    >>> server: AvEntity
+    >>> host: AvEntity
+    >>> authorization: AvAuthorization
+    >>> address: AvAddress # Assume address is a valid integer representation of an IPv4 address
+    >>> routing.route_host(server=server, host=host, authorization=authorization, address=address, trusted=True)
+
+    >>> import avesterra.routing as routing # Configure untrusted host routing
+    >>> server: AvEntity
+    >>> host: AvEntity
+    >>> authorization: AvAuthorization
+    >>> routing.route_host(server=server, host=host, authorization=authorization, trusted=False)
+    """
     return invoke_entity(
         entity=server,
         method=AvMethod.AVESTERRA,
@@ -44,6 +89,47 @@ def route_network(
     address: AvAddress = NULL_ADDRESS,
     trusted: bool = False,
 ):
+    """Configure routing for a network on the AvesTerra server
+    
+    This function establishes or modifies routing configuration for a network entity
+    on the specified AvesTerra server. It allows setting network addresses and
+    trust relationships for peer-to-peer communication.
+
+    Parameters
+    __________
+    server : AvEntity
+        The AvesTerra server entity that will handle the routing
+    network : AvEntity
+        The network entity to be routed
+    authorization : AvAuthorization
+        Root authorizations of the `server`
+    address : AvAddress, optional
+        Integer network address for the host routing configuration (default: NULL_ADDRESS)
+    trusted : bool, optional
+        Whether the network should be marked as trusted (default: False)
+
+    Returns
+    _______
+    AvValue
+        Result of the routing configuration operation
+
+    Examples
+    ________
+
+    >>> import avesterra.routing as routing # Configure trusted network routing
+    >>> server: AvEntity
+    >>> network: AvEntity
+    >>> authorization: AvAuthorization
+    >>> address: AvAddress # Assume address is a valid integer representation of an IPv4 address
+    >>> routing.route_network(server=server, network=network, authorization=authorization, address=address, trusted=True)
+
+    >>> import avesterra.routing as routing # Configure untrusted network routing
+    >>> server: AvEntity
+    >>> network: AvEntity
+    >>> authorization: AvAuthorization
+    >>> address: AvAddress # Assume address is a valid integer representation of an IPv4 address
+    >>> routing.route_network(server=server, network=network, authorization=authorization, trusted=False)
+    """
     return invoke_entity(
         entity=server,
         method=AvMethod.AVESTERRA,
@@ -64,6 +150,47 @@ def include_host(
     address: AvAddress = NULL_ADDRESS,
     trusted: bool = False,
 ):
+    """Include a host in the AvesTerra server's routing table
+    
+    This function adds a host to the server's routing configuration, enabling
+    network communication to the specified host. The host will be accessible
+    through the server's routing infrastructure.
+
+    Parameters
+    __________
+    server : AvEntity
+        The AvesTerra server entity that will handle the routing
+    host_entity : AvEntity
+        The host entity to be included in routing
+    authorization : AvAuthorization
+        Root authorization of server that is being configured
+    address : AvAddress, optional
+        Network address for the host (default: NULL_ADDRESS)
+    trusted : bool, optional
+        Whether the host should be marked as trusted (default: False)
+
+    Raises
+    ______
+    ValueError
+        When address is NULL or empty, as an address is required for inclusion
+
+    Examples
+    ________
+
+    >>> import avesterra.routing as routing # Include a trusted host
+    >>> server: AvEntity
+    >>> host_entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> address: AvAddress # Assume address is a valid integer representation of an IPv4 address
+    >>> routing.include_host(server=server, host_entity=host_entity, authorization=authorization, address=address, trusted=True)
+
+    >>> import avesterra.routing as routing # Include an untrusted host
+    >>> server: AvEntity
+    >>> host_entity: AvEntity
+    >>> authorization: AvAuthorization
+    >>> address: AvAddress # Assume address is a valid integer representation of an IPv4 address
+    >>> routing.include_host(server=server, host_entity=host_entity, authorization=authorization, address=address, trusted=False)
+    """
     if not address:
         raise ValueError("Argument `address` cannot be NULL when including a host")
 
@@ -77,6 +204,29 @@ def include_host(
 
 
 def exclude_host(server: AvEntity, host: AvEntity, authorization: AvAuthorization):
+    """Exclude a host from the AvesTerra server's routing table
+    
+    This function removes a host from the server's routing configuration,
+    preventing network communication to the specified host through this server.
+
+    Parameters
+    __________
+    server : AvEntity
+        The AvesTerra server entity that will handle the routing
+    host : AvEntity
+        The host entity to be excluded from routing
+    authorization : AvAuthorization
+        Root authorization of server that is being configured
+
+    Examples
+    ________
+
+    >>> import avesterra.routing as routing # Exclude a host from routing
+    >>> server: AvEntity
+    >>> host: AvEntity
+    >>> authorization: AvAuthorization
+    >>> routing.exclude_host(server=server, host=host, authorization=authorization)
+    """
     route_host(server=server, host=host, address=0, authorization=authorization)
 
 
@@ -87,6 +237,46 @@ def include_network(
     authorization: AvAuthorization,
     trusted: bool = False,
 ):
+    """Include a network in the AvesTerra server's routing table
+    
+    This function adds a network to the server's routing configuration, enabling
+    network communication to all hosts within the specified network range.
+
+    Parameters
+    __________
+    server : AvEntity
+        The AvesTerra server entity that will handle the routing
+    network : AvEntity
+        The network entity to be included in routing
+    address : AvAddress
+        Network address range for the network (required)
+    authorization : AvAuthorization
+        Root authorization of server that is being configured
+    trusted : bool, optional
+        Whether the network should be marked as trusted (default: False)
+
+    Raises
+    ______
+    ValueError
+        When address is NULL or empty, as an address is required for inclusion
+
+    Examples
+    ________
+
+    >>> import avesterra.routing as routing # Include a trusted network
+    >>> server: AvEntity
+    >>> network: AvEntity
+    >>> authorization: AvAuthorization
+    >>> address: AvAddress # Assume address is a valid integer representation of an IPv4 address
+    >>> routing.include_network(server=server, network=network, address=address, authorization=authorization, trusted=True)
+
+    >>> import avesterra.routing as routing # Include an untrusted network
+    >>> server: AvEntity
+    >>> network: AvEntity
+    >>> authorization: AvAuthorization
+    >>> address: AvAddress # Assume address is a valid integer representation of an IPv4 address
+    >>> routing.include_network(server=server, network=network, address=address, authorization=authorization, trusted=False)
+    """
     if not address:
         raise ValueError("Argument `address` cannot be NULL when including a network")
 
@@ -102,6 +292,29 @@ def include_network(
 def exclude_network(
     server: AvEntity, network: AvEntity, authorization: AvAuthorization
 ):
+    """Exclude a network from the AvesTerra server's routing table
+    
+    This function removes a network from the server's routing configuration,
+    preventing network communication to hosts within the specified network range.
+
+    Parameters
+    __________
+    server : AvEntity
+        The AvesTerra server entity that will handle the routing
+    network : AvEntity
+        The network entity to be excluded from routing
+    authorization : AvAuthorization
+        Root authorization of server that is being configured
+
+    Examples
+    ________
+
+    >>> import avesterra.routing as routing # Exclude a network from routing
+    >>> server: AvEntity
+    >>> network: AvEntity
+    >>> authorization: AvAuthorization
+    >>> routing.exclude_network(server=server, network=network, authorization=authorization)
+    """
     route_network(
         server=server,
         network=network,
@@ -116,6 +329,39 @@ def enable_routing(
     routing: Routing = Routing.NULL,
     gateway: AvEntity = NULL_ENTITY,
 ):
+    """Enable routing functionality on an AvesTerra server
+    
+    This function activates routing capabilities on the specified AvesTerra server,
+    allowing it to route network traffic between different entities. It supports
+    logical, physical, and virtual routing types, and can configure gateway relationships.
+
+    Routing must be configured before adapters or other entities are configured on the server,
+    otherwise problems may occur; this includes re-configuring.
+
+    Parameters
+    __________
+    server : AvEntity
+        The AvesTerra server entity on which to enable routing
+    local : AvEntity
+        The EID(Entity ID) that the AvesTerra server will become in the global, p2p, knowledge space
+    authorization : AvAuthorization
+        Root authorization of server that is being configured
+    routing : Routing, optional
+        The type of routing to enable (default: Routing.NULL); Logical routing is most popular at the moment
+    gateway : AvEntity, optional
+        The gateway entity for routing configuration (default: NULL_ENTITY); if NULL_ENTITY, then local becomes its own Gateway
+
+    Examples
+    ________
+
+    >>> import avesterra.routing as routing # Enable logical routing with custom gateway
+    >>> server: AvEntity
+    >>> local: AvEntity
+    >>> gateway: AvEntity
+    >>> authorization: AvAuthorization
+    >>> enable_routing(server=server, local=local, authorization=authorization, routing=Routing.LOGICAL, gateway=gateway)
+
+    """
     if not isinstance(routing, Routing):
         raise TypeError("Argument `routing` must be an instance of Routing")
 
@@ -145,6 +391,40 @@ def enable_routing(
     )
 
 def parse_networks(server_model: Dict) -> Dict[str, Tuple[bool, int]]:
+    """Parse network routing information from an AvesTerra server model
+    
+    This function extracts network routing configuration from a server model
+    structure, returning a dictionary mapping network entity strings to their
+    trust status and address information.
+
+    Parameters
+    __________
+    server_model : Dict
+        Dictionary containing server model with network routing attributes
+
+    Returns
+    _______
+    Dict[str, Tuple[bool, int]]
+        Dictionary mapping network entity strings to tuples of (trusted, address)
+        where trusted is a boolean indicating trust status and address is the
+        numeric network address
+
+    Examples
+    ________
+
+    >>> import avesterra.routing as routing # Parse network routing from server model
+    >>> server_model = {
+    ...     "Attributes": [
+    ...         ["NETWORK_ATTRIBUTE", {}, [
+    ...             ["TRUSTED", "network_entity_123", "192168001000"],
+    ...             ["", "network_entity_456", "10000000000"]
+    ...         ]]
+    ...     ]
+    ... }
+    >>> network_info = routing.parse_networks(server_model)
+    >>> print(network_info)
+    {'network_entity_123': (True, 192168001000), 'network_entity_456': (False, 10000000000)}
+    """
     attributes = server_model["Attributes"]
     network_info: Dict[str, Tuple[bool, int]] = {}
     for attribute in attributes:
@@ -154,6 +434,40 @@ def parse_networks(server_model: Dict) -> Dict[str, Tuple[bool, int]]:
     return network_info
 
 def parse_hosts(server_model: Dict) -> Dict[str, Tuple[bool, int]]:
+    """Parse host routing information from an AvesTerra server model
+    
+    This function extracts host routing configuration from a server model
+    structure, returning a dictionary mapping host entity strings to their
+    trust status and address information.
+
+    Parameters
+    __________
+    server_model : Dict
+        Dictionary containing server model with host routing attributes
+
+    Returns
+    _______
+    Dict[str, Tuple[bool, int]]
+        Dictionary mapping host entity strings to tuples of (trusted, address)
+        where trusted is a boolean indicating trust status and address is the
+        numeric host address
+
+    Examples
+    ________
+
+    >>> import avesterra.routing as routing # Parse host routing from server model
+    >>> server_model = {
+    ...     "Attributes": [
+    ...         ["HOST_ATTRIBUTE", {}, [
+    ...             ["TRUSTED", "host_entity_123", "192168001100"],
+    ...             ["", "host_entity_456", "10000000050"]
+    ...         ]]
+    ...     ]
+    ... }
+    >>> host_info = routing.parse_hosts(server_model)
+    >>> print(host_info)
+    {'host_entity_123': (True, 192168001100), 'host_entity_456': (False, 10000000050)}
+    """
     attributes = server_model["Attributes"]
     host_info: Dict[str, Tuple[bool, int]] = {}
     for attribute in attributes:
@@ -161,5 +475,3 @@ def parse_hosts(server_model: Dict) -> Dict[str, Tuple[bool, int]]:
             for trusted, entity_str, num_address_str in attribute[2]:
                 host_info[entity_str] = (trusted == "TRUSTED", int(num_address_str))
     return host_info
-
-
