@@ -25,6 +25,62 @@ def create_general(
     server: AvEntity = NULL_ENTITY,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvGeneral:
+    """Create a new general in the AvesTerra knowledge space
+    
+    Generals are entities that are connected to the General Adapter Outlet(<0|0|14>) 
+    at Presence level 0 and have been allocated as Generals in the Generals Adapter 
+    file system. Generals are a 'catch-all' solution for Avial, providing the most 
+    rich representations possible through support for Attributions, Facts, Properties, 
+    and Data access. They should be used when maximal richness/capabilities are needed 
+    for system representations, but should be used in a limited capacity to avoid 
+    performance bottlenecks.
+
+    Parameters
+    __________
+    name : AvName, optional
+        The name to assign to the new general
+    key : AvKey, optional
+        Unique identifier key for the general
+    context : AvContext, optional
+        Context for the general
+    category : AvCategory, optional
+        Category for the general
+    klass : AvClass, optional
+        Class for the general
+    mode : AvMode, optional
+        Operational mode for the general
+    outlet : AvEntity, optional
+        Custom outlet to use instead of the default general_outlet
+    server : AvEntity, optional
+        Server entity to associate with the General
+    authorization : AvAuthorization, optional
+        Authorization required to create the general; must be on both general and general adapter outlet
+
+    Returns
+    _______
+    AvGeneral
+        The newly created general
+
+    Examples
+    ________
+
+    >>> import avesterra.generals as generals # Create a basic general
+    >>> authorization: AvAuthorization
+    >>> general = generals.create_general(name="MyGeneral", authorization=authorization)
+    >>> print(f"Created General: {general}")
+    
+    Notes
+    _____
+    Generals support the full range of AvesTerra constructs including:
+    - Attributions: Simple attribute/value pairs with optional traits
+    - Facts: Complex semantic structures with facets, features, fields, and frames
+    - Properties: Name/value pairs with optional keys and annotations
+    - Data: Direct storage of arbitrary data content
+    
+    Due to their comprehensive capabilities, Generals should be used judiciously
+    to maintain system performance. Consider using more specialized entity types
+    (Files, Folders) when their specific capabilities are enough.
+    """
     adapter = general_outlet if outlet == NULL_ENTITY else outlet
     return invoke_entity(
         entity=adapter,
@@ -43,4 +99,44 @@ def create_general(
 def delete_general(
     general: AvGeneral, authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> None:
+    """Delete a general from the AvesTerra knowledge space
+    
+    Permanently removes the specified general and all associated data
+    including attributions, facts, properties, and any stored data content.
+    This operation cannot be undone.
+
+    Parameters
+    __________
+    general : AvGeneral
+        The general to be deleted
+    authorization : AvAuthorization, optional
+        Authorization required to delete the general; must be on both general and general adapter outlet.
+
+    Examples
+    ________
+
+    >>> import avesterra.generals as generals # Delete a general
+    >>> general: AvGeneral # Assume this is a valid general
+    >>> authorization: AvAuthorization
+    >>> generals.delete_general(general=general, authorization=authorization)
+    >>> print("general has been deleted")
+
+
+    >>> import avesterra.generals as generals # Delete with explicit authorization
+    >>> general: AvGeneral
+    >>> admin_auth: AvAuthorization
+    >>> generals.delete_general(general, admin_auth)
+    >>> print("General deleted with admin authorization")
+    
+    Notes
+    _____
+    Deleting a general will remove all associated constructs:
+    - All attributions and their traits
+    - All facts with their facets, features, fields, and frames
+    - All properties and their annotations
+    - All stored data content
+    
+    Ensure proper authorization is provided as this operation requires
+    appropriate permissions to delete the general and its contents.
+    """
     invoke_entity(entity=general, method=AvMethod.DELETE, authorization=authorization)
