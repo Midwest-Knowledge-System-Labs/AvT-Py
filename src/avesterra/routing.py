@@ -416,14 +416,14 @@ def parse_networks(server_model: Dict) -> Dict[str, Tuple[bool, int]]:
     >>> server_model = {
     ...     "Attributes": [
     ...         ["NETWORK_ATTRIBUTE", {}, [
-    ...             ["TRUSTED", "network_entity_123", "192168001000"],
-    ...             ["", "network_entity_456", "10000000000"]
+    ...             ["TRUSTED", "<0|1002|0>", "2273762998"],
+    ...             ["", "<0|999|0>", "134744072"]
     ...         ]]
     ...     ]
     ... }
     >>> network_info = routing.parse_networks(server_model)
     >>> print(network_info)
-    {'network_entity_123': (True, 192168001000), 'network_entity_456': (False, 10000000000)}
+    {'<1002|0|0>': (True, 2273762998), '<999|0|0>': (False, 134744072)}
     """
     attributes = server_model["Attributes"]
     network_info: Dict[str, Tuple[bool, int]] = {}
@@ -459,14 +459,14 @@ def parse_hosts(server_model: Dict) -> Dict[str, Tuple[bool, int]]:
     >>> server_model = {
     ...     "Attributes": [
     ...         ["HOST_ATTRIBUTE", {}, [
-    ...             ["TRUSTED", "host_entity_123", "192168001100"],
-    ...             ["", "host_entity_456", "10000000050"]
+    ...             ["TRUSTED", "<0|1002|0>", "2273762998"],
+    ...             ["", "<0|999|0>", "134744072"]
     ...         ]]
     ...     ]
     ... }
     >>> host_info = routing.parse_hosts(server_model)
     >>> print(host_info)
-    {'host_entity_123': (True, 192168001100), 'host_entity_456': (False, 10000000050)}
+    {'<0|1002|0>': (True, 2273762998), '<0|999|0>': (False, 134744072)}
     """
     attributes = server_model["Attributes"]
     host_info: Dict[str, Tuple[bool, int]] = {}
