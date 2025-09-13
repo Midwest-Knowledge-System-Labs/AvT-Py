@@ -343,8 +343,6 @@ class Property:
 
         if len(li) > 3:
 
-            print(li[3])
-
             p.annotations =  AnnotationList.from_json_list(li[3])
 
             #for annotation in li[3]:
