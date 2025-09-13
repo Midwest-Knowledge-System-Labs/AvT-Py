@@ -701,23 +701,27 @@ class SocketPool:
         context.check_hostname = False
         context.options &= ssl.OP_NO_TLSv1_2 | ssl.OP_NO_TLSv1_1 | ssl.OP_NO_TLSv1
         if address != 0:
-            try:
-                context.load_verify_locations(
-                    os.path.join(directory, str(address) + ".pem")
-                )
-            except Exception:
+
+            if not directory:
+                context.load_default_certs()
+            else:
                 try:
-                    context.load_verify_locations(os.path.join(directory, "local.pem"))
+                    context.load_verify_locations(
+                        os.path.join(directory, str(address) + ".pem")
+                    )
                 except Exception:
-                    cert_dir_path = os.path.join(directory, "avesterra.pem")
                     try:
-                        context.load_verify_locations(cert_dir_path)
+                        context.load_verify_locations(os.path.join(directory, "local.pem"))
                     except Exception:
-                        print(os.path.join(directory, "avesterra.pem"))
-                        print(traceback.format_exc())
-                        raise IOError(
-                            f"Unable to load a valid TLS certificate from {cert_dir_path}"
-                        )
+                        cert_dir_path = os.path.join(directory, "avesterra.pem")
+                        try:
+                            context.load_verify_locations(cert_dir_path)
+                        except Exception:
+                            print(os.path.join(directory, "avesterra.pem"))
+                            print(traceback.format_exc())
+                            raise IOError(
+                                f"Unable to load a valid TLS certificate from {cert_dir_path}"
+                            )
         try:
             s.connect((self.host, self._port))
         except OSError as err:

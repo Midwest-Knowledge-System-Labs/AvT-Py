@@ -179,6 +179,127 @@ class AvialModel:
             d["Properties"] = self.properties.to_json_list()
         return d
 
+class Annotation:
+    def __init__(
+        self,
+        attribute: AvAttribute,
+        name: str = "",
+        value: av.AvValue = av.NULL_VALUE,
+    ):
+        self.attribute = attribute
+        self.name = name
+        self.value = value
+
+    def __eq__(self, other):
+        return (
+            self.attribute == other.attribute
+            and self.name == other.name
+            and self.value == other.value
+        )
+
+    def pretty_str(self, indent: int = 0):
+        indent_str = " " * indent
+        attribute_str = f"{indent_str}Fact: {self.attribute.name:<15} "
+        name_str = f"{indent_str}Name: {self.name:<15}"
+        value_str = f"{self.value.tag().name}: {self.value.decode()}\n"
+        return (
+            f"{attribute_str}{name_str}{value_str}"
+        )
+
+    @staticmethod
+    def from_json_list(li: List):
+        f = Annotation(AvAttribute.NULL)
+
+        attribute_name = li[0].removesuffix("_ATTRIBUTE")
+        f.attribute = AvAttribute[attribute_name]
+        f.name = li[1]
+        f.value = av.AvValue.from_json(li[2])
+
+        return f
+
+    def to_json_list(self):
+        li = []
+        li.append(self.attribute.name + "_ATTRIBUTE")
+        li.append(self.name)
+        li.append(self.value.obj())
+        return li
+
+class AnnotationList:
+    def __init__(self):
+        self.annotations: List[Annotation] = []
+
+    def __bool__(self):
+        return bool(self.annotations)
+
+    def __len__(self):
+        return len(self.annotations)
+
+    def __eq__(self, other):
+        return self.annotations == other.annotations
+
+    def __str__(self):
+        return "[" + ", ".join(str(p) for p in self.annotations) + "]"
+
+    def pretty_str(self, indent: int = 0):
+        return "".join([f.pretty_str(indent) for f in self.annotations])
+
+    def __getitem__(self, item: int | AvAttribute) -> Annotation:
+        res = self.get_opt(item)
+        if res is None:
+            if not isinstance(item, AvAttribute):
+                raise IndexError()
+            res = Annotation(item)
+            self.annotations.append(res)
+        return res
+
+    def get_opt(self, item: int | AvAttribute) -> Annotation | None:
+        """
+        Returns None if the item does not exist
+        """
+        if isinstance(item, AvAttribute):
+            for f in self.annotations:
+                if f.attribute == item:
+                    return f
+            return None
+        elif isinstance(item, int):
+            try:
+                return self.annotations[item]
+            except IndexError:
+                return None
+        else:
+            raise TypeError(f"Invalid type for item: {type(item)}")
+
+    def append(self, item: Annotation):
+        self.annotations.append(item)
+
+    def has(self, item: int | av.AvAttribute):
+        return self.get_opt(item) is not None
+
+    def pop(self, item: int | av.AvAttribute) -> Annotation | None:
+        res = self.get_opt(item)
+        if res is None:
+            return None
+        if isinstance(item, av.AvAttribute):
+            self.annotations.remove(res)
+        else:
+            del self.annotations[item]
+        return res
+
+    def remove(self, item: int | av.AvAttribute):
+        self.pop(item)
+
+    @staticmethod
+    def from_json_list(li: List):
+        model = AnnotationList()
+
+        for f in li:
+            model.annotations.append(Annotation.from_json_list(f))
+
+        return model
+
+    def to_json_list(self):
+        return [f.to_json_list() for f in self.annotations]
+
 
 class Property:
     def __init__(
@@ -186,12 +307,12 @@ class Property:
         name: str = "",
         key: str = "",
         value: av.AvValue = av.NULL_VALUE,
-        annotations: Dict[AvAttribute, av.AvValue] | None = None,
+        annotations: AnnotationList | None = None,
     ):
         self.name = name
         self.key = key
         self.value = value
-        self.annotations = annotations if annotations is not None else {}
+        self.annotations = annotations
 
     def __eq__(self, other):
         return (
@@ -217,11 +338,20 @@ class Property:
 
         p.name = li[0]
         p.key = li[1]
+
         p.value = av.AvValue.from_json(li[2])
+
         if len(li) > 3:
-            for k, v in li[3].items():
-                attribute_name = k.removesuffix("_ATTRIBUTE")
-                p.annotations[AvAttribute[attribute_name]] = av.AvValue.from_json(v)
+
+            print(li[3])
+
+            p.annotations =  AnnotationList.from_json_list(li[3])
+
+            #for annotation in li[3]:
+            #    attribute_name = annotation[0].removesuffix("_ATTRIBUTE")
+            #    annotation_name = annotation[1]
+            #    p.annotations[AvAttribute[attribute_name]] = av.AvValue.from_json(annotation[2])
+
 
         return p
 
@@ -326,9 +456,11 @@ class Fact:
     def __init__(
         self,
         attribute: AvAttribute,
+        name: str,
         value: av.AvValue = av.NULL_VALUE,
     ):
         self.attribute = attribute
+        self.name = name
         self.value = value
         self.facets = FacetList()
         self.features = FeatureList()
@@ -339,6 +471,7 @@ class Fact:
         return (
             self.attribute == other.attribute
             and self.value == other.value
+            and self.name == other.name
             and self.facets == other.facets
             and self.features == other.features
             and self.fields == other.fields
@@ -348,6 +481,7 @@ class Fact:
     def pretty_str(self, indent: int = 0):
         indent_str = " " * indent
         attribute_str = f"{indent_str}Fact: {self.attribute.name:<15} "
+        name_str = f"{indent_str}Name: {self.name:<15}"
         value_str = f"{self.value.tag().name}: {self.value.decode()}\n"
         if self.facets:
             facet_str = f"{indent_str}Facets ({len(self.facets)}):\n{self.facets.pretty_str(indent+4)}\n"
@@ -366,20 +500,21 @@ class Fact:
         else:
             frame_str = ""
         return (
-            f"{attribute_str}{value_str}{facet_str}{feature_str}{field_str}{frame_str}"
+            f"{attribute_str}{name_str}{value_str}{facet_str}{feature_str}{field_str}{frame_str}"
         )
 
     @staticmethod
     def from_json_list(li: List):
-        f = Fact(AvAttribute.NULL)
+        f = Fact(AvAttribute.NULL, "")
 
         attribute_name = li[0].removesuffix("_ATTRIBUTE")
         f.attribute = AvAttribute[attribute_name]
-        f.value = av.AvValue.from_json(li[1])
-        f.facets = FacetList.from_json_list(li[2])
-        f.features = FeatureList.from_json_list(li[3])
-        f.fields = FieldList.from_json_list(li[4])
-        f.frames = FrameList.from_json_list(li[5], f.fields)
+        f.name = li[1]
+        f.value = av.AvValue.from_json(li[2])
+        f.facets = FacetList.from_json_list(li[3])
+        f.features = FeatureList.from_json_list(li[4])
+        f.fields = FieldList.from_json_list(li[5])
+        f.frames = FrameList.from_json_list(li[6], f.fields)
         f.frames.fields = f.fields
 
         return f
@@ -1072,15 +1207,18 @@ class Attribution:
     def __init__(
         self,
         attribute: AvAttribute,
+        name: str = "",
         value: av.AvValue = av.NULL_VALUE,
     ):
         self.attribute = attribute
+        self.name = name
         self.value = value
         self.traits = TraitList()
 
     def __eq__(self, other):
         return (
             self.attribute == other.attribute
+            and self.name == other.name
             and self.value == other.value
             and self.traits == other.traits
         )
@@ -1088,12 +1226,13 @@ class Attribution:
     def pretty_str(self, indent: int = 0):
         indent_str = " " * indent
         attribute_str = f"{indent_str}Attribution: {self.attribute.name:<15} "
+        name_str = f"{indent_str}Name: {self.name:<15} "
         value_str = f"{self.value.tag().name}: {self.value.decode()}\n"
         if self.traits:
             trait_str = f"{indent_str}Traits ({len(self.traits)}):\n{self.traits.pretty_str(indent+4)}\n"
         else:
             trait_str = ""
-        return f"{attribute_str}{value_str}{trait_str}"
+        return f"{attribute_str}{name_str}{value_str}{trait_str}"
 
     @staticmethod
     def from_json_list(li: List):
@@ -1101,6 +1240,7 @@ class Attribution:
 
         attribute_name = li[0].removesuffix("_ATTRIBUTE")
         f.attribute = AvAttribute[attribute_name]
+        f.name = li[1]
         f.value = av.AvValue.from_json(li[1])
         f.traits = TraitList.from_json_list(li[2])
 
@@ -1109,6 +1249,7 @@ class Attribution:
     def to_json_list(self):
         li = []
         li.append(self.attribute.name + "_ATTRIBUTE")
+        li.append(self.name)
         li.append(self.value.obj())
         li.append(self.traits.to_json_list())
         return li

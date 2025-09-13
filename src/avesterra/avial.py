@@ -163,8 +163,10 @@ class AvLocutorOpt:
         if "MODE" in d: loc.mode = AvMode[d["MODE"].removesuffix("_MODE")]
         if "STATE" in d: loc.state = AvState[d["STATE"].removesuffix("_STATE")]
         if "CONDITION" in d: loc.condition = AxCondition[d["CONDITION"].removesuffix("_CONDITION")]
-        if "PRESENCE" in d: loc.presence = int(d["PRESENCE"])
-        if "TIME" in d: loc.time = AvTime.fromtimestamp(int(d["TIME"]))
+
+        if "PRESENCE" in d: loc.presence = 1 if d["PRESENCE"] == 'AVESTERRA_PRESENCE' else 0 # TODO
+
+        if "TIME" in d: loc.time = AvTime.fromisoformat(d["TIME"])
         if "TIMEOUT" in d: loc.timeout = int(d["TIMEOUT"])
         if "ASPECT" in d: loc.aspect = AvAspect[d["ASPECT"].removesuffix("_ASPECT")]
         if "TEMPLATE" in d: loc.template = AxTemplate[d["TEMPLATE"].removesuffix("_TEMPLATE")]
@@ -341,7 +343,8 @@ class AvValue:
                 AvTime.fromtimestamp(int(value_str), tz=UTC).replace(microsecond=0)
             )
         elif tag == AvTag.DATE:
-            return AvValue.encode_date(date(year=int(value_json["YEAR"]), month=int(value_json["MONTH"]), day=int(value_json["DAY"])))
+            date_json = json.loads(value_str)
+            return AvValue.encode_date(date(year=int(date_json["YEAR"]), month=int(date_json["MONTH"]), day=int(date_json["DAY"])))
         elif tag == AvTag.EXCEPTION:
             exception_dict = json.loads(value_str)
             err = exception_dict["ERROR"].removesuffix("_ERROR")
@@ -368,9 +371,14 @@ class AvValue:
             return AvValue.encode_operator(AvOperator[value_str])
         elif tag == AvTag.FUNCTION:
             return AvValue.encode_function(AvEntity.from_str(value_str))
+        elif tag == AvTag.MEASUREMENT:
+            return AvValue.encode_null() # TODO
+        elif tag == AvTag.TAXON:
+            return AvValue.encode_null() # TODO
         elif tag == AvTag.LOCUTOR:
             return AvValue.encode_locutor(AvLocutor.from_dict(json.loads(value_str)))
         else:
+            print(value_str)
             raise ValueError(f"Unknown TAG given: {tag}")
 
     def __str__(self):

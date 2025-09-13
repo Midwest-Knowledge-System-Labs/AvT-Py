@@ -1,10 +1,12 @@
 import avesterra
-from avesterra import AvEntity
+from avesterra import AvEntity, AvialModel, AvAuthorization
+import avesterra.avial as av
 
 avesterra.initialize(
-    server="192.168.1.251",
-    directory="/AvesTerra/Certificates/meep",
+    server="origin.midwksl.net",
+    directory="./Certificates"
 )
-print(avesterra.server_version(server=AvEntity(0,0,0)))
-
+print("BOL")
+print(AvialModel.from_interchange(av.retrieve_entity(entity=AvEntity.from_str("<37|1|100077>"), authorization=AvAuthorization("0c0d0215-9859-4c3f-a107-65b632c1ac23"))))
+print("BBBB")
 avesterra.finalize()
