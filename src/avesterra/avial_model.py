@@ -157,7 +157,7 @@ class AvialModel:
         model.key = d.get("Key", "")
         model.data = d.get("Data", 0)
 
-        model.attributions = AttributionList.from_json_list(d.get("Attributes", []))
+        model.attributions = AttributionList.from_json_list(d.get("Attributions", []))
         model.facts = FactList.from_json_list(d.get("Facts", []))
         model.properties = PropertyList.from_json_list(d.get("Properties", []))
 
@@ -1239,8 +1239,8 @@ class Attribution:
         attribute_name = li[0].removesuffix("_ATTRIBUTE")
         f.attribute = AvAttribute[attribute_name]
         f.name = li[1]
-        f.value = av.AvValue.from_json(li[1])
-        f.traits = TraitList.from_json_list(li[2])
+        f.value = av.AvValue.from_json(li[2])
+        f.traits = TraitList.from_json_list(li[3])
 
         return f
 
