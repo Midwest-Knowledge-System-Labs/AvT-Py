@@ -454,7 +454,7 @@ class Fact:
     def __init__(
         self,
         attribute: AvAttribute,
-        name: str,
+        name: str = "",
         value: av.AvValue = av.NULL_VALUE,
     ):
         self.attribute = attribute
