@@ -328,7 +328,7 @@ class Property:
 
     def __str__(self):
         ann = (
-            "[" + ", ".join(f"{k.name}: {v}" for k, v in self.annotations.items()) + "]"
+            "[" + ", ".join(f"{annotation.name}: {annotation.value}" for annotation in self.annotations) + "]"
         )
         return f"{self.name}\t[{self.key}]: {self.value} | {ann}"
 
@@ -360,8 +360,8 @@ class Property:
         li.append(self.value.obj())
         if self.annotations:
             d = {}
-            for k, v in self.annotations.items():
-                d[k.name + "_ATTRIBUTE"] = v.obj()
+            for annotation in self.annotations:
+                d[annotation.name + "_ATTRIBUTE"] = annotation.value.obj()
             li.append(d)
         return li
 
