@@ -72,9 +72,6 @@ class Adapter:
             while True:
                 try:
                     avtc_init(
-                        avt_host=self.avt_server,
-                        avt_verify_chain_dir=self.avt_directory,
-                        avt_auth=self.auth,
                         max_socket_count=self._socket_count
                     )
                     break

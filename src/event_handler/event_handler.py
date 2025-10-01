@@ -20,7 +20,6 @@ from avesterra import avial as av, av_log
 
 from avesterra.avesterra import AvAuthorization
 from avesterra.avial import AvValue, NULL_ENTITY
-from avesterra.taxonomy import AvTag
 
 SLEEP_ON_ERROR_SECONDS = 5
 
@@ -71,9 +70,6 @@ class EventHandler:
             while True:
                 try:
                     avtc_init(
-                        avt_host=self.avt_server,
-                        avt_verify_chain_dir=self.avt_directory,
-                        avt_auth=self.auth,
                         max_socket_count=self._socket_count
                     )
                     break
@@ -213,6 +209,6 @@ class EventHandler:
             self.publish_callback(args)
         except Exception as e:
             av_log.error(
-                f"Event_Handler: Error during event handling\n"
+                "Event_Handler: Error during event handling\n"
             )
             raise e

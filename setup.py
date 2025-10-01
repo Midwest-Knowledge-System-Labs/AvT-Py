@@ -37,7 +37,9 @@ setup(
     package_data={
         "avesterra": ["py.typed"],
         "orchestra": ["py.typed"],
-        "midwksl": ["py.typed"]
+        "midwksl": ["py.typed"],
+        "adapter": ["py.typed"],
+        "event_handler": ["py.typed"]
     },
 
 )
