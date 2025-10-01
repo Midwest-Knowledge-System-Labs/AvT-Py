@@ -33,13 +33,12 @@ setup(
     package_dir={
         "": "src",
     },
-    packages=["avesterra", "orchestra", "midwksl", "adapter", "event_handler"],
+    packages=["avesterra", "orchestra", "midwksl", "machinations"],
     package_data={
         "avesterra": ["py.typed"],
         "orchestra": ["py.typed"],
         "midwksl": ["py.typed"],
-        "adapter": ["py.typed"],
-        "event_handler": ["py.typed"]
+        "machinations": ["py.typed"]
     },
 
 )

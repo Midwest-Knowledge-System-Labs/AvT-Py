@@ -8,7 +8,7 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
-from avesterra.avesterra import AvEntity, AvMask, AvAuthorization, AuthorizationError
+from avesterra.avesterra import AvEntity, AvMask, AvAuthorization
 from avesterra.avial import AvKey, entity_key, AvValue, NULL_ENTITY
 from avesterra.compartments import compartment_valid
 from avesterra.identities import identity_valid
@@ -21,8 +21,6 @@ import avesterra.tokens as tokens
 
 # Avial 4.12 Added credential module, which issues or retracts credentials
 # for an identity in a compartment.
-
-
 def issue_credential(
     compartment: AvEntity,
     identity: AvEntity,
