@@ -284,7 +284,7 @@ def avtc_init(
 
     avt_tokens = env_avt_tokens()
     avt_tokens.append(AvAuthorization("00000000-0000-0000-0000-000000000001"))
-    avt_tokens.append(AvAuthorization(AvAuthorization("00000000-0000-0000-0000-000000000002")))
+    avt_tokens.append(AvAuthorization("00000000-0000-0000-0000-000000000002"))
     _chain = avt_tokens
     print(f"Info: Loaded tokens `{_chain}`")
 

@@ -1,11 +1,6 @@
 import avesterra
+from midwksl import avtc_fin, avtc_init
 
-avesterra.initialize(
-    server="origin.midwksl.net",
-    directory="./Certificates"
-)
+avtc_init()
 
-
-
-
-avesterra.finalize()
+avtc_fin()
