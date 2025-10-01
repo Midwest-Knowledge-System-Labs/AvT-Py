@@ -14,10 +14,8 @@ from concurrent import futures
 from threading import Event
 from abc import ABCMeta, abstractmethod
 import signal
-
 from midwksl import avtc_init, avtc_fin
 from avesterra import avial as av, av_log
-
 from avesterra.avesterra import AvAuthorization
 from avesterra.avial import AvValue, NULL_ENTITY
 

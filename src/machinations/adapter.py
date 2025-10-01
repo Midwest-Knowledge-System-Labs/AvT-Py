@@ -39,22 +39,14 @@ class Adapter:
 
     def __init__(
         self,
-        server: str,
-        directory: str,
         auth: AvAuthorization,
         socket_count: int,
         adapting_threads: int = 1,
     ):
-        if not os.path.exists(directory):
-            raise IOError(
-                f"The given certificate directory '{directory}' doesn't exist"
-            )
 
         self._stop = Event()
 
         self.auth = auth
-        self.avt_server = server
-        self.avt_directory = directory
         self._socket_count = socket_count
         self._thread_count = adapting_threads
 

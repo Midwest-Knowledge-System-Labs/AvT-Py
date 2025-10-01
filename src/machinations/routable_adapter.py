@@ -19,7 +19,7 @@ from dataclasses import dataclass
 from typing import Callable, Literal
 from dotenv import find_dotenv, load_dotenv
 import avesterra as av
-from avesterra.avesterra import AdapterError
+from avesterra.avesterra import AdapterError, AvAuthorization
 from adapter.adapter import Adapter
 from orchestra.interface import Interface, Method, ValueType
 import midwksl
@@ -31,6 +31,7 @@ class _RoutableAdapter(Adapter):
         name: str,
         socket_count: int,
         adapting_threads: int,
+        auth: AvAuthorization,
         self_connect: bool = True
     ):
         load_dotenv(find_dotenv())
@@ -41,7 +42,7 @@ class _RoutableAdapter(Adapter):
         super().__init__(
             server=midwksl.env_avt_host(),
             directory=midwksl.env_avt_verify_chain_dir(),
-            auth=midwksl.env_avt_auth(),
+            auth=auth,
             socket_count=socket_count,
             adapting_threads=adapting_threads,
         )

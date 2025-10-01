@@ -20,7 +20,7 @@ from dataclasses import dataclass
 from typing import Callable, Literal
 from dotenv import find_dotenv, load_dotenv
 import avesterra as av
-from avesterra.avesterra import SubscriberError
+from avesterra.avesterra import SubscriberError, AvAuthorization
 from event_handler.event_handler import EventHandler
 from orchestra.interface import Interface, Event, ValueType
 import midwksl
@@ -31,6 +31,7 @@ class _RoutableEventHandler(EventHandler):
         name: str,
         socket_count: int,
         waiting_threads: int,
+        auth: AvAuthorization,
         self_subscribe: bool = False
     ):
         load_dotenv(find_dotenv())
@@ -41,7 +42,7 @@ class _RoutableEventHandler(EventHandler):
         super().__init__(
             server=midwksl.env_avt_host(),
             directory=midwksl.env_avt_verify_chain_dir(),
-            auth=midwksl.env_avt_auth(),
+            auth=auth,
             socket_count=socket_count,
             handling_threads=waiting_threads,
         )
