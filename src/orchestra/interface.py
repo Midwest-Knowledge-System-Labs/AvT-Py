@@ -9,9 +9,11 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 """
 
 from dataclasses import dataclass
-from typing import Union
+from typing import Union, Dict
 import avesterra as av
-from avesterra import AvDate
+from avesterra import AvDate, AvAttribute, AvValue, NULL_ENTITY
+from build.lib.avesterra import AvEntity
+from machinations.control_surface import create_control_surface
 
 
 class ValueType:
@@ -249,7 +251,7 @@ class Event:
     name: str
     description: str
     base: av.AvLocutorOpt
-    args: list[av.AvAspect]
+    args: list[str]
     value_in: ValueType = ValueType.null()
     value_out: ValueType = ValueType.null()
 
@@ -258,9 +260,10 @@ class Method:
     name: str
     description: str
     base: av.AvLocutorOpt
-    args: list[av.AvAspect]
+    args: list[str]
     value_in: ValueType = ValueType.null()
-    value_out: ValueType = ValueType.null()
+    value_out: ValueType = ValueType.null(),
+    control_surface: AvEntity = NULL_ENTITY
 
 
 @dataclass
@@ -272,6 +275,7 @@ class Interface:
 
     @staticmethod
     def from_avialmodel(model: av.AvialModel) -> "Interface":
+
         name = model.facts[av.AvAttribute.NAME].value.decode()
         if not isinstance(name, str):
             name = ""
@@ -282,15 +286,17 @@ class Interface:
         if not isinstance(description, str):
             description = ""
         methods = []
+
         for facet in model.facts[av.AvAttribute.METHOD].facets:
             mname = facet.name
             mdescription = facet.value.decode()
             if not isinstance(mdescription, str):
                 mdescription = ""
             mbase = facet.factors["base"].value.decode_locutor()
+
             margs = []
             for arg in facet.factors["args"].value.decode_array():
-                margs.append(arg.decode_locutor().aspect)
+                margs.append(arg.decode_operator())
             mvalue_in = facet.factors["value_in"].value
             mvalue_out = facet.factors["value_out"].value
 
@@ -302,7 +308,13 @@ class Interface:
                     args=margs,
                     value_in=ValueType.from_value(mvalue_in),
                     value_out=ValueType.from_value(mvalue_out),
+                    control_surface=facet.factors["control_surface"].value.decode_entity() if "control_surface" in facet.factors else NULL_ENTITY,
                 )
+            )
+
+        for facet in model.facts[AvAttribute.METHOD].facets:
+            facet.factors["control_surface"][facet.name] = AvValue.encode_entity(
+                facet.value.decode()
             )
 
         return Interface(name, version, description, methods)
@@ -316,20 +328,26 @@ class Interface:
         model.facts[av.AvAttribute.DESCRIPTION].value = av.AvValue.encode_text(
             self.description
         )
+
         for method in self.methods:
             facet = model.facts[av.AvAttribute.METHOD].facets[method.name]
             facet.value = av.AvValue.encode_text(method.description)
             facet.factors["base"].value = av.AvValue.encode_locutor(
                 method.base.to_locutor()
             )
+
             facet.factors["args"].value = av.AvValue.encode_array(
                 [
-                    av.AvValue.encode_locutor(av.AvLocutor(aspect=arg))
+                    av.AvValue.encode_operator(arg)
                     for arg in method.args
                 ]
             )
             facet.factors["value_in"].value = method.value_in.to_value()
             facet.factors["value_out"].value = method.value_out.to_value()
+
+            if method.control_surface != NULL_ENTITY:
+                facet.factors["control_surface"].value = av.AvValue.encode_entity(method.control_surface)
+
         return model
 
 

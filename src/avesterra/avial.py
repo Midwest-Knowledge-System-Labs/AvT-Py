@@ -168,6 +168,13 @@ class AvLocutorOpt:
 
         if "TIME" in d: loc.time = AvTime.fromisoformat(d["TIME"])
         if "TIMEOUT" in d: loc.timeout = int(d["TIMEOUT"])
+
+
+        if "ASPECT" in d:
+            print(d)
+            print(d["ASPECT"])
+            print(d["ASPECT"].removesuffix("_ASPECT"))
+
         if "ASPECT" in d: loc.aspect = AvAspect[d["ASPECT"].removesuffix("_ASPECT")]
         if "TEMPLATE" in d: loc.template = AxTemplate[d["TEMPLATE"].removesuffix("_TEMPLATE")]
         if "SCHEME" in d: loc.scheme = AxScheme[d["SCHEME"].removesuffix("_SCHEME")]
@@ -378,7 +385,6 @@ class AvValue:
         elif tag == AvTag.LOCUTOR:
             return AvValue.encode_locutor(AvLocutor.from_dict(json.loads(value_str)))
         else:
-            print(value_str)
             raise ValueError(f"Unknown TAG given: {tag}")
 
     def __str__(self):

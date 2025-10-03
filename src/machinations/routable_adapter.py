@@ -6,6 +6,9 @@ The Orchestra library is distributed in the hope that it will be useful, but WIT
 You should have received a copy of the GNU Lesser General Public License along with the Orchestra library. If not, see <https://www.gnu.org/licenses/>.
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
+from avesterra import NULL_VALUE, AuthorizationError
+from build.lib.avesterra import AvAttribute, AvValue, AvEntity, AvialModel
+from machinations.control_surface import create_control_surface
 
 """
 RoutableAdapter aims at implementing all the standard Orchestra behavior of an
@@ -16,7 +19,7 @@ See documentation of the `RoutableAdapter` class
 import inspect
 import time
 from dataclasses import dataclass
-from typing import Callable, Literal
+from typing import Callable, Literal, List, Dict
 from dotenv import find_dotenv, load_dotenv
 import avesterra as av
 from avesterra.avesterra import AdapterError, AvAuthorization
@@ -26,6 +29,9 @@ import midwksl
 
 
 class _RoutableAdapter(Adapter):
+
+    _control_surfaces: Dict[str, AvEntity] = {}
+
     def __init__(
         self,
         name: str,
@@ -35,6 +41,7 @@ class _RoutableAdapter(Adapter):
         self_connect: bool = True
     ):
         load_dotenv(find_dotenv())
+
         self.name = name
         self.interface: Interface | None = None
         self._on_shutdown: Callable | None = None
@@ -48,9 +55,11 @@ class _RoutableAdapter(Adapter):
         )
 
     def init_outlet(self):
-        assert self.interface is not None, "Interface not set"
         # Split name by capital letter and replace spaces after trim
-        self.outlet = midwksl.outlet(self.name.strip().replace(" ", "_"), self_connect = self.self_connect)
+        self.outlet = midwksl.outlet(name=self.name.strip().replace(" ", "_"), self_connect = self.self_connect)
+
+    def setup_outlet(self):
+        assert self.interface is not None, "Interface not set"
         av.exclude_fact(self.outlet, av.AvAttribute.METHOD, authorization=self.auth)
         av.store_entity(
             self.outlet,
@@ -76,17 +85,20 @@ class OARoute:
     callback: Callable[..., av.AvValue]
     name_set: bool
     value_out_set: bool
+    is_control_surface: bool
 
 
 class RoutableAdapter:
+
     def __init__(
         self,
         name: str,
         version: str,
         description: str,
+        auth: AvAuthorization,
         adapting_threads: int = 1,
         socket_count: int = 32,
-        self_connect: bool = True,
+        self_connect: bool = True
     ):
         """
         Utility class to implement Orchestra adapters respecting the Orchestra
@@ -234,7 +246,7 @@ class RoutableAdapter:
         :param self_connect: If true, the outlet created to support the adapter will be self connected; default is True
         """
 
-        self._adapter = _RoutableAdapter(name, socket_count, adapting_threads, self_connect=self_connect)
+        self._adapter = _RoutableAdapter(name, socket_count, adapting_threads, self_connect=self_connect, auth=auth)
         self._adapter.invoke_callback = self.invoke_callback
         self._routes: dict[str, OARoute] = {}
         self._version = version
@@ -497,6 +509,7 @@ class RoutableAdapter:
                 callback=fn,
                 name_set=False,
                 value_out_set=False,
+                is_control_surface=False
             )
 
         return self._routes[fn.__name__]
@@ -673,6 +686,14 @@ class RoutableAdapter:
 
         return decorator
 
+    def control_surface(self):
+        def decorator(fn: Callable[..., av.AvValue]):
+            route = self._route(fn)
+            route.is_control_surface = True
+            return fn
+
+        return decorator
+
     def on_outlet_init(self, fn: Callable):
         """
         This function will be called after the outlet of the adapter is fully
@@ -715,6 +736,18 @@ class RoutableAdapter:
         """
         Only safe to call once all the routes are properly declared
         """
+        import avesterra.objects as objects
+
+        model = objects.retrieve_entity(
+            entity=self.outlet,
+            authorization=self.auth
+        )
+
+        # Pull model of adapter
+        model = AvialModel.from_interchange(
+            value=model
+        )
+
         for fnname, route in self._routes.items():
             if not route.name_set:
                 raise ValueError(
@@ -732,16 +765,27 @@ class RoutableAdapter:
                         f"{fnname}: Takes value as parameter but value_in is not set, did you forgot to add the decorator eg. `@adapter.value_in(<value type>)` ?"
                     )
 
+            if route.is_control_surface:
+                if model.facts[AvAttribute.METHOD].facets[route._method.name].factors["control_surface"].value == NULL_VALUE:
+                    route._method.control_surface = create_control_surface(
+                        name=route._method.name,
+                        outlet=self.outlet,
+                        auth=self.auth
+                    )
+                else:
+                    route._method.control_surface = model.facts[AvAttribute.METHOD].facets[route._method.name].factors["control_surface"].value.decode_entity()
+
         return Interface(
             self.__class__.__name__,
             self._version,
             self._description,
-            [r._method for r in self._routes.values()],
+            [r._method for r in self._routes.values()]
         )
 
     def run(self):
-        self._adapter.interface = self.generate_interface()
         self._adapter.init_outlet()
+        self._adapter.interface = self.generate_interface()
+        self._adapter.setup_outlet()
         if self._on_outlet_init is not None:
             self._on_outlet_init()
         self._adapter.run()
@@ -793,6 +837,9 @@ class RoutableAdapter:
             kwargs = {}
             if "mask" in inspect.signature(route.callback).parameters:
                 kwargs["mask"] = args.mask
+
+            if route.is_control_surface and args.entity != route._method.control_surface:
+                raise AuthorizationError(f"Method {route._method.name} can only be called via the control surface {route._method.control_surface}")
 
             for arg in route._method.args:
                 match arg:

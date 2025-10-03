@@ -8,45 +8,10 @@ import avesterra.objects as objects
 import avesterra.registries as registries
 import avesterra.avial as av
 from typing import List
-from avesterra import AuthorizationError
 from avesterra.avial import AvAuthorization
+import midwksl.mac as mac
+from midwksl.mac import aca
 
-_chain: List[AvAuthorization] = None
-
-def include_auth_to_chain(authorization: AvAuthorization):
-    global _chain
-    if _chain is None:
-        _chain = []
-    _chain = list(set(_chain + [authorization]))
-
-def chain():
-    global _chain
-    if _chain is None:
-        _chain = []
-    return _chain
-
-# Takes a function and tries to call it with the given authorization,
-# or with the first authorization in the chain that supports access to the registry
-def aca(f, **kwargs):
-    for auth in chain():
-        if 'authorization' in f.__code__.co_varnames:
-            kwargs['authorization'] = auth
-        else:
-            kwargs['auth'] = auth
-        try:
-            return f(**kwargs)
-        except AuthorizationError:
-            pass
-    raise AuthorizationError("Authorization Error: No authorizations in chain support access")
-
-def auth(a: AvAuthorization | None = None) -> AvAuthorization:
-    global _auth
-    if a is None:
-        if _auth is None:
-            _auth = AvAuthorization(env("AVT_AUTH"))
-        return _auth
-    else:
-        return a
 
 def env(key: str, default: str | None = None) -> str:
     value = os.environ.get(key)
@@ -59,42 +24,44 @@ def env(key: str, default: str | None = None) -> str:
         return value
 
 @cache
-def origin():
+@aca()
+def origin(auth: AvAuthorization):
     try:
         return av_registries.lookup_registry(
             registry=AvEntity(0, 0, 1),
             key="MIDWKSL",
-            authorization=auth()
+            authorization=auth
         )
     except ApplicationError:
         e = registries.create_registry(
             name="MIDWKSL",
             key="MIDWKSL",
-            authorization=auth()
+            authorization=auth
         )
         registries.register_entity(
             registry=AvEntity(0, 0, 1),
             name="MIDWKSL",
             key="MIDWKSL",
             entity=e,
-            authorization=auth()
+            authorization=auth
         )
         return e
 
 
 @cache
-def regs():
+@aca()
+def regs(auth: AvAuthorization):
     try:
         return av_registries.lookup_registry(
             registry=origin(),
             key="registries",
-            authorization=auth()
+            authorization=auth
         )
     except ApplicationError:
         e = registries.create_registry(
             name="Registries",
             key="registries",
-            authorization=auth()
+            authorization=auth
         )
 
         registries.register_entity(
@@ -102,23 +69,24 @@ def regs():
             name="Registries",
             key="registries",
             entity=e,
-            authorization=auth()
+            authorization=auth
         )
         return e
 
 @cache
-def outlets():
+@aca()
+def outlets(auth: AvAuthorization):
     try:
         return av_registries.lookup_registry(
             registry=origin(),
             key="outlets",
-            authorization=auth()
+            authorization=auth
         )
     except ApplicationError:
         e = registries.create_registry(
             name="Outlets",
             key="outlets",
-            authorization=auth()
+            authorization=auth
         )
 
         registries.register_entity(
@@ -126,7 +94,7 @@ def outlets():
             name="Outlets",
             key="outlets",
             entity=e,
-            authorization=auth()
+            authorization=auth
         )
         return e
 
@@ -135,49 +103,54 @@ def init_midwksl_ks():
     regs()
     outlets()
 
-def registry_exists(key: str):
+@aca()
+def registry_exists(key: str, auth: AvAuthorization):
     try:
         av_registries.lookup_registry(
             registry=regs(),
             key=key,
-            authorization=auth()
+            authorization=auth
         )
         return True
     except ApplicationError:
         return False
 
-def outlet_exists(key: str):
+@aca()
+def outlet_exists(key: str, auth: AvAuthorization):
     try:
         av_registries.lookup_registry(
             registry=outlets(),
             key=key,
-            authorization=auth()
+            authorization=auth
         )
         return True
     except ApplicationError:
         return False
 
 @cache
-def find_registry(key: str):
+@aca()
+def find_registry(key: str, auth: AvAuthorization):
     return av_registries.lookup_registry(
         registry=regs(),
         key=key,
-        authorization=auth()
+        authorization=auth
     )
 
 @cache
-def find_outlet(key: str):
+@aca()
+def find_outlet(key: str, auth: AvAuthorization):
     return av_registries.lookup_registry(
         registry=outlets(),
         key=key,
-        authorization=auth()
+        authorization=auth
     )
 
 @cache
-def outlet(name: str, a: AvAuthorization | None = None, self_subscribe: bool = False, self_connect: bool = False) -> AvEntity:
+@aca()
+def outlet(name: str, auth: AvAuthorization, self_subscribe: bool = False, self_connect: bool = False) -> AvEntity:
     key = name.lower().replace(" ", "_")
-    if outlet_exists(key):
-        e = find_outlet(key)
+    if outlet_exists(key=key):
+        e = find_outlet(key=key)
     else:
         # Create outlet object
         e = objects.create_object(
@@ -186,7 +159,7 @@ def outlet(name: str, a: AvAuthorization | None = None, self_subscribe: bool = F
             context=AvContext.NULL,
             klass=AvClass.AVESTERRA,
             category=AvCategory.AVESTERRA,
-            authorization=auth(a=a)
+            authorization=auth
         )
 
         if self_connect:
@@ -195,7 +168,7 @@ def outlet(name: str, a: AvAuthorization | None = None, self_subscribe: bool = F
                 entity=e,
                 outlet=e,
                 presence=1,
-                authorization=auth(a)
+                authorization=auth
             )
 
         if self_subscribe:
@@ -203,13 +176,13 @@ def outlet(name: str, a: AvAuthorization | None = None, self_subscribe: bool = F
             av.subscribe_event(
                 entity=e,
                 outlet=e,
-                authorization=auth(a)
+                authorization=auth
             )
 
         # Activate object to make outlet
         av.activate_entity(
             outlet=e,
-            authorization=auth(a)
+            authorization=auth
         )
 
         registries.register_entity(
@@ -217,23 +190,24 @@ def outlet(name: str, a: AvAuthorization | None = None, self_subscribe: bool = F
             name=name,
             key=key,
             entity=e,
-            authorization=auth(a)
+            authorization=auth
         )
 
     return e
 
 
 @cache
-def resolve_registry(name: str, a: AvAuthorization | None = None) -> AvEntity:
+@aca()
+def resolve_registry(name: str, auth: AvAuthorization) -> AvEntity:
     key = name.lower().replace(" ", "_")
-    if registry_exists(key):
-        e = find_registry(key)
+    if registry_exists(key=key):
+        e = find_registry(key=key)
     else:
         # Create registry
         e = registries.create_registry(
             name=name,
             key=key,
-            authorization=auth(a=a)
+            authorization=auth
         )
 
         registries.register_entity(
@@ -241,13 +215,12 @@ def resolve_registry(name: str, a: AvAuthorization | None = None) -> AvEntity:
             name=name,
             key=key,
             entity=e,
-            authorization=auth(a)
+            authorization=auth
         )
 
     return e
 
 def env_avt_tokens() -> List[AvAuthorization]:
-
     tokens: List[AvAuthorization] = []
     tokens_str = env("AVT_TOKENS", "NONE")
     if tokens_str == "NONE":
@@ -274,7 +247,6 @@ def avtc_init(
     max_socket_count: int = 2
 ):
     load_dotenv(find_dotenv())
-    global _chain
 
     avt_host = env_avt_host()
     print(f"Info: Loaded avt_host as `{avt_host}`")
@@ -285,8 +257,9 @@ def avtc_init(
     avt_tokens = env_avt_tokens()
     avt_tokens.append(AvAuthorization("00000000-0000-0000-0000-000000000001"))
     avt_tokens.append(AvAuthorization("00000000-0000-0000-0000-000000000002"))
-    _chain = avt_tokens
-    print(f"Info: Loaded tokens `{_chain}`")
+    for token in avt_tokens:
+        mac.include_auth_to_chain(authorization=token)
+    print(f"Info: Loaded tokens `{avt_tokens}`")
 
     av.initialize(
         server=avt_host,
