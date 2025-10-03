@@ -16,7 +16,7 @@ from setuptools import setup
 
 setup(
     name="AvesTerra",
-    version="25.01.2",
+    version="25.01.3",
     description="Python Avial Library",
     author="Midwest Knowledge System Labs",
     author_email="avesterra@georgetown.edu ; dev@midwksl.net ; dev@ledr.io",
