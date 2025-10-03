@@ -1,6 +1,6 @@
 from avesterra import AvEntity, AvCategory, AvContext
 import avesterra.avial as av
-from build.lib.avesterra import AvAuthorization, AvClass
+from avesterra import AvAuthorization, AvClass
 
 
 def create_control_surface(

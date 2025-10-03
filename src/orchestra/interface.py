@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from typing import Union, Dict
 import avesterra as av
 from avesterra import AvDate, AvAttribute, AvValue, NULL_ENTITY
-from build.lib.avesterra import AvEntity
+from avesterra import AvEntity
 from machinations.control_surface import create_control_surface
 
 
