@@ -222,8 +222,11 @@ def resolve_registry(name: str, auth: AvAuthorization) -> AvEntity:
 
 def env_avt_tokens() -> List[AvAuthorization]:
     tokens: List[AvAuthorization] = []
+
+    auth_str = env("AVT_AUTH", "NONE")
     tokens_str = env("AVT_TOKENS", "NONE")
-    if tokens_str == "NONE":
+
+    if tokens_str == "NONE" and auth_str == "NONE":
         # Try loading from /AvesTerra/Data...
         _def_authorities_path = os.path.join(os.path.abspath(os.sep), "AvesTerra", "Data", "Authorities.txt")
         if os.path.exists(_def_authorities_path):
@@ -232,9 +235,15 @@ def env_avt_tokens() -> List[AvAuthorization]:
         else:
             raise ValueError("No Authorities file found")
     else:
-        split_tokens: List[str] = json.loads(tokens_str)
-        for token_str in split_tokens:
-            tokens.append(AvAuthorization(token_str))
+
+        if tokens_str:
+            # Split tokens up
+            split_tokens: List[str] = json.loads(tokens_str)
+            for token_str in split_tokens:
+                tokens.append(AvAuthorization(token_str))
+
+        if auth_str:
+            tokens.append(AvAuthorization(auth_str))
     return tokens
 
 def env_avt_host() -> str:
