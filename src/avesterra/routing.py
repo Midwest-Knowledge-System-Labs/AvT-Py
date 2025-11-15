@@ -7,13 +7,13 @@ The Orchestra library is distributed in the hope that it will be useful, but WIT
 You should have received a copy of the GNU Lesser General Public License along with the Orchestra library. If not, see <https://www.gnu.org/licenses/>.
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
-<<<<<<<< HEAD:src/avesterra/routing.py
+
 from typing import Dict, Tuple
 
 from avesterra.avial import *
-========
-from pyks.avesterra.avial import *
->>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/routing.py
+
+from avesterra.avial import *
+
 
 
 class Routing(IntEnum):
@@ -62,14 +62,14 @@ def route_host(
     Examples
     ________
 
-    >>> from pyks import avesterra as routing
+    >>> 
     >>> server: AvEntity
     >>> host: AvEntity
     >>> authorization: AvAuthorization
     >>> address: AvAddress # Assume address is a valid integer representation of an IPv4 address
     >>> routing.route_host(server=server, host=host, authorization=authorization, address=address, trusted=True)
 
-    >>> from pyks import avesterra as routing
+    >>> 
     >>> server: AvEntity
     >>> host: AvEntity
     >>> authorization: AvAuthorization
@@ -122,14 +122,14 @@ def route_network(
     Examples
     ________
 
-    >>> from pyks import avesterra as routing
+    >>> 
     >>> server: AvEntity
     >>> network: AvEntity
     >>> authorization: AvAuthorization
     >>> address: AvAddress # Assume address is a valid integer representation of an IPv4 address
     >>> routing.route_network(server=server, network=network, authorization=authorization, address=address, trusted=True)
 
-    >>> from pyks import avesterra as routing
+    >>> 
     >>> server: AvEntity
     >>> network: AvEntity
     >>> authorization: AvAuthorization
@@ -183,14 +183,14 @@ def include_host(
     Examples
     ________
 
-    >>> from pyks import avesterra as routing
+    >>> 
     >>> server: AvEntity
     >>> host_entity: AvEntity
     >>> authorization: AvAuthorization
     >>> address: AvAddress # Assume address is a valid integer representation of an IPv4 address
     >>> routing.include_host(server=server, host_entity=host_entity, authorization=authorization, address=address, trusted=True)
 
-    >>> from pyks import avesterra as routing
+    >>> 
     >>> server: AvEntity
     >>> host_entity: AvEntity
     >>> authorization: AvAuthorization
@@ -227,7 +227,7 @@ def exclude_host(server: AvEntity, host: AvEntity, authorization: AvAuthorizatio
     Examples
     ________
 
-    >>> from pyks import avesterra as routing
+    >>> 
     >>> server: AvEntity
     >>> host: AvEntity
     >>> authorization: AvAuthorization
@@ -269,14 +269,14 @@ def include_network(
     Examples
     ________
 
-    >>> from pyks import avesterra as routing
+    >>> 
     >>> server: AvEntity
     >>> network: AvEntity
     >>> authorization: AvAuthorization
     >>> address: AvAddress # Assume address is a valid integer representation of an IPv4 address
     >>> routing.include_network(server=server, network=network, address=address, authorization=authorization, trusted=True)
 
-    >>> from pyks import avesterra as routing
+    >>> 
     >>> server: AvEntity
     >>> network: AvEntity
     >>> authorization: AvAuthorization
@@ -315,7 +315,7 @@ def exclude_network(
     Examples
     ________
 
-    >>> from pyks import avesterra as routing
+    >>> 
     >>> server: AvEntity
     >>> network: AvEntity
     >>> authorization: AvAuthorization
@@ -360,7 +360,7 @@ def enable_routing(
     Examples
     ________
 
-    >>> from pyks import avesterra as routing
+    >>> 
     >>> server: AvEntity
     >>> local: AvEntity
     >>> gateway: AvEntity
@@ -418,7 +418,7 @@ def parse_networks(server_model: Dict) -> Dict[str, Tuple[bool, int]]:
     Examples
     ________
 
-    >>> from pyks import avesterra as routing
+    >>> 
     >>> server_model = {
     ...     "Attributes": [
     ...         ["NETWORK_ATTRIBUTE", {}, [
@@ -461,7 +461,7 @@ def parse_hosts(server_model: Dict) -> Dict[str, Tuple[bool, int]]:
     Examples
     ________
 
-    >>> from pyks import avesterra as routing
+    >>> 
     >>> server_model = {
     ...     "Attributes": [
     ...         ["HOST_ATTRIBUTE", {}, [

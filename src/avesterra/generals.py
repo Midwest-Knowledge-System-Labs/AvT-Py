@@ -8,13 +8,13 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
-<<<<<<<< HEAD:src/avesterra/generals.py
+
 from avesterra.avial import *
 from avesterra.predefined import general_outlet
-========
-from pyks.avesterra.avial import *
-from pyks.avesterra.predefined import general_outlet
->>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/generals.py
+
+from avesterra.avial import *
+from avesterra.predefined import general_outlet
+
 
 AvGeneral = AvEntity
 
@@ -69,7 +69,7 @@ def create_general(
     Examples
     ________
 
-    >>> from pyks import avesterra as generals
+    >>> 
     >>> authorization: AvAuthorization
     >>> general = generals.create_general(name="MyGeneral", authorization=authorization)
     >>> print(f"Created General: {general}")
@@ -120,14 +120,14 @@ def delete_general(
     Examples
     ________
 
-    >>> from pyks import avesterra as generals
+    >>> 
     >>> general: AvGeneral # Assume this is a valid general
     >>> authorization: AvAuthorization
     >>> generals.delete_general(general=general, authorization=authorization)
     >>> print("general has been deleted")
 
 
-    >>> from pyks import avesterra as generals
+    >>> 
     >>> general: AvGeneral
     >>> admin_auth: AvAuthorization
     >>> generals.delete_general(general, admin_auth)

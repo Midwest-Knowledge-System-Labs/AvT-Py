@@ -7,13 +7,9 @@ The Orchestra library is distributed in the hope that it will be useful, but WIT
 You should have received a copy of the GNU Lesser General Public License along with the Orchestra library. If not, see <https://www.gnu.org/licenses/>.
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
-<<<<<<<< HEAD:src/avesterra/outlets.py
+
 from avesterra.avial import *
-import avesterra.avial as av
-========
-from pyks.avesterra.avial import *
-from pyks import avesterra as avial
->>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/outlets.py
+
 
 # Avial 4.7: Created separate outlets module; create/delete outlet moved to outlets module
 

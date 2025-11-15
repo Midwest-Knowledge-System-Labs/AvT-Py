@@ -8,15 +8,15 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
-<<<<<<<< HEAD:src/avesterra/folders.py
+
 from avesterra.properties import *
 from avesterra.predefined import folder_outlet
 import avesterra.properties as properties
-========
-from pyks.avesterra.properties import *
-from pyks.avesterra.predefined import folder_outlet
-from pyks import avesterra as properties
->>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/folders.py
+
+from avesterra.properties import *
+from avesterra.predefined import folder_outlet
+
+
 
 AvFolder = AvEntity
 
@@ -61,7 +61,7 @@ def create_folder(
     Examples
     ________
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> authorization: AvAuthorization
     >>> folder = folders.create_folder(name="MyFolder", authorization=authorization)
     >>> print(f"Created folder: {folder}")
@@ -112,7 +112,7 @@ def delete_folder(
     Examples
     ________
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> folder: AvFolder  # Assume this is a valid folder
     >>> authorization: AvAuthorization
     >>> folders.delete_folder(folder=folder, authorization=authorization)
@@ -166,7 +166,7 @@ def insert_folder(
     Examples
     ________
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> folder: AvFolder
     >>> authorization: AvAuthorization
     >>> folders.insert_folder(
@@ -213,12 +213,12 @@ def remove_folder(
     Examples
     ________
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> folder: AvFolder
     >>> authorization: AvAuthorization
     >>> folders.remove_folder(folder=folder, index=1, authorization=authorization)
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> folders.remove_folder(
     ...     folder=folder,
     ...     index=3,
@@ -265,7 +265,7 @@ def replace_folder(
     Examples
     ________
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> folder: AvFolder
     >>> authorization: AvAuthorization
     >>> folders.replace_folder(
@@ -318,7 +318,7 @@ def find_item(
     Examples
     ________
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> folder: AvFolder
     >>> authorization: AvAuthorization
     >>> target_value = AvValue.encode_text("Important document")
@@ -361,7 +361,7 @@ def lookup_item(
     Examples
     ________
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> folder: AvFolder
     >>> authorization: AvAuthorization
     >>> value = folders.lookup_item(
@@ -371,7 +371,7 @@ def lookup_item(
     ... )
     >>> print(f"Retrieved value: {value}")
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> try:
     ...     value = folders.lookup_item(folder=folder, key="nonexistent", authorization=authorization)
     ...     print(f"Found: {value}")
@@ -403,13 +403,13 @@ def item_count(folder: AvFolder, authorization: AvAuthorization = NULL_AUTHORIZA
     Examples
     ________
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> folder: AvFolder
     >>> authorization: AvAuthorization
     >>> count = folders.item_count(folder=folder, authorization=authorization)
     >>> print(f"Folder contains {count} properties")
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> if folders.item_count(folder, authorization) == 0:
     ...     print("Folder is empty")
     ... else:
@@ -443,7 +443,7 @@ def item_member(
     Examples
     ________
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> folder: AvFolder
     >>> authorization: AvAuthorization
     >>> if folders.item_member(folder=folder, key="document1", authorization=authorization):
@@ -451,7 +451,7 @@ def item_member(
     ... else:
     ...     print("Document1 not found")
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> key = "important_file"
     >>> if folders.item_member(folder, key, authorization):
     ...     value = folders.lookup_item(folder, key, authorization)
@@ -489,13 +489,13 @@ def item_name(
     Examples
     ________
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> folder: AvFolder
     >>> authorization: AvAuthorization
     >>> name = folders.item_name(folder=folder, index=1, authorization=authorization)
     >>> print(f"Property name: {name}")
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> count = folders.item_count(folder, authorization)
     >>> for i in range(1, count + 1):
     ...     name = folders.item_name(folder, i, authorization)
@@ -533,13 +533,13 @@ def item_key(
     Examples
     ________
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> folder: AvFolder
     >>> authorization: AvAuthorization
     >>> key = folders.item_key(folder=folder, index=2, authorization=authorization)
     >>> print(f"Property key: {key}")
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> count = folders.item_count(folder, authorization)
     >>> keys = [folders.item_key(folder, i, authorization) for i in range(1, count + 1)]
     >>> print(f"All keys: {keys}")
@@ -576,13 +576,13 @@ def item_value(
     Examples
     ________
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> folder: AvFolder
     >>> authorization: AvAuthorization
     >>> value = folders.item_value(folder=folder, index=1, authorization=authorization)
     >>> print(f"Property value: {value}")
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> count = folders.item_count(folder, authorization)
     >>> values = [folders.item_value(folder, i, authorization) for i in range(1, count + 1)]
     >>> print(f"All values: {values}")
@@ -608,13 +608,13 @@ def save_folder(folder: AvFolder, authorization: AvAuthorization = NULL_AUTHORIZ
     Examples
     ________
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> folder: AvFolder
     >>> authorization: AvAuthorization
     >>> folders.save_folder(folder=folder, authorization=authorization)
     >>> print("Folder saved successfully")
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> folders.insert_folder(folder, name="item1", value=AvValue.encode_text("value1"), authorization=authorization)
     >>> folders.insert_folder(folder, name="item2", value=AvValue.encode_text("value2"), authorization=authorization)
     >>> folders.save_folder(folder, authorization)
@@ -641,13 +641,13 @@ def erase_registry(
     Examples
     ________
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> folder: AvFolder
     >>> authorization: AvAuthorization
     >>> folders.erase_registry(folder=folder, authorization=authorization)
     >>> print("All properties erased from folder")
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> folders.erase_registry(folder, authorization)
     >>> count = folders.item_count(folder, authorization)
     >>> print(f"Folder now contains {count} properties")
@@ -673,13 +673,13 @@ def sort_registry(
     Examples
     ________
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> folder: AvFolder
     >>> authorization: AvAuthorization
     >>> folders.sort_registry(folder=folder, authorization=authorization)
     >>> print("Folder properties sorted")
 
-    >>> from pyks import avesterra as folders
+    >>> 
     >>> folders.sort_registry(folder, authorization)
     >>> folders.save_folder(folder, authorization)
     >>> print("Folder sorted and saved")

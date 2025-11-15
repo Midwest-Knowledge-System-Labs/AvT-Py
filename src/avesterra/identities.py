@@ -7,17 +7,17 @@ The Orchestra library is distributed in the hope that it will be useful, but WIT
 You should have received a copy of the GNU Lesser General Public License along with the Orchestra library. If not, see <https://www.gnu.org/licenses/>.
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
-<<<<<<<< HEAD:src/avesterra/identities.py
+
 from avesterra.outlets import delete_outlet, create_outlet
 from avesterra.avial import *
 from avesterra.predefined import access_outlet
 import avesterra.facts as facts
-========
-from pyks.avesterra.outlets import delete_outlet, create_outlet
-from pyks.avesterra.avial import *
-from pyks.avesterra.predefined import access_outlet
-import pyks.avesterra.facts as facts
->>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/identities.py
+
+from avesterra.outlets import delete_outlet, create_outlet
+from avesterra.avial import *
+from avesterra.predefined import access_outlet
+import avesterra.facts as facts
+
 
 AvIdentity = AvEntity
 

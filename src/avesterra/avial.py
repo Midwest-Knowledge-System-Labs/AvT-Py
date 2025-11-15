@@ -9,7 +9,7 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 """
 from __future__ import annotations
 
-<<<<<<<< HEAD:src/avesterra/avial.py
+
 import dataclasses
 from dataclasses import dataclass, field
 from datetime import datetime, UTC, date
@@ -18,7 +18,7 @@ from avesterra.avesterra import *
 from avesterra.taxonomy import *
 from avesterra.parameters import *
 import avesterra.api as api
-========
+
 import base64
 import copy
 import dataclasses
@@ -27,11 +27,11 @@ from dataclasses import dataclass
 from datetime import datetime, date, UTC
 from typing import Dict, List, Tuple
 
-from pyks.avesterra.avesterra import *
-from pyks.avesterra.taxonomy import *
-from pyks.avesterra.parameters import *
-from pyks.avesterra import api
->>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/avial.py
+from avesterra.avesterra import *
+from avesterra.taxonomy import *
+from avesterra.parameters import *
+from avesterra import api
+
 import enum
 
 ENCODING = "utf-8"

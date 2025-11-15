@@ -9,14 +9,14 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 """
 from typing import Dict, Tuple
 
-<<<<<<<< HEAD:src/avesterra/registries.py
+
 from avesterra.avial import *
 from avesterra.predefined import registry_outlet
-========
-from pyks.avesterra.avial import *
-from pyks.avesterra import properties
-from pyks.avesterra.predefined import registry_outlet
->>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/registries.py
+
+from avesterra.avial import *
+from avesterra import properties
+from avesterra.predefined import registry_outlet
+
 import json
 import avesterra.properties as properties
 
@@ -38,7 +38,7 @@ def get_registry_entries(
     Examples
     ________
 
-    >>> from pyks import avesterra as registries
+    >>> 
     >>> registry: AvRegistry
     >>> authorization: AvAuthorization
     >>> registry_entries = registries.get_registry_entries(registry=registry, authorization=authorization)
@@ -89,7 +89,7 @@ def create_registry(
     Examples
     ________
 
-    >>> from pyks import avesterra as registries
+    >>> 
     >>> authorization: AvAuthorization
     >>> registry_name: str = "TestRegistry"
     >>> registry_key: str = "test_registry"
@@ -133,7 +133,7 @@ def delete_registry(
     Examples
     ________
 
-    >>> from pyks import avesterra as registries
+    >>> 
     >>> registry: AvRegistry = registries.create_registry(authorization=authorization)
     >>> authorization: AvAuthorization
     >>> registries.delete_registry(registry=registry, authorization=authorization)
@@ -169,7 +169,7 @@ def register_entity(
 
     Examples
     ________
-    >>> from pyks import avesterra as registries, avesterra as av
+    >>> 
     >>> registry: AvRegistry = registries.create_registry(authorization=authorization)
     >>> entity = av.create_entity(authorization=authorization)
     >>> authorization: AvAuthorization
@@ -207,7 +207,7 @@ def deregister_entity(
     Examples
     ________
 
-    >>> from pyks import avesterra as registries
+    >>> 
     >>> registry: AvRegistry = registries.create_registry(authorization=authorization)
     >>> authorization: AvAuthorization
     >>> key: str = "example_entity"
@@ -231,7 +231,7 @@ def save_registry(
 
     Examples
     ________
-    >>> from pyks import avesterra as registries, avesterra as av
+    >>> 
     >>> authorization: AvAuthorization
     >>> registry: AvRegistry = registries.create_registry(authorization=authorization)
     >>> entity1: AvEntity = av.create_entity(authorization=authorization)
@@ -267,7 +267,7 @@ def clear_registry(
 
     Examples
     ________
-    >>> from pyks import avesterra as registries, avesterra as av
+    >>> 
     >>> authorization: AvAuthorization
     >>> registry: AvRegistry = registries.create_registry(authorization=authorization)
     >>> entity1: AvEntity = av.create_entity(authorization=authorization)
@@ -296,7 +296,7 @@ def sort_registry(
 
     Examples
     ________
-    >>> from pyks import avesterra as registries, avesterra as av
+    >>> 
     >>> authorization: AvAuthorization
     >>> registry: AvRegistry = registries.create_registry(authorization=authorization)
     >>> entity1: AvEntity = av.create_entity(authorization=authorization)
@@ -333,7 +333,7 @@ def lookup_registry(
 
     Examples
     ________
-    >>> from pyks import avesterra as registries
+    >>> 
     >>> authorization: AvAuthorization
     >>> registry: AvRegistry = registries.create_registry(authorization=authorization)
     >>> entity: AvEntity = av.create_entity(authorization=authorization)
@@ -341,7 +341,7 @@ def lookup_registry(
     >>> assert registries.lookup_registry(registry=registry, key="entity1", authorization=authorization) == entity # Lookup should succeed
 
 
-    >>> from pyks import avesterra as registries, avesterra as av
+    >>> 
     >>> authorization: AvAuthorization
     >>> registry: AvRegistry = registries.create_registry(authorization=authorization)
     >>> entity: AvEntity = av.create_entity(authorization=authorization)
@@ -388,14 +388,14 @@ def registry_item(
     Examples
     ________
 
-    >>> from pyks import avesterra as registries
+    >>> 
     >>> authorization: AvAuthorization
     >>> registry: AvRegistry = registries.create_registry(authorization=authorization)
     >>> entity: AvEntity = av.create_entity(authorization=authorization)
     >>> registries.register_entity(registry=registry,name="entity1",key="entity1",entity=entity,authorization=authorization)  # Register entity1 in registry
     >>> print(registries.registry_item(registry=registry, index=1, authorization=authorization).decode_entity() == entity)# Item retrieval should succeed
 
-    >>> from pyks import avesterra as registries, avesterra as av
+    >>> 
     >>> authorization: AvAuthorization
     >>> registry: AvRegistry = registries.create_registry(authorization=authorization)
     >>> entity: AvEntity = av.create_entity(authorization=authorization)
@@ -434,7 +434,7 @@ def registry_count(
     Examples
     ________
 
-    >>> from pyks import avesterra as registries, avesterra as av
+    >>> 
     >>> authorization: AvAuthorization
     >>> registry: AvRegistry = registries.create_registry(authorization=authorization)
     >>> entity1: AvEntity = av.create_entity(authorization=authorization)
@@ -474,7 +474,7 @@ def registry_member(
     Examples
     ________
 
-    >>> from pyks import avesterra as registries, avesterra as av
+    >>> 
     >>> authorization: AvAuthorization
     >>> registry: AvRegistry = registries.create_registry(authorization=authorization)
     >>> entity1: AvEntity = av.create_entity(authorization=authorization)
@@ -482,7 +482,7 @@ def registry_member(
     >>> print(registries.registry_member(registry=registry, authorization=authorization))
     True
 
-    >>> from pyks import avesterra as registries
+    >>> 
     >>> authorization: AvAuthorization
     >>> registry: AvRegistry = registries.create_registry(authorization=authorization)
     >>> print(registries.registry_member(registry=registry, authorization=authorization))
@@ -516,7 +516,7 @@ def registry_name(
     Examples
     ________
 
-    >>> from pyks import avesterra as registries, avesterra as av
+    >>> 
     >>> authorization: AvAuthorization
     >>> registry: AvRegistry = registries.create_registry(authorization=authorization)
     >>> entity1: AvEntity = av.create_entity(authorization=authorization)
@@ -549,7 +549,7 @@ def retrieve_registry(
 
     Examples
     ________
-    >>> from pyks import avesterra as registries, avesterra as av
+    >>> 
     >>> authorization: AvAuthorization
     >>> registry: AvRegistry = registries.create_registry(authorization=authorization)
     >>> entity1: AvEntity = av.create_entity(authorization=authorization)

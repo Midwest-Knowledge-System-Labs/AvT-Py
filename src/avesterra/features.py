@@ -8,11 +8,11 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
-<<<<<<<< HEAD:src/avesterra/features.py
+
 from avesterra.avial import *
-========
-from pyks.avesterra.avial import *
->>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/features.py
+
+from avesterra.avial import *
+
 
 
 def insert_feature(
@@ -52,7 +52,7 @@ def insert_feature(
     Examples
     ________
 
-    >>> from pyks import avesterra as features
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports features
     >>> authorization: AvAuthorization
     >>> features.insert_feature(entity=entity, attribute=AvAttribute.EXAMPLE, name="Feature 1", key="key_1", value=AvValue.encode_text("Value 1"), index=0, authorization=authorization)
@@ -103,7 +103,7 @@ def remove_feature(
     Examples
     ________
 
-    >>> from pyks import avesterra as features
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports features
     >>> authorization: AvAuthorization
     >>> features.include_feature(entity=entity, attribute=AvAttribute.EXAMPLE, name="Feature 1", key="key_1", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -161,7 +161,7 @@ def replace_feature(
     Examples
     ________
 
-    >>> from pyks import avesterra as features
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports features
     >>> authorization: AvAuthorization
     >>> features.include_feature(entity=entity, attribute=AvAttribute.EXAMPLE, name="Original", key="key_1", value=AvValue.encode_text("Original Value"), authorization=authorization)
@@ -215,7 +215,7 @@ def find_feature(
     Examples
     ________
 
-    >>> from pyks import avesterra as features
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports features
     >>> authorization: AvAuthorization
     >>> features.include_feature(entity=entity, attribute=AvAttribute.EXAMPLE, name="Target Feature", key="key_1", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -268,7 +268,7 @@ def include_feature(
     Examples
     ________
 
-    >>> from pyks import avesterra as features
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports features
     >>> authorization: AvAuthorization
     >>> features.include_feature(entity=entity, attribute=AvAttribute.EXAMPLE, name="Feature 1", key="unique_key", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -313,7 +313,7 @@ def exclude_feature(
     Examples
     ________
 
-    >>> from pyks import avesterra as features
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports features
     >>> authorization: AvAuthorization
     >>> features.include_feature(entity=entity, attribute=AvAttribute.EXAMPLE, name="Feature 1", key="to_remove", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -363,7 +363,7 @@ def set_feature(
     Examples
     ________
 
-    >>> from pyks import avesterra as features
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports features
     >>> authorization: AvAuthorization
     >>> features.set_feature(entity=entity, attribute=AvAttribute.EXAMPLE, name="Feature 1", key="set_key", value=AvValue.encode_text("Initial Value"), authorization=authorization)
@@ -406,14 +406,14 @@ def get_feature(
     Examples
     ________
 
-    >>> from pyks import avesterra as features
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports features
     >>> authorization: AvAuthorization
     >>> features.include_feature(entity=entity, attribute=AvAttribute.EXAMPLE, name="Feature 1", key="get_key", value=AvValue.encode_text("Retrieved Value"), authorization=authorization)
     >>> print(features.get_feature(entity=entity, attribute=AvAttribute.EXAMPLE, key="get_key", authorization=authorization).decode_text())
     Retrieved Value
 
-    >>> from pyks import avesterra as features
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports features
     >>> authorization: AvAuthorization
     >>> print(features.get_feature(entity=entity, attribute=AvAttribute.EXAMPLE, key="nonexistent_key", authorization=authorization))
@@ -454,7 +454,7 @@ def clear_feature(
     Examples
     ________
 
-    >>> from pyks import avesterra as features
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports features
     >>> authorization: AvAuthorization
     >>> features.include_feature(entity=entity, attribute=AvAttribute.EXAMPLE, name="Feature 1", key="clear_key", value=AvValue.encode_text("To be cleared"), authorization=authorization)
@@ -495,7 +495,7 @@ def feature_count(
     Examples
     ________
 
-    >>> from pyks import avesterra as features
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports features
     >>> authorization: AvAuthorization
     >>> features.include_feature(entity=entity, attribute=AvAttribute.EXAMPLE, name="Feature 1", key="key_1", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -538,7 +538,7 @@ def feature_member(
     Examples
     ________
 
-    >>> from pyks import avesterra as features
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports features
     >>> authorization: AvAuthorization
     >>> features.include_feature(entity=entity, attribute=AvAttribute.EXAMPLE, name="Feature 1", key="member_key", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -586,7 +586,7 @@ def feature_name(
     Examples
     ________
 
-    >>> from pyks import avesterra as features
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports features
     >>> authorization: AvAuthorization
     >>> features.include_feature(entity=entity, attribute=AvAttribute.EXAMPLE, name="Named Feature", key="name_key", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -630,7 +630,7 @@ def feature_key(
     Examples
     ________
 
-    >>> from pyks import avesterra as features
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports features
     >>> authorization: AvAuthorization
     >>> features.include_feature(entity=entity, attribute=AvAttribute.EXAMPLE, name="Feature 1", key="indexed_key", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -676,7 +676,7 @@ def feature_value(
     Examples
     ________
 
-    >>> from pyks import avesterra as features
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports features
     >>> authorization: AvAuthorization
     >>> features.include_feature(entity=entity, attribute=AvAttribute.EXAMPLE, name="Feature 1", key="value_key", value=AvValue.encode_text("Retrieved Value"), authorization=authorization)
@@ -720,7 +720,7 @@ def feature_index(
     Examples
     ________
 
-    >>> from pyks import avesterra as features
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports features
     >>> authorization: AvAuthorization
     >>> features.include_feature(entity=entity, attribute=AvAttribute.EXAMPLE, name="Feature 1", key="index_key", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -764,7 +764,7 @@ def feature_attribute(
     Examples
     ________
 
-    >>> from pyks import avesterra as features
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports features
     >>> authorization: AvAuthorization
     >>> features.include_feature(entity=entity, attribute=AvAttribute.EXAMPLE, name="Feature 1", key="attr_key", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -807,7 +807,7 @@ def sort_features(
     Examples
     ________
 
-    >>> from pyks import avesterra as features
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports features
     >>> authorization: AvAuthorization
     >>> features.include_feature(entity=entity, attribute=AvAttribute.EXAMPLE, name="Z Feature", key="key_z", value=AvValue.encode_text("Value Z"), authorization=authorization)
@@ -852,7 +852,7 @@ def erase_features(
     Examples
     ________
 
-    >>> from pyks import avesterra as features
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports features
     >>> authorization: AvAuthorization
     >>> features.include_feature(entity=entity, attribute=AvAttribute.EXAMPLE, name="Feature 1", key="key_1", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -894,7 +894,7 @@ def retrieve_features(
     Examples
     ________
 
-    >>> from pyks import avesterra as features
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports features
     >>> authorization: AvAuthorization
     >>> features.include_feature(entity=entity, attribute=AvAttribute.EXAMPLE, name="Feature 1", key="key_1", value=AvValue.encode_text("Value 1"), authorization=authorization)

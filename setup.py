@@ -31,11 +31,14 @@ setup(
     install_requires=["tabulate"],
     include_package_data=True,
     package_dir={
-        "": ".",
+        "": "src",
     },
-    packages=["pyks"],
+    packages=["avesterra", "machinations", "orchestra"],
     package_data={
-        "pyks": ["py.typed"],
+        "avesterra": ["py.typed"],
+        "machinations": ["py.typed"],
+        "orchestra": ["py.typed"],
+
     },
 
 )

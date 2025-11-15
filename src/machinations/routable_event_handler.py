@@ -19,17 +19,17 @@ import time
 from dataclasses import dataclass
 from typing import Callable, Literal
 from dotenv import find_dotenv, load_dotenv
-<<<<<<<< HEAD:src/machinations/routable_event_handler.py
+
 from avial import avesterra as av
 from avesterra.avesterra import SubscriberError, AvAuthorization
 from event_handler.event_handler import EventHandler
 from orchestra import Interface, Event, ValueType
-========
-from pyks import avesterra as av
-from pyks.avesterra.avesterra import SubscriberError, AvAuthorization
+
+
+from avesterra.avesterra import SubscriberError, AvAuthorization
 from event_handler.event_handler import EventHandler
-from pyks.orchestra.interface import Interface, Event, ValueType
->>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/machinations/routable_event_handler.py
+from orchestra.interface import Interface, Event, ValueType
+
 import midwksl
 
 class _RoutableEventHandler(EventHandler):

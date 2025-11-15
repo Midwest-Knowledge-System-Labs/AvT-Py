@@ -8,11 +8,11 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
-<<<<<<<< HEAD:src/avesterra/annotation.py
+
 from avesterra.avial import *
-========
-from pyks.avesterra.avial import *
->>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/annotation.py
+
+from avesterra.avial import *
+
 
 
 def insert_annotation(
@@ -49,12 +49,12 @@ def insert_annotation(
     Examples
     ________
 
-<<<<<<<< HEAD:src/avesterra/annotation.py
+
 
 import avesterra as annotation
-========
-    >>> from pyks import avesterra as annotation
->>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/annotation.py
+
+    >>> 
+
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> attribute: AvAttribute = AvAttribute.EXAMPLE
@@ -62,7 +62,7 @@ import avesterra as annotation
     >>> annotation.insert_annotation(entity=entity, attribute=attribute, key=key, value=AvValue.encode_text("I am going to be inserted in the property table on `key`!"), authorization=authorization)
 
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> key: AvKey = "example_key"
@@ -71,7 +71,7 @@ import avesterra as annotation
     >>> annotation.insert_annotation(entity=entity, key=key, attribute=AvAttribute.ATTRIBUTE, index=2, value=AvValue.encode_text("I am going to become second!"), authorization=authorization)
 
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> key: AvKey = "example_key"
@@ -127,7 +127,7 @@ def remove_annotation(
     Examples
     ________
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> attribute: AvAttribute = AvAttribute.EXAMPLE
@@ -135,7 +135,7 @@ def remove_annotation(
     >>> annotation.insert_annotation(entity=entity, attribute=AvAttribute.FRAME, key="example_key", value=AvValue.encode_text("I am not safe"), authorization=authorization)
     >>> annotation.remove_annotation(entity=entity, key="example_key", authorization=authorization)
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> attribute: AvAttribute = AvAttribute.EXAMPLE
@@ -143,7 +143,7 @@ def remove_annotation(
     >>> annotation.insert_annotation(entity=entity, attribute=AvAttribute.ATTRIBUTION, key="example_key", value=AvValue.encode_text("I am not safe"), authorization=authorization)
     >>> annotation.remove_annotation(entity=entity, index=1, authorization=authorization)
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> attribute: AvAttribute = AvAttribute.EXAMPLE
@@ -204,7 +204,7 @@ def replace_annotation(
     Examples
     ________
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> attribute: AvAttribute = AvAttribute.EXAMPLE
@@ -212,7 +212,7 @@ def replace_annotation(
     >>> annotation.insert_annotation(entity=entity, attribute=attribute, key=key, value=AvValue.encode_text("I am going to be replaced in the future...sadly"), authorization=authorization)
     >>> annotation.replace_annotation(entity=entity, attribute=attribute, key=key, value=AvValue.encode_text("I am the epic replacement!"), authorization=authorization)
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> attribute: AvAttribute = AvAttribute.EXAMPLE
@@ -270,7 +270,7 @@ def find_annotation(
     Examples
     ________
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> attribute: AvAttribute = AvAttribute.EXAMPLE
@@ -281,7 +281,7 @@ def find_annotation(
     >>> annotation.find_annotation(entity=entity, key=key, value=AvValue.encode_text("I am gonna get looked up"), authorization=authorization)
     2
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> attribute: AvAttribute = AvAttribute.EXAMPLE
@@ -292,7 +292,7 @@ def find_annotation(
     >>> annotation.find_annotation(entity=entity, key=key, value=AvValue.encode_text("I don't know where I am"), authorization=authorization)
     0
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> attribute: AvAttribute = AvAttribute.EXAMPLE
@@ -351,20 +351,20 @@ def include_annotation(
     Examples
     ________
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> attribute: AvAttribute = AvAttribute.EXAMPLE
     >>> key: AvKey = "example_key"
     >>> annotation.include_annotation(entity=entity, attribute=attribute, key=key, value=AvValue.encode_text("I have been included"), authorization=authorization)
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> attribute: AvAttribute = AvAttribute.EXAMPLE
     >>> annotation.include_annotation(entity=entity, attribute=attribute, instance=1, value=AvValue.encode_text("I have been included"), authorization=authorization)
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> attribute: AvAttribute = AvAttribute.EXAMPLE
@@ -418,7 +418,7 @@ def exclude_annotation(
     Examples
     ________
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> attribute: AvAttribute = AvAttribute.EXAMPLE
@@ -471,7 +471,7 @@ def set_annotation(
     Examples
     ________
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> attribute: AvAttribute = AvAttribute.EXAMPLE
@@ -518,7 +518,7 @@ def get_annotation(
     Examples
     ________
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> attribute: AvAttribute = AvAttribute.EXAMPLE
@@ -527,7 +527,7 @@ def get_annotation(
     >>> print(annotation.get_annotation(entity=entity, attribute=attribute, key=key, authorization=authorization).decode_text())
     I have been included
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> attribute: AvAttribute = AvAttribute.EXAMPLE
@@ -536,7 +536,7 @@ def get_annotation(
     >>> print(annotation.get_annotation(entity=entity, attribute=AvAttribute.HEIGHT, key=key, authorization=authorization))
     {"NULL": ""}
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> attribute: AvAttribute = AvAttribute.EXAMPLE
@@ -578,7 +578,7 @@ def clear_annotation(
     Examples
     ________
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> attribute: AvAttribute = AvAttribute.EXAMPLE
@@ -621,7 +621,7 @@ def annotation_count(
     Examples
     ________
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> key: AvKey = "example_key"
@@ -631,7 +631,7 @@ def annotation_count(
     >>> print(annotation.annotation_count(entity=entity, key=key, authorization=authorization))
     3
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> key: AvKey = "example_key"
@@ -678,7 +678,7 @@ def annotation_member(
     Examples
     ________
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> key: AvKey = "example_key"
@@ -686,7 +686,7 @@ def annotation_member(
     >>> print(annotation.annotation_member(entity=entity, key=key, attribute=attribute, authorization=authorization))
     True
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> key: AvKey = "example_key"
@@ -737,7 +737,7 @@ def annotation_name(
     Examples
     ________
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> key: AvKey = "example_key"
@@ -746,7 +746,7 @@ def annotation_name(
     >>> print(annotation.annotation_name(entity=entity, key=key, attribute=AvAttribute.ATTRIBUTION, authorization=authorization))
     example_name
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> key: AvKey = "example_key"
@@ -798,7 +798,7 @@ def annotation_key(
     Examples
     ________
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> key: AvKey = "example_key"
@@ -851,7 +851,7 @@ def annotation_value(
     Examples
     ________
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> key: AvKey = "example_key"
@@ -860,7 +860,7 @@ def annotation_value(
     >>> print(annotation.annotation_value(entity=entity, key=key, attribute=AvAttribute.ATTRIBUTION, authorization=authorization))
     {"TEXT": "I have been included"}
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> key: AvKey = "example_key"
@@ -911,7 +911,7 @@ def annotation_index(
     Examples
     ________
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> key: AvKey = "example_key"
@@ -922,7 +922,7 @@ def annotation_index(
     >>> print(annotation.annotation_index(entity=entity, key=key, attribute=AvAttribute.ATTRIBUTE, authorization=authorization))
     2
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> key: AvKey = "example_key"
@@ -974,7 +974,7 @@ def annotation_attribute(
     Examples
     ________
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> key: AvKey = "example_key"
@@ -1027,7 +1027,7 @@ def sort_annotation(
     Examples
     ________
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> key: AvKey = "example_key"
@@ -1073,7 +1073,7 @@ def erase_annotation(
     Examples
     ________
 
-    >>> from pyks import avesterra as annotation
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> key: AvKey = "example_key"

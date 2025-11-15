@@ -7,11 +7,11 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Midwest Knowledge System Labs library, you can contact us at support@midwksl.net.
 """
 
-<<<<<<<< HEAD:src/avesterra/items.py
+
 from avesterra.avial import *
-========
-from pyks.avesterra.avial import *
->>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/items.py
+
+from avesterra.avial import *
+
 
 
 def insert_item(
@@ -53,7 +53,7 @@ def insert_item(
     Examples
     ________
 
-    >>> from pyks import avesterra as items
+    >>> 
     >>> entity: AvEntity # Assume entity is a collection that supports items
     >>> authorization: AvAuthorization
     >>> items.insert_item(entity=entity, attribute=AvAttribute.DESCRIPTION, name="Item 1", key="key1", value=AvValue.encode_text("First item"), index=1, authorization=authorization)
@@ -101,7 +101,7 @@ def remove_item(
     Examples
     ________
 
-    >>> from pyks import avesterra as items
+    >>> 
     >>> entity: AvEntity # Assume entity is a collection with existing items
     >>> authorization: AvAuthorization
     >>> items.remove_item(entity=entity, key="key1", authorization=authorization)
@@ -157,7 +157,7 @@ def replace_item(
     Examples
     ________
 
-    >>> from pyks import avesterra as items
+    >>> 
     >>> entity: AvEntity # Assume entity is a collection with existing items
     >>> authorization: AvAuthorization
     >>> items.replace_item(entity=entity, attribute=AvAttribute.TITLE, name="Updated Item", key="key1", value=AvValue.encode_text("Updated value"), authorization=authorization)
@@ -213,7 +213,7 @@ def find_item(
     Examples
     ________
 
-    >>> from pyks import avesterra as items
+    >>> 
     >>> entity: AvEntity # Assume entity is a collection with items
     >>> authorization: AvAuthorization
     >>> index1 = items.find_item(entity=entity, key="key1", authorization=authorization)
@@ -264,7 +264,7 @@ def include_item(
     Examples
     ________
 
-    >>> from pyks import avesterra as items
+    >>> 
     >>> entity: AvEntity # Assume entity is a collection
     >>> authorization: AvAuthorization
     >>> items.include_item(entity=entity, attribute=AvAttribute.CATEGORY, name="Category Item", key="cat1", value=AvValue.encode_text("Category value"), authorization=authorization)
@@ -307,7 +307,7 @@ def exclude_item(
     Examples
     ________
 
-    >>> from pyks import avesterra as items
+    >>> 
     >>> entity: AvEntity # Assume entity is a collection with items
     >>> authorization: AvAuthorization
     >>> items.exclude_item(entity=entity, key="cat1", authorization=authorization)
@@ -356,7 +356,7 @@ def set_item(
     Examples
     ________
 
-    >>> from pyks import avesterra as items
+    >>> 
     >>> entity: AvEntity # Assume entity is a collection
     >>> authorization: AvAuthorization
     >>> items.set_item(entity=entity, attribute=AvAttribute.STATUS, name="Status Item", key="status1", value=AvValue.encode_text("Active"), authorization=authorization)
@@ -407,7 +407,7 @@ def get_item(
     Examples
     ________
 
-    >>> from pyks import avesterra as items
+    >>> 
     >>> entity: AvEntity # Assume entity is a collection with items
     >>> authorization: AvAuthorization
     >>> value1 = items.get_item(entity=entity, key="status1", authorization=authorization)
@@ -457,7 +457,7 @@ def clear_item(
     Examples
     ________
 
-    >>> from pyks import avesterra as items
+    >>> 
     >>> entity: AvEntity # Assume entity is a collection with items
     >>> authorization: AvAuthorization
     >>> items.clear_item(entity=entity, key="status1", authorization=authorization)
@@ -504,7 +504,7 @@ def item_count(
     Examples
     ________
 
-    >>> from pyks import avesterra as items
+    >>> 
     >>> entity: AvEntity # Assume entity is a collection with items
     >>> authorization: AvAuthorization
     >>> count = items.item_count(entity=entity, authorization=authorization)
@@ -551,7 +551,7 @@ def item_member(
     Examples
     ________
 
-    >>> from pyks import avesterra as items
+    >>> 
     >>> entity: AvEntity # Assume entity is a collection with items
     >>> authorization: AvAuthorization
     >>> exists = items.item_member(entity=entity, key="status1", authorization=authorization)
@@ -598,7 +598,7 @@ def item_name(
     Examples
     ________
 
-    >>> from pyks import avesterra as items
+    >>> 
     >>> entity: AvEntity # Assume entity is a collection with items
     >>> authorization: AvAuthorization
     >>> name1 = items.item_name(entity=entity, key="status1", authorization=authorization)
@@ -643,7 +643,7 @@ def item_key(
     Examples
     ________
 
-    >>> from pyks import avesterra as items
+    >>> 
     >>> entity: AvEntity # Assume entity is a collection with items
     >>> authorization: AvAuthorization
     >>> key = items.item_key(entity=entity, index=1, authorization=authorization)
@@ -689,7 +689,7 @@ def item_value(
     Examples
     ________
 
-    >>> from pyks import avesterra as items
+    >>> 
     >>> entity: AvEntity # Assume entity is a collection with items
     >>> authorization: AvAuthorization
     >>> value1 = items.item_value(entity=entity, key="status1", authorization=authorization)
@@ -734,7 +734,7 @@ def item_index(
     Examples
     ________
 
-    >>> from pyks import avesterra as items
+    >>> 
     >>> entity: AvEntity # Assume entity is a collection with items
     >>> authorization: AvAuthorization
     >>> index1 = items.item_index(entity=entity, key="status1", authorization=authorization)
@@ -783,7 +783,7 @@ def item_attribute(
     Examples
     ________
 
-    >>> from pyks import avesterra as items
+    >>> 
     >>> entity: AvEntity # Assume entity is a collection with items
     >>> authorization: AvAuthorization
     >>> attribute1 = items.item_attribute(entity=entity, key="status1", authorization=authorization)
@@ -826,7 +826,7 @@ def sort_items(
     Examples
     ________
 
-    >>> from pyks import avesterra as items
+    >>> 
     >>> entity: AvEntity # Assume entity is a collection with items
     >>> authorization: AvAuthorization
     >>> items.sort_items(entity=entity, authorization=authorization)
@@ -868,7 +868,7 @@ def erase_items(
     Examples
     ________
 
-    >>> from pyks import avesterra as items
+    >>> 
     >>> entity: AvEntity # Assume entity is a collection with items
     >>> authorization: AvAuthorization
     >>> items.insert_item(entity=entity, attribute=AvAttribute.CATEGORY, name="Item 1", key="key1", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -914,7 +914,7 @@ def retrieve_items(
     Examples
     ________
 
-    >>> from pyks import avesterra as items
+    >>> 
     >>> entity: AvEntity # Assume entity is a collection with items
     >>> authorization: AvAuthorization
     >>> items.insert_item(entity=entity, attribute=AvAttribute.CATEGORY, name="Category Item", key="cat1", value=AvValue.encode_text("Category value"), authorization=authorization)

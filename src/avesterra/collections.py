@@ -7,11 +7,11 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Midwest Knowledge System Labs library, you can contact us at support@midwksl.net.
 """
 
-<<<<<<<< HEAD:src/avesterra/collections.py
+
 from avesterra.avial import *
-========
-from pyks.avesterra.avial import *
->>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/collections.py
+
+from avesterra.avial import *
+
 
 
 def insert_collection(
@@ -49,12 +49,12 @@ def insert_collection(
     Examples
     ________
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> collections.insert_collection(entity=entity, name="collection_name", value=AvValue.encode_text("Sample collection value"), authorization=authorization)
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> collections.insert_collection(entity=entity, name="first_collection", key="key1", value=AvValue.encode_integer(100), authorization=authorization)
@@ -95,7 +95,7 @@ def remove_collection(
     Examples
     ________
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> collections.remove_collection(entity=entity, instance=1, authorization=authorization)
@@ -140,12 +140,12 @@ def replace_collection(
     Examples
     ________
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> collections.replace_collection(entity=entity, key="existing_key", name="updated_name", value=AvValue.encode_text("Updated value"), authorization=authorization)
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> collections.replace_collection(entity=entity, instance=1, name="new_name", value=AvValue.encode_integer(999), authorization=authorization)
@@ -194,13 +194,13 @@ def find_collection(
     Examples
     ________
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> index = collections.find_collection(entity=entity, name="target_collection", authorization=authorization)
     >>> print(f"Found at index: {index}")
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> index = collections.find_collection(entity=entity, value=AvValue.encode_text("search_value"), authorization=authorization)
@@ -244,7 +244,7 @@ def include_collection(
     Examples
     ________
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> collections.include_collection(entity=entity, name="ensure_collection", key="ensure_key", value=AvValue.encode_text("Ensured value"), authorization=authorization)
@@ -283,7 +283,7 @@ def exclude_collection(
     Examples
     ________
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> collections.exclude_collection(entity=entity, key="collection_to_remove", authorization=authorization)
@@ -326,12 +326,12 @@ def set_collection(
     Examples
     ________
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> collections.set_collection(entity=entity, name="config_collection", key="config_key", value=AvValue.encode_text("Configuration value"), authorization=authorization)
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> collections.set_collection(entity=entity, name="setting_1", key="key1", value=AvValue.encode_boolean(True), authorization=authorization)
@@ -373,7 +373,7 @@ def get_collection(
     Examples
     ________
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> value = collections.get_collection(entity=entity, key="my_key", authorization=authorization)
@@ -410,12 +410,12 @@ def clear_collection(
     Examples
     ________
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> collections.clear_collection(entity=entity, key="specific_key", authorization=authorization)
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> collections.clear_collection(entity=entity, authorization=authorization)
@@ -451,7 +451,7 @@ def collection_count(
     Examples
     ________
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> count = collections.collection_count(entity=entity, authorization=authorization)
@@ -489,7 +489,7 @@ def collection_member(
     Examples
     ________
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> exists = collections.collection_member(entity=entity, key="check_key", authorization=authorization)
@@ -534,13 +534,13 @@ def collection_name(
     Examples
     ________
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> name = collections.collection_name(entity=entity, key="my_key", authorization=authorization)
     >>> print(f"Collection name: {name}")
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> name = collections.collection_name(entity=entity, instance=1, authorization=authorization)
@@ -579,7 +579,7 @@ def collection_key(
     Examples
     ________
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> key = collections.collection_key(entity=entity, instance=1, authorization=authorization)
@@ -621,12 +621,12 @@ def collection_value(
     Examples
     ________
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> value = collections.collection_value(entity=entity, key="my_key", authorization=authorization)
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> value = collections.collection_value(entity=entity, instance=1, authorization=authorization)
@@ -665,7 +665,7 @@ def collection_index(
     Examples
     ________
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> index = collections.collection_index(entity=entity, key="my_key", authorization=authorization)
@@ -709,12 +709,12 @@ def collection_attribute(
     Examples
     ________
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> attribute = collections.collection_attribute(entity=entity, key="my_key", authorization=authorization)
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> attribute = collections.collection_attribute(entity=entity, instance=1, authorization=authorization)
@@ -747,7 +747,7 @@ def sort_collections(
     Examples
     ________
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> collections.sort_collections(entity=entity, authorization=authorization)
@@ -780,7 +780,7 @@ def erase_collections(
     Examples
     ________
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> collections.erase_collections(entity=entity, authorization=authorization)
@@ -821,7 +821,7 @@ def retrieve_collections(
     Examples
     ________
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> collections.set_collection(entity=entity, name="collection1", key="key1", value=AvValue.encode_text("value1"), authorization=authorization)
@@ -829,7 +829,7 @@ def retrieve_collections(
     >>> result = collections.retrieve_collections(entity=entity, authorization=authorization)
     >>> print(result)
 
-    >>> from pyks import avesterra as collections
+    >>> 
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> result = collections.retrieve_collections(entity=entity, key="specific_key", authorization=authorization)

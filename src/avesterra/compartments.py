@@ -8,17 +8,17 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
-<<<<<<<< HEAD:src/avesterra/compartments.py
+
 from avesterra.outlets import delete_outlet
 from avesterra.avial import *
 from avesterra.predefined import access_outlet
 import avesterra.facts as facts
-========
-from pyks.avesterra.outlets import delete_outlet
-from pyks.avesterra.avial import *
-from pyks.avesterra.predefined import access_outlet
-import pyks.avesterra.facts as facts
->>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/compartments.py
+
+from avesterra.outlets import delete_outlet
+from avesterra.avial import *
+from avesterra.predefined import access_outlet
+import avesterra.facts as facts
+
 
 AvCompartment = AvEntity
 

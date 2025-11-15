@@ -7,17 +7,11 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
-<<<<<<<< HEAD:src/avesterra/spaces.py
 from avesterra.avial import *
 from avesterra.avesterra import AvEntity, NULL_ENTITY, AvAuthorization
 from avesterra.predefined import space_outlet
 from avesterra.taxonomy import (
-========
-from pyks.avesterra.avial import *
-from pyks.avesterra.avesterra import AvEntity, NULL_ENTITY, AvAuthorization
-from pyks.avesterra.predefined import space_outlet
-from pyks.avesterra.taxonomy import (
->>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/spaces.py
+
     AvMode,
     AvContext,
     AvCategory,

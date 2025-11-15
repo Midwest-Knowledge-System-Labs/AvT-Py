@@ -11,11 +11,11 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 import traceback
 from threading import Lock
 from typing import List
-<<<<<<<< HEAD:src/avesterra/av_logging.py
+
 from avesterra.taxonomy import AvNotice
-========
-from pyks.avesterra.taxonomy import AvNotice
->>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/av_logging.py
+
+from avesterra.taxonomy import AvNotice
+
 from datetime import datetime
 
 log_aggregate_lock = Lock()

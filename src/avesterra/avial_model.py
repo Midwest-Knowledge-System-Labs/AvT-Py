@@ -10,13 +10,10 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 
 import json
 from typing import Dict, List
-<<<<<<<< HEAD:src/avesterra/avial_model.py
+
 import avesterra.avial as av
 from avesterra.taxonomy import AvAttribute
-========
-from pyks import avesterra as av
-from pyks.avesterra.taxonomy import AvAttribute
->>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/avial_model.py
+
 from tabulate import tabulate
 
 
@@ -38,7 +35,7 @@ class AvialModel:
     recommended to use a DAO Object instead, which will only overwrite fields
     than were updated, therefore reducing the risk of data loss.
 
-    Every aspect of the pyks model can either be accessed through it's unique
+    Every aspect of the model can either be accessed through it's unique
     key or by index.
     Unique key are:
     - Properties: the key
@@ -59,10 +56,10 @@ class AvialModel:
     key by using the `append` method recklessly, which is not legal in 
     You are responsible for ensuring it does not happen.
     Though it is possible to have multiple objects with the NULL key, the
-    pyks STORE operation does NOT support it. Therefore, this data structure
+    STORE operation does NOT support it. Therefore, this data structure
     only helps you to parse such models, not to create them.
     If you need to create such a model with multiple objects with the NULL key,
-    you will need to use the specific pyks methods insert/remove which support
+    you will need to use the specific methods insert/remove which support
     such operations by index.
 
     Note that index are 0-based, unlike the usual 1-based indexing in 
@@ -75,7 +72,7 @@ class AvialModel:
     # Step 1 - Retrieve the entity
     val = av.retrieve_entity(entity, auth)
 
-    # Step 2 - Parse the JSON string into an pyks model
+    # Step 2 - Parse the JSON string into an model
     model = AvialModel.from_interchange(val)
 
     # Step 3 - Read and modify it

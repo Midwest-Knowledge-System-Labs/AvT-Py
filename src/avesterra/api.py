@@ -10,17 +10,12 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 
 import ipaddress
 from ipaddress import IPv4Address, IPv6Address
-<<<<<<<< HEAD:src/avesterra/api.py
+
 import avesterra.hgtp as hgtp
 from avesterra.avesterra import *
 from avesterra.parameters import FALSE_PARAMETER, TRUE_PARAMETER
 from avesterra.taxonomy import *
-========
-import pyks.avesterra.hgtp as hgtp
-from pyks.avesterra.avesterra import *
-from pyks.avesterra.parameters import FALSE_PARAMETER, TRUE_PARAMETER
-from pyks.avesterra.taxonomy import *
->>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/api.py
+
 from typing import Tuple, Callable
 
 # AvesTerra null constants:

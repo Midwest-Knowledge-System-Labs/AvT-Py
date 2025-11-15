@@ -8,11 +8,11 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
-<<<<<<<< HEAD:src/avesterra/factors.py
+
 from avesterra.avial import *
-========
-from pyks.avesterra.avial import *
->>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/factors.py
+
+from avesterra.avial import *
+
 
 
 def insert_factor(
@@ -58,7 +58,7 @@ def insert_factor(
     Examples
     ________
 
-    >>> from pyks import avesterra as factors
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> factors.insert_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="factor_key", value=AvValue.encode_text("Factor Value"), authorization=authorization)
@@ -113,7 +113,7 @@ def remove_factor(
     Examples
     ________
 
-    >>> from pyks import avesterra as factors
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> factors.insert_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="factor_key", value=AvValue.encode_text("Factor Value"), authorization=authorization)
@@ -173,7 +173,7 @@ def replace_factor(
     Examples
     ________
 
-    >>> from pyks import avesterra as factors
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> factors.insert_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="factor_key", value=AvValue.encode_text("Original Value"), authorization=authorization)
@@ -229,7 +229,7 @@ def find_factor(
     Examples
     ________
 
-    >>> from pyks import avesterra as factors
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> factors.insert_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="key1", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -237,7 +237,7 @@ def find_factor(
     >>> factors.find_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", value=AvValue.encode_text("Value 2"), authorization=authorization)
     2
 
-    >>> from pyks import avesterra as factors
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> factors.insert_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="key1", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -289,7 +289,7 @@ def include_factor(
     Examples
     ________
 
-    >>> from pyks import avesterra as factors
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> factors.include_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="new_key", value=AvValue.encode_text("New Factor"), authorization=authorization)
@@ -335,7 +335,7 @@ def exclude_factor(
     Examples
     ________
 
-    >>> from pyks import avesterra as factors
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> factors.include_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="remove_key", value=AvValue.encode_text("To be removed"), authorization=authorization)
@@ -384,7 +384,7 @@ def set_factor(
     Examples
     ________
 
-    >>> from pyks import avesterra as factors
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="set_key", value=AvValue.encode_text("Set Value"), authorization=authorization)
@@ -427,14 +427,14 @@ def get_factor(
     Examples
     ________
 
-    >>> from pyks import avesterra as factors
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="get_key", value=AvValue.encode_text("Retrieved Value"), authorization=authorization)
     >>> print(factors.get_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="get_key", authorization=authorization).decode_text())
     Retrieved Value
 
-    >>> from pyks import avesterra as factors
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> print(factors.get_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="nonexistent_key", authorization=authorization))
@@ -479,7 +479,7 @@ def clear_factor(
     Examples
     ________
 
-    >>> from pyks import avesterra as factors
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="clear_key", value=AvValue.encode_text("To be cleared"), authorization=authorization)
@@ -525,7 +525,7 @@ def factor_count(
     Examples
     ________
 
-    >>> from pyks import avesterra as factors
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="key1", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -576,7 +576,7 @@ def factor_member(
     Examples
     ________
 
-    >>> from pyks import avesterra as factors
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="member_key", value=AvValue.encode_text("Member Value"), authorization=authorization)
@@ -630,7 +630,7 @@ def factor_name(
     Examples
     ________
 
-    >>> from pyks import avesterra as factors
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="test_facet", key="test_key", value=AvValue.encode_text("Test Value"), authorization=authorization)
@@ -681,7 +681,7 @@ def factor_key(
     Examples
     ________
 
-    >>> from pyks import avesterra as factors
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="indexed_key", value=AvValue.encode_text("Indexed Value"), authorization=authorization)
@@ -735,7 +735,7 @@ def factor_value(
     Examples
     ________
 
-    >>> from pyks import avesterra as factors
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="value_key", value=AvValue.encode_text("Retrieved by Index"), authorization=authorization)
@@ -787,7 +787,7 @@ def factor_index(
     Examples
     ________
 
-    >>> from pyks import avesterra as factors
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="index_key", value=AvValue.encode_text("Find My Index"), authorization=authorization)
@@ -838,7 +838,7 @@ def factor_attribute(
     Examples
     ________
 
-    >>> from pyks import avesterra as factors
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="attr_key", value=AvValue.encode_text("Attribute Test"), authorization=authorization)
@@ -889,7 +889,7 @@ def sort_factors(
     Examples
     ________
 
-    >>> from pyks import avesterra as factors
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="z_key", value=AvValue.encode_text("Z Value"), authorization=authorization)
@@ -940,7 +940,7 @@ def erase_factors(
     Examples
     ________
 
-    >>> from pyks import avesterra as factors
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="key1", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -988,7 +988,7 @@ def retrieve_factors(
     Examples
     ________
 
-    >>> from pyks import avesterra as factors
+    >>> 
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="key1", value=AvValue.encode_text("Value 1"), authorization=authorization)

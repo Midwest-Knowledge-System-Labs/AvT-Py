@@ -9,11 +9,11 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 """
 
 from typing import Callable
-<<<<<<<< HEAD:src/avesterra/av_log.py
+
 from avesterra.taxonomy import AvNotice
-========
-from pyks.avesterra.taxonomy import AvNotice
->>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/av_log.py
+
+from avesterra.taxonomy import AvNotice
+
 
 
 def null(msg: str):

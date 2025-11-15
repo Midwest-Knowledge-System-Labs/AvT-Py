@@ -8,13 +8,13 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
-<<<<<<<< HEAD:src/avesterra/objects.py
+
 from avesterra.avial import *
 from avesterra.predefined import object_outlet
-========
-from pyks.avesterra.avial import *
-from pyks.avesterra.predefined import object_outlet
->>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/objects.py
+
+from avesterra.avial import *
+from avesterra.predefined import object_outlet
+
 
 AvObject = AvEntity
 
@@ -69,7 +69,7 @@ def create_object(
 
     Examples
     ________
-    >>> from pyks import avesterra as objects
+    >>> 
     >>> authorization: AvAuthorization  # Assume valid authorization
     >>> # Create a simple object with name and key
     >>> obj = objects.create_object(
@@ -119,7 +119,7 @@ def delete_object(
 
     Examples
     ________
-    >>> from pyks import avesterra as objects
+    >>> 
     >>> authorization: AvAuthorization  # Assume valid authorization
     >>> # Create an object first
     >>> obj = objects.create_object(
