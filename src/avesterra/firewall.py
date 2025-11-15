@@ -8,7 +8,11 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
+<<<<<<<< HEAD:src/avesterra/firewall.py
 from avesterra.avial import *
+========
+from pyks.avesterra.avial import *
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/firewall.py
 
 
 def allow_rule(
@@ -37,7 +41,7 @@ def allow_rule(
         Examples
         ________
 
-        >>> from avial import avesterra as firewall
+        >>> from pyks import avesterra as firewall
         >>> authorization: AvAuthorization
         >>> firewall.allow_rule(address=2130706433, index=1, authorization=authorization) # 2130706433 = 127.0.0.1
         """
@@ -78,7 +82,7 @@ def deny_rule(
             Examples
             ________
 
-            >>> from avial import avesterra as firewall
+            >>> from pyks import avesterra as firewall
             >>> authorization: AvAuthorization
             >>> firewall.deny_rule(address=3232235786, index=1, authorization=authorization) # 3232235786 = 192.168.1.10
             """
@@ -115,7 +119,7 @@ def void_rule(
                 Examples
                 ________
 
-                >>> from avial import avesterra as firewall
+                >>> from pyks import avesterra as firewall
                 >>> authorization: AvAuthorization
                 >>> firewall.deny_rule(address=3232235786, index=1, authorization=authorization) # 3232235786 = 192.168.1.10
                 >>> firewall.void_rule(index=1, authorization=authorization) # 3232235786 = 192.168.1.10

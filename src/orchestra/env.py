@@ -10,7 +10,12 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 
 import os
 from typing import Callable, TypeVar
+<<<<<<<< HEAD:src/orchestra/env.py
 from avesterra import av_log
+========
+from pyks.avesterra import av_log
+
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/orchestra/env.py
 
 AVESTERRA_AUTH = "AVESTERRA_AUTH"
 AVESTERRA_HOST = "AVESTERRA_HOST"

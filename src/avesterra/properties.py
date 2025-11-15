@@ -8,7 +8,11 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
+<<<<<<<< HEAD:src/avesterra/properties.py
 from avesterra.avial import *
+========
+from pyks.avesterra.avial import *
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/properties.py
 
 
 def insert_property(
@@ -42,20 +46,20 @@ def insert_property(
     Examples
     ________
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> key: AvKey = "example_key"
     >>> name: AvName = "example_name"
     >>> properties.insert_property(entity=entity, name=name, key=key, value=AvValue.encode_text("Some example text!"), authorization=authorization) # Inserted at end of property table
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="First example", index=1, value=AvValue.encode_text("Some example text!"), authorization=authorization) # Inserts property at index 1
     >>> properties.insert_property(entity=entity, name="Second example", index=2, value=AvValue.encode_text("Some better example text!"), authorization=authorization) # Inserts property at index 2
 
-    >>> from avial import avesterra as annotation
+    >>> from pyks import avesterra as annotation
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="First", key="first_key", value=AvValue.encode_text("Some example text!"), authorization=authorization) # Inserted at end of property table
@@ -102,7 +106,7 @@ def remove_property(
     Examples
     ________
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> key: AvKey = "example_key"
@@ -112,7 +116,7 @@ def remove_property(
     >>> properties.insert_property(entity=entity, name="Name 3", key="key_3", value=AvValue.encode_text("Some even better example text!"), authorization=authorization) # Inserted at end of property table
     >>> properties.remove_property(entity=entity, index=2, authorization=authorization) # Remove property at index 2
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> key: AvKey = "example_key"
@@ -168,13 +172,13 @@ def replace_property(
     Examples
     ________
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="Name 1", key="key_1", value=AvValue.encode_text("I am feeling very temporary!"), authorization=authorization) # Inserted at end of property table
     >>> properties.replace_property(entity=entity, name="Name 2", key="key_2", value=AvValue.encode_text("I am feeling very temporary!"), authorization=authorization) # Inserted at end of property table
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="Name 1", key="key_1", value=AvValue.encode_text("Some example text!"), authorization=authorization) # Inserted at end of property table
@@ -227,7 +231,7 @@ def find_property(
     Examples
     ________
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="Name 1", key="key_1", value=AvValue.encode_text("1"), authorization=authorization)
@@ -236,7 +240,7 @@ def find_property(
     >>> print(properties.find_property(entity=entity, name="Name 2", authorization=authorization))
     2
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="Name 1", key="key_1", value=AvValue.encode_text("1"), authorization=authorization)
@@ -245,7 +249,7 @@ def find_property(
     >>> print(properties.find_property(entity=entity, value=AvValue.encode_text("3"), authorization=authorization))
     3
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="Name 1", key="key_1", value=AvValue.encode_text("1"), authorization=authorization)
@@ -254,7 +258,7 @@ def find_property(
     >>> print(properties.find_property(entity=entity, name="1", value=AvValue.encode_text("3"), authorization=authorization))
     1
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="Name 1", key="key_1", value=AvValue.encode_text("1"), authorization=authorization)
@@ -305,7 +309,7 @@ def include_property(
     Examples
     ________
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.include_property(entity=entity, name="Name 1", key="key_1", value=AvValue.encode_text("I am gonna be included!"), authorization=authorization) # Inserted at end of property table
@@ -344,7 +348,7 @@ def exclude_property(
     Examples
     ________
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.include_property(entity=entity, name="Name 1", key="key_1", value=AvValue.encode_text("I am gonna be included!"), authorization=authorization)
@@ -391,7 +395,7 @@ def set_property(
     Examples
     ________
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.include_property(entity=entity, name="Name 1", key="key_1", value=AvValue.encode_text("I am gonna be included!"), authorization=authorization) # Inserted at end of property table
@@ -427,14 +431,14 @@ def get_property(
     Examples
     ________
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="Name 1", key="key_1", value=AvValue.encode_text("The value to pull"), authorization=authorization)
     >>> print(properties.get_property(entity=entity, key="key_1", authorization=authorization).decode_text())
     "The value to pull"
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="Name 1", key="key_1", value=AvValue.encode_text("The value to pull"), authorization=authorization)
@@ -469,7 +473,7 @@ def clear_property(
     Examples
     ________
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="Name 1", key="key_1", value=AvValue.encode_text("A cool value"), authorization=authorization)
@@ -502,7 +506,7 @@ def property_count(
     Examples
     ________
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="Name 1", key="key_3", value=AvValue.encode_text("1"), authorization=authorization)
@@ -536,14 +540,14 @@ def property_member(
     Examples
     ________
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="Name 1", key="key_1", value=AvValue.encode_text("The value to pull"), authorization=authorization)
     >>> print(properties.property_member(entity=entity, key="key_1", authorization=authorization))
     True
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> print(properties.property_member(entity=entity, key="non-existent", authorization=authorization))
@@ -577,7 +581,7 @@ def property_name(
     Examples
     ________
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="Name 1", key="key_1", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -586,7 +590,7 @@ def property_name(
     >>> print(properties.property_name(entity=entity, key="key_3", authorization=authorization))
     "Name 3"
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="Name 1", key="key_1", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -629,7 +633,7 @@ def property_key(
     Examples
     ________
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="Name 1", key="key_1", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -674,7 +678,7 @@ def property_value(
     Examples
     ________
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="Name 1", key="key_1", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -683,7 +687,7 @@ def property_value(
     >>> print(properties.property_value(entity=entity, key="key_2", authorization=authorization).decode_text())
     "Value 2"
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="Name 1", key="key_1", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -726,7 +730,7 @@ def property_index(
     Examples
     ________
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="Name 1", key="key_1", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -735,7 +739,7 @@ def property_index(
     >>> print(properties.property_index(entity=entity, key="key_2", authorization=authorization))
     2
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="Name 1", key="key_1", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -803,7 +807,7 @@ def sort_properties(
     Examples
     ________
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="Name 2", key="key_2", value=AvValue.encode_text("Value 2"), authorization=authorization)
@@ -839,7 +843,7 @@ def erase_properties(
     Examples
     ________
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="Name 2", key="key_2", value=AvValue.encode_text("Value 2"), authorization=authorization)
@@ -871,7 +875,7 @@ def retrieve_properties(
     Examples
     ________
 
-    >>> from avial import avesterra as properties
+    >>> from pyks import avesterra as properties
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports properties
     >>> authorization: AvAuthorization
     >>> properties.insert_property(entity=entity, name="Name 2", key="key_2", value=AvValue.encode_text("Value 2"), authorization=authorization)

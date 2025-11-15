@@ -8,10 +8,17 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
+<<<<<<<< HEAD:src/avesterra/trash.py
 from avesterra.avial import *
 from avesterra.predefined import trash_outlet
 from avesterra.taxonomy import AvCategory, AvClass
 import avesterra.properties as properties
+========
+from pyks.avesterra.avial import *
+from pyks.avesterra.predefined import trash_outlet
+from pyks.avesterra.taxonomy import AvCategory, AvClass
+from pyks import avesterra as properties
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/trash.py
 
 AvTrash = AvEntity
 

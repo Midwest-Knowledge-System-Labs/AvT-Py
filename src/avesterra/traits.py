@@ -8,9 +8,15 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
+<<<<<<<< HEAD:src/avesterra/traits.py
 from avesterra.avial import *
 from avesterra.taxonomy import AvAttribute, AvAspect
 import avesterra.aspects as aspects
+========
+from pyks.avesterra.avial import *
+from pyks.avesterra.taxonomy import AvAttribute, AvAspect
+import pyks.avesterra.aspects as aspects
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/traits.py
 
 
 def insert_trait(
@@ -50,19 +56,19 @@ def insert_trait(
     Examples
     ________
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
     >>> traits.insert_trait(entity=entity, attribute=attribute, name="I am a trait", key="1", value=AvValue.encode_text("I am a trait"), authorization=authorization)
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
     >>> traits.insert_trait(entity=entity, attribute=attribute, name="I am a trait", index=1, value=AvValue.encode_text("I am a trait"), authorization=authorization)
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -125,14 +131,14 @@ def remove_trait(
     Examples
     ________
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
     >>> traits.insert_trait(entity=entity, attribute=attribute, name="I am a trait", key="1", value=AvValue.encode_text("I am a trait"), authorization=authorization)
     >>> traits.remove_trait(entity=entity, attribute=attribute, authorization=authorization, key="1")
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -196,14 +202,14 @@ def replace_trait(
     Examples
     ________
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
     >>> traits.insert_trait(entity=entity, attribute=attribute, name="I am a trait", key="1", value=AvValue.encode_text("I am a trait"), authorization=authorization)
     >>> traits.replace_trait(entity=entity, attribute=attribute, key="1", name="I am the replacement", value=AvValue.encode_text("I am the replacement"), authorization=authorization)
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -264,7 +270,7 @@ def find_trait(
     Examples
     ________
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -274,7 +280,7 @@ def find_trait(
     >>> traits.find_trait(entity=entity, attribute=attribute, key="2", authorization=authorization)
     2
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -284,7 +290,7 @@ def find_trait(
     >>> traits.find_trait(entity=entity, attribute=attribute, name="Trait 3", authorization=authorization)
     3
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -294,7 +300,7 @@ def find_trait(
     >>> traits.find_trait(entity=entity, attribute=attribute, index=1, name="Trait 3", authorization=authorization)
     3
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -352,7 +358,7 @@ def include_trait(
     Examples
     ________
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -402,7 +408,7 @@ def exclude_trait(
     Examples
     ________
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -457,7 +463,7 @@ def set_trait(
     Examples
     ________
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -504,7 +510,7 @@ def get_trait(
     Examples
     ________
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -512,7 +518,7 @@ def get_trait(
     >>> print(traits.get_trait(entity=entity, attribute=attribute, key="1", authorization=authorization).decode_text())
     1
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -555,7 +561,7 @@ def clear_trait(
     Examples
     ________
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -606,7 +612,7 @@ def trait_member(
     Examples
     ________
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -614,7 +620,7 @@ def trait_member(
     >>> print(traits.trait_member(entity=entity, attribute=attribute, key="1", authorization=authorization))
     True
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -666,7 +672,7 @@ def trait_name(
     Examples
     ________
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -674,7 +680,7 @@ def trait_name(
     >>> print(traits.trait_name(entity=entity, attribute=attribute, key="1", authorization=authorization))
     I am a trait
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -725,7 +731,7 @@ def trait_key(
     Examples
     ________
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -733,7 +739,7 @@ def trait_key(
     >>> print(traits.trait_key(entity=entity, attribute=attribute, index=1, authorization=authorization))
     1
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -788,7 +794,7 @@ def trait_value(
     Examples
     ________
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -796,7 +802,7 @@ def trait_value(
     >>> print(traits.trait_value(entity=entity, attribute=attribute, key="1", authorization=authorization).decode_text())
     I am a trait
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -806,7 +812,7 @@ def trait_value(
     >>> print(traits.trait_value(entity=entity, attribute=attribute, key="key_1", authorization=authorization).decode_text())
     I am trait 1
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -859,7 +865,7 @@ def trait_index(
     Examples
     ________
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -867,7 +873,7 @@ def trait_index(
     >>> print(traits.trait_index(entity=entity, attribute=attribute, key="key_1", authorization=authorization))
     1
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -877,7 +883,7 @@ def trait_index(
     >>> print(traits.trait_index(entity=entity, attribute=attribute, key="key_2", authorization=authorization))
     2
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -926,7 +932,7 @@ def trait_attribute(
     Examples
     ________
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -934,7 +940,7 @@ def trait_attribute(
     >>> print(traits.trait_attribute(entity=entity, attribute=attribute, key="key_1", authorization=authorization).name)
     WIDTH
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -991,7 +997,7 @@ def sort_traits(
     Examples
     ________
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization
@@ -1044,7 +1050,7 @@ def erase_traits(
     Examples
     ________
 
-    >>> from avial import avesterra as traits
+    >>> from pyks import avesterra as traits
     >>> attribute: AvAttribute = AvAttribute.WIDTH
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attribute operations
     >>> authorization: AvAuthorization

@@ -6,9 +6,15 @@ The Orchestra library is distributed in the hope that it will be useful, but WIT
 You should have received a copy of the GNU Lesser General Public License along with the Orchestra library. If not, see <https://www.gnu.org/licenses/>.
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
+<<<<<<<< HEAD:src/machinations/routable_adapter.py
 from avesterra import NULL_VALUE, AuthorizationError
 from avesterra import AvAttribute, AvEntity, AvialModel
 from machinations.control_surface import create_control_surface
+========
+from pyks.avesterra import NULL_VALUE, AuthorizationError
+from pyks.avesterra import AvAttribute, AvEntity, AvialModel
+from pyks.machinations.control_surface import create_control_surface
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/machinations/routable_adapter.py
 
 """
 RoutableAdapter aims at implementing all the standard Orchestra behavior of an
@@ -21,10 +27,17 @@ import time
 from dataclasses import dataclass
 from typing import Callable, Literal, Dict
 from dotenv import find_dotenv, load_dotenv
+<<<<<<<< HEAD:src/machinations/routable_adapter.py
 from avial import avesterra as av
 from avesterra.avesterra import AdapterError, AvAuthorization
 from adapter.adapter import Adapter
 from orchestra import Interface, Method, ValueType
+========
+from pyks import avesterra as av
+from pyks.avesterra.avesterra import AdapterError, AvAuthorization
+from adapter.adapter import Adapter
+from pyks.orchestra.interface import Interface, Method, ValueType
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/machinations/routable_adapter.py
 import midwksl
 
 
@@ -736,7 +749,11 @@ class RoutableAdapter:
         """
         Only safe to call once all the routes are properly declared
         """
+<<<<<<<< HEAD:src/machinations/routable_adapter.py
         import avesterra.objects as objects
+========
+        import pyks.avesterra.objects as objects
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/machinations/routable_adapter.py
 
         model = objects.retrieve_entity(
             entity=self.outlet,

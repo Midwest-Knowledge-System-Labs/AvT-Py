@@ -8,8 +8,13 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
+<<<<<<<< HEAD:src/orchestra/utils.py
 from avesterra.avial import AvTime
 from avial import avesterra as avial
+========
+from pyks.avesterra.avial import AvTime
+from pyks import avesterra as avial
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/orchestra/utils.py
 
 
 def get_entity_update_time(

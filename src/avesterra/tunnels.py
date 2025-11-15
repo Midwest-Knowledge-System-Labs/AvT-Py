@@ -9,8 +9,13 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 """
 from typing import Dict
 
+<<<<<<<< HEAD:src/avesterra/tunnels.py
 from avesterra.predefined import tunnel_outlet
 from avesterra.avial import *
+========
+from pyks.avesterra.predefined import tunnel_outlet
+from pyks.avesterra.avial import *
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/tunnels.py
 
 AvTunnel = AvEntity
 AvPortal = AvEntity
@@ -60,7 +65,7 @@ def create_tunnel(
     Examples
     ________
 
-    >>> from avial import avesterra as tunnels
+    >>> from pyks import avesterra as tunnels
     >>> tunnel_name = AvName("epic_tunnel")
     >>> portal_entity: AvPortal  # Assume portal is configured
     >>> server_entity: AvEntity  # Assume server is available
@@ -108,7 +113,7 @@ def delete_tunnel(
     Examples
     ________
 
-    >>> from avial import avesterra as tunnels
+    >>> from pyks import avesterra as tunnels
     >>> tunnel: AvTunnel  # Assume tunnel exists
     >>> auth: AvAuthorization  # Assume authorization is available
     >>> tunnels.delete_tunnel(tunnel=tunnel, authorization=auth)
@@ -155,7 +160,7 @@ def open_portal(
     Examples
     ________
 
-    >>> from avial import avesterra as tunnels
+    >>> from pyks import avesterra as tunnels
     >>> portal: AvPortal  # Assume portal entity exists
     >>> server: AvEntity  # Assume entity of the server exists
     >>> portal_name = AvName("my_portal")
@@ -200,7 +205,7 @@ def close_portal(
     Examples
     ________
 
-    >>> from avial import avesterra as tunnels
+    >>> from pyks import avesterra as tunnels
     >>> portal: AvPortal  # Assume portal entity exists
     >>> server: AvEntity  # Assume entity of the server exists
     >>> auth: AvAuthorization  # Assume authorization is available
@@ -234,7 +239,7 @@ def parse_portals(server_model: Dict) -> Dict[str, str]:
     Examples
     ________
 
-    >>> from avial import avesterra as tunnels
+    >>> from pyks import avesterra as tunnels
     >>> server_model = {
     ...     ...
     ...     "Attributes": [

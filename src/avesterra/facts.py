@@ -8,8 +8,13 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
+<<<<<<<< HEAD:src/avesterra/facts.py
 import avesterra.aspects as aspects
 from avesterra.avial import *
+========
+import pyks.avesterra.aspects as aspects
+from pyks.avesterra.avial import *
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/facts.py
 
 
 def insert_fact(
@@ -40,12 +45,12 @@ def insert_fact(
     Examples
     ________
 
-    >>> from avial import avesterra as facts
+    >>> from pyks import avesterra as facts
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> facts.insert_fact(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(100), index=1, authorization=authorization)
 
-    >>> from avial import avesterra as facts
+    >>> from pyks import avesterra as facts
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> facts.insert_fact(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(100), index=1, authorization=authorization)
@@ -86,13 +91,13 @@ def remove_fact(
     Examples
     ________
 
-    >>> from avial import avesterra as facts
+    >>> from pyks import avesterra as facts
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> facts.insert_fact(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(100), index=1, authorization=authorization)
     >>> facts.remove_fact(entity=entity, index=1, authorization=authorization)
 
-    >>> from avial import avesterra as facts
+    >>> from pyks import avesterra as facts
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> facts.insert_fact(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(100), index=1, authorization=authorization)
@@ -138,7 +143,7 @@ def replace_fact(
     Examples
     ________
 
-    >>> from avial import avesterra as facts
+    >>> from pyks import avesterra as facts
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> facts.insert_fact(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(100), index=1, authorization=authorization)
@@ -183,7 +188,7 @@ def find_fact(
     Examples
     ________
 
-    >>> from avial import avesterra as facts
+    >>> from pyks import avesterra as facts
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> facts.insert_fact(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(100), index=1, authorization=authorization)
@@ -226,7 +231,7 @@ def include_fact(
     Examples
     ________
 
-    >>> from avial import avesterra as facts
+    >>> from pyks import avesterra as facts
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> facts.include_fact(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(100), authorization=authorization)
@@ -265,7 +270,7 @@ def exclude_fact(
     Examples
     ________
 
-    >>> from avial import avesterra as facts
+    >>> from pyks import avesterra as facts
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> facts.set_fact(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(100), authorization=authorization)
@@ -306,7 +311,7 @@ def set_fact(
     Examples
     ________
 
-    >>> from avial import avesterra as facts
+    >>> from pyks import avesterra as facts
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> facts.set_fact(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(100), authorization=authorization)
@@ -347,14 +352,14 @@ def get_fact(
     Examples
     ________
 
-    >>> from avial import avesterra as facts
+    >>> from pyks import avesterra as facts
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> facts.set_fact(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(100), authorization=authorization)
     >>> value = facts.get_fact(entity=entity, attribute=AvAttribute.HEIGHT, authorization=authorization)
     >>> print(value.decode_integer()) # Will print 100
 
-    >>> from avial import avesterra as facts
+    >>> from pyks import avesterra as facts
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> facts.set_fact(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(100), authorization=authorization)
@@ -392,7 +397,7 @@ def clear_fact(
     Examples
     ________
 
-    >>> from avial import avesterra as facts
+    >>> from pyks import avesterra as facts
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> facts.set_fact(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(100), authorization=authorization)
@@ -428,7 +433,7 @@ def fact_count(
     Examples
     ________
 
-    >>> from avial import avesterra as facts
+    >>> from pyks import avesterra as facts
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> facts.set_fact(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(100), authorization=authorization)
@@ -466,7 +471,7 @@ def fact_member(
     Examples
     ________
 
-    >>> from avial import avesterra as facts
+    >>> from pyks import avesterra as facts
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> facts.set_fact(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(100), authorization=authorization)
@@ -511,7 +516,7 @@ def fact_name(
     Examples
     ________
 
-    >>> from avial import avesterra as facts
+    >>> from pyks import avesterra as facts
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> facts.insert_fact(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(100), index=1, authorization=authorization)
@@ -555,7 +560,7 @@ def fact_key(
     Examples
     ________
 
-    >>> from avial import avesterra as facts
+    >>> from pyks import avesterra as facts
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> facts.insert_fact(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(100), index=1, authorization=authorization)
@@ -599,7 +604,7 @@ def fact_value(
     Examples
     ________
 
-    >>> from avial import avesterra as facts
+    >>> from pyks import avesterra as facts
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> facts.insert_fact(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(100), index=1, authorization=authorization)
@@ -640,7 +645,7 @@ def fact_index(
     Examples
     ________
 
-    >>> from avial import avesterra as facts
+    >>> from pyks import avesterra as facts
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> facts.insert_fact(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(100), index=1, authorization=authorization)
@@ -681,7 +686,7 @@ def fact_attribute(
     Examples
     ________
 
-    >>> from avial import avesterra as facts
+    >>> from pyks import avesterra as facts
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> facts.insert_fact(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(100), index=1, authorization=authorization)
@@ -713,7 +718,7 @@ def sort_facts(
     Examples
     ________
 
-    >>> from avial import avesterra as facts
+    >>> from pyks import avesterra as facts
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> facts.set_fact(entity=entity, attribute=AvAttribute.WIDTH, value=AvValue.encode_integer(50), authorization=authorization)
@@ -750,7 +755,7 @@ def erase_facts(
     Examples
     ________
 
-    >>> from avial import avesterra as facts
+    >>> from pyks import avesterra as facts
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> facts.set_fact(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(100), authorization=authorization)
@@ -788,7 +793,7 @@ def retrieve_facts(
     Examples
     ________
 
-    >>> from avial import avesterra as facts
+    >>> from pyks import avesterra as facts
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> facts.set_fact(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(100), authorization=authorization)

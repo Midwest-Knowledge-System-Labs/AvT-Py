@@ -17,11 +17,19 @@ import time
 import ssl
 import os.path
 import traceback
+<<<<<<<< HEAD:src/avesterra/hgtp.py
 from avesterra import avesterra as avesterra
 from enum import IntEnum
 from socket import SocketType
 from ipaddress import ip_address
 from avesterra.avesterra import AvEntity, AvAuthorization, NULL_AUTHORIZATION
+========
+from pyks.avesterra import avesterra as avesterra
+from enum import IntEnum
+from socket import SocketType
+from ipaddress import ip_address
+from pyks.avesterra.avesterra import AvEntity, AvAuthorization, NULL_AUTHORIZATION
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/hgtp.py
 
 
 ############################
@@ -703,6 +711,7 @@ class SocketPool:
         if address != 0:
 
             if not directory:
+<<<<<<<< HEAD:src/avesterra/hgtp.py
                 directory = os.path.join(os.path.dirname(__file__), "certificates")
 
             try:
@@ -711,6 +720,26 @@ class SocketPool:
                 raise IOError(
                     f"Unable to load a valid TLS certificate from {directory}"
                 )
+========
+                directory = os.path.join(os.path.dirname(os.path.dirname(__file__)), "certificates")
+            try:
+                context.load_verify_locations(
+                    os.path.join(directory, str(address) + ".pem")
+                )
+            except Exception:
+                try:
+                    context.load_verify_locations(os.path.join(directory, "local.pem"))
+                except Exception:
+                    cert_dir_path = os.path.join(directory, "avesterra.pem")
+                    try:
+                        context.load_verify_locations(cert_dir_path)
+                    except Exception:
+                        print(os.path.join(directory, "avesterra.pem"))
+                        print(traceback.format_exc())
+                        raise IOError(
+                            f"Unable to load a valid TLS certificate from {cert_dir_path}"
+                        )
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/hgtp.py
         try:
             s.connect((self.host, self._port))
         except OSError as err:

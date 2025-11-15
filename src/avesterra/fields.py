@@ -8,7 +8,11 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
+<<<<<<<< HEAD:src/avesterra/fields.py
 from avesterra.avial import *
+========
+from pyks.avesterra.avial import *
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/fields.py
 
 
 def insert_field(
@@ -48,7 +52,7 @@ def insert_field(
     Examples
     ________
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports fields
     >>> authorization: AvAuthorization
     >>> fields.insert_field(entity=entity, attribute=AvAttribute.NAME, name="Column1", value=AvValue.encode_text("Default"), index=1, authorization=authorization)
@@ -99,7 +103,7 @@ def remove_field(
     Examples
     ________
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity # Assume entity has existing fields
     >>> authorization: AvAuthorization
     >>> fields.remove_field(entity=entity, index=2, authorization=authorization)
@@ -151,7 +155,7 @@ def replace_field(
     Examples
     ________
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity # Assume entity has existing fields
     >>> authorization: AvAuthorization
     >>> fields.replace_field(entity=entity, attribute=AvAttribute.DESCRIPTION, name="NewColumn", value=AvValue.encode_text("NewDefault"), index=1, authorization=authorization)
@@ -205,7 +209,7 @@ def find_field(
     Examples
     ________
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity # Assume entity has fields with values
     >>> authorization: AvAuthorization
     >>> fields.insert_field(entity=entity, name="Field1", value=AvValue.encode_text("SearchValue"), authorization=authorization)
@@ -213,7 +217,7 @@ def find_field(
     >>> fields.find_field(entity=entity, value=AvValue.encode_text("SearchValue"), authorization=authorization)
     1
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> fields.find_field(entity=entity, value=AvValue.encode_text("NonExistentValue"), authorization=authorization)
@@ -261,7 +265,7 @@ def include_field(
     Examples
     ________
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> fields.include_field(entity=entity, attribute=AvAttribute.NAME, name="UniqueField", value=AvValue.encode_text("UniqueValue"), authorization=authorization)
@@ -305,7 +309,7 @@ def exclude_field(
     Examples
     ________
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> fields.exclude_field(entity=entity, name="FieldToRemove", authorization=authorization)
@@ -351,7 +355,7 @@ def set_field(
     Examples
     ________
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> fields.set_field(entity=entity, attribute=AvAttribute.TYPE, name="StatusField", value=AvValue.encode_text("Active"), authorization=authorization)
@@ -396,14 +400,14 @@ def get_field(
     Examples
     ________
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> fields.set_field(entity=entity, name="TestField", value=AvValue.encode_text("TestValue"), authorization=authorization)
     >>> print(fields.get_field(entity=entity, name="TestField", authorization=authorization).decode_text())
     TestValue
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> print(fields.get_field(entity=entity, name="NonExistentField", authorization=authorization))
@@ -446,7 +450,7 @@ def clear_field(
     Examples
     ________
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> fields.set_field(entity=entity, name="FieldToClear", value=AvValue.encode_text("SomeValue"), authorization=authorization)
@@ -492,7 +496,7 @@ def field_count(
     Examples
     ________
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> fields.set_field(entity=entity, name="Field1", value=AvValue.encode_text("Value1"), authorization=authorization)
@@ -540,14 +544,14 @@ def field_member(
     Examples
     ________
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> fields.set_field(entity=entity, name="ExistingField", value=AvValue.encode_text("Value"), authorization=authorization)
     >>> fields.field_member(entity=entity, name="ExistingField", authorization=authorization)
     True
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> fields.field_member(entity=entity, name="NonExistentField", authorization=authorization)
@@ -594,7 +598,7 @@ def field_name(
     Examples
     ________
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> fields.insert_field(entity=entity, name="FirstField", value=AvValue.encode_text("Value1"), index=1, authorization=authorization)
@@ -646,7 +650,7 @@ def field_key(
     Examples
     ________
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> fields.set_field(entity=entity, name="KeyedField", value=AvValue.encode_text("Value"), authorization=authorization)
@@ -697,14 +701,14 @@ def field_value(
     Examples
     ________
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> fields.set_field(entity=entity, name="ValueField", value=AvValue.encode_text("TestValue"), authorization=authorization)
     >>> print(fields.field_value(entity=entity, name="ValueField", authorization=authorization).decode_text())
     TestValue
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> fields.insert_field(entity=entity, name="IndexedField", value=AvValue.encode_integer(123), index=1, authorization=authorization)
@@ -753,7 +757,7 @@ def field_index(
     Examples
     ________
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> fields.insert_field(entity=entity, name="FirstField", value=AvValue.encode_text("Value1"), index=1, authorization=authorization)
@@ -802,7 +806,7 @@ def field_attribute(
     Examples
     ________
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> fields.set_field(entity=entity, attribute=AvAttribute.TYPE, name="TypedField", value=AvValue.encode_text("Value"), authorization=authorization)
@@ -847,7 +851,7 @@ def sort_fields(
     Examples
     ________
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> fields.insert_field(entity=entity, name="ZField", value=AvValue.encode_text("Last"), authorization=authorization)
@@ -892,7 +896,7 @@ def erase_fields(
     Examples
     ________
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity
     >>> authorization: AvAuthorization
     >>> fields.erase_fields(entity=entity, authorization=authorization)
@@ -938,7 +942,7 @@ def retrieve_fields(
     Examples
     ________
 
-    >>> from avial import avesterra as fields
+    >>> from pyks import avesterra as fields
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports fields
     >>> authorization: AvAuthorization
     >>> fields.set_field(entity=entity, attribute=AvAttribute.NAME, name="Field1", value=AvValue.encode_text("Value1"), authorization=authorization)

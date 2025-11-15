@@ -7,9 +7,15 @@ The Orchestra library is distributed in the hope that it will be useful, but WIT
 You should have received a copy of the GNU Lesser General Public License along with the Orchestra library. If not, see <https://www.gnu.org/licenses/>.
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
+<<<<<<<< HEAD:src/avesterra/files.py
 from avesterra.avial import *
 from avesterra.predefined import file_outlet
 import avesterra.attributions as attributions
+========
+from pyks.avesterra.avial import *
+from pyks.avesterra.predefined import file_outlet
+from pyks import avesterra as attributions
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/files.py
 
 # Avial 4.10 Added this module
 
@@ -54,7 +60,7 @@ def create_file(
     Examples
     ________
 
-    >>> from avial import avesterra as files
+    >>> from pyks import avesterra as files
     >>> authorization: AvAuthorization
     >>> # Create a simple file
     >>> file = files.create_file(name="example.txt", authorization=authorization)
@@ -92,7 +98,7 @@ def delete_file(file: AvFile, authorization: AvAuthorization = NULL_AUTHORIZATIO
     Examples
     ________
 
-    >>> from avial import avesterra as files
+    >>> from pyks import avesterra as files
     >>> file: AvFile
     >>> authorization: AvAuthorization
     >>> # Delete a file entity
@@ -128,7 +134,7 @@ def download_file(
     Examples
     ________
 
-    >>> from avial import avesterra as files
+    >>> from pyks import avesterra as files
     >>> file: AvFile
     >>> authorization: AvAuthorization
     >>> timeout: AvTimeout = 30.0
@@ -197,7 +203,7 @@ def upload_file(
     Examples
     ________
 
-    >>> from avial import avesterra as files
+    >>> from pyks import avesterra as files
     >>> file: AvFile
     >>> authorization: AvAuthorization
     >>> timeout: AvTimeout = 30.0
@@ -272,7 +278,7 @@ def file_size(file: AvFile, authorization: AvAuthorization = NULL_AUTHORIZATION)
     Examples
     ________
 
-    >>> from avial import avesterra as files
+    >>> from pyks import avesterra as files
     >>> file: AvFile
     >>> authorization: AvAuthorization
     >>> # Get file size
@@ -307,7 +313,7 @@ def file_time(
     Examples
     ________
 
-    >>> from avial import avesterra as files
+    >>> from pyks import avesterra as files
     >>> file: AvFile
     >>> authorization: AvAuthorization
     >>> # Get file modification time
@@ -340,7 +346,7 @@ def file_mode(file: AvFile, authorization: AvAuthorization = NULL_AUTHORIZATION)
     Examples
     ________
 
-    >>> from avial import avesterra as files
+    >>> from pyks import avesterra as files
     >>> file: AvFile
     >>> authorization: AvAuthorization
     >>> # Get file mode
@@ -373,7 +379,7 @@ def file_hash(file: AvFile, authorization: AvAuthorization = NULL_AUTHORIZATION)
     Examples
     ________
 
-    >>> from avial import avesterra as files
+    >>> from pyks import avesterra as files
     >>> file: AvFile
     >>> authorization: AvAuthorization
     >>> # Get file hash for integrity verification
@@ -405,7 +411,7 @@ def hash_file_content(byte_content: bytes) -> str:
     Examples
     ________
 
-    >>> from avial import avesterra as files
+    >>> from pyks import avesterra as files
     >>> # Calculate hash of some data
     >>> data = b"Hello, World!"
     >>> hash_value = files.hash_file_content(data)

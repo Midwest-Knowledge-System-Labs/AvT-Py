@@ -8,7 +8,11 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
+<<<<<<<< HEAD:src/avesterra/facets.py
 from avesterra.avial import *
+========
+from pyks.avesterra.avial import *
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/facets.py
 
 
 def insert_facet(
@@ -48,7 +52,7 @@ def insert_facet(
     Examples
     ________
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> facets.insert_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="facet_1", value=AvValue.encode_text("First Facet"), index=1, authorization=authorization)
@@ -96,7 +100,7 @@ def remove_facet(
     Examples
     ________
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> facets.insert_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="facet_1", value=AvValue.encode_text("To be removed"), index=1, authorization=authorization)
@@ -148,7 +152,7 @@ def replace_facet(
     Examples
     ________
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> facets.insert_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="old_facet", value=AvValue.encode_text("Old Value"), index=1, authorization=authorization)
@@ -201,7 +205,7 @@ def find_facet(
     Examples
     ________
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> facets.insert_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="facet_1", value=AvValue.encode_text("Find me"), authorization=authorization)
@@ -209,7 +213,7 @@ def find_facet(
     >>> print(index)
     1
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> index = facets.find_facet(entity=entity, attribute=AvAttribute.EXAMPLE, value=AvValue.encode_text("Not here"), authorization=authorization)
@@ -258,12 +262,12 @@ def include_facet(
     Examples
     ________
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="unique_facet", value=AvValue.encode_text("Unique Value"), authorization=authorization)
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="update_me", value=AvValue.encode_text("Old Value"), authorization=authorization)
@@ -306,7 +310,7 @@ def exclude_facet(
     Examples
     ________
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="remove_me", value=AvValue.encode_text("To be removed"), authorization=authorization)
@@ -353,12 +357,12 @@ def set_facet(
     Examples
     ________
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> facets.set_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="my_facet", value=AvValue.encode_text("My Value"), authorization=authorization)
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> facets.set_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="my_facet", value=AvValue.encode_text("First Value"), authorization=authorization)
@@ -403,14 +407,14 @@ def get_facet(
     Examples
     ________
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> facets.set_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="my_facet", value=AvValue.encode_text("Retrieved Value"), authorization=authorization)
     >>> print(facets.get_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="my_facet", authorization=authorization).decode_text())
     Retrieved Value
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> print(facets.get_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="nonexistent", authorization=authorization))
@@ -451,7 +455,7 @@ def clear_facet(
     Examples
     ________
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> facets.set_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="clear_me", value=AvValue.encode_text("Will be cleared"), authorization=authorization)
@@ -497,7 +501,7 @@ def facet_count(
     Examples
     ________
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="facet_1", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -545,14 +549,14 @@ def facet_member(
     Examples
     ________
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="exists", value=AvValue.encode_text("I exist"), authorization=authorization)
     >>> print(facets.facet_member(entity=entity, attribute=AvAttribute.EXAMPLE, name="exists", authorization=authorization))
     True
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> print(facets.facet_member(entity=entity, attribute=AvAttribute.EXAMPLE, name="nonexistent", authorization=authorization))
@@ -599,7 +603,7 @@ def facet_name(
     Examples
     ________
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="first_facet", value=AvValue.encode_text("Value"), authorization=authorization)
@@ -650,7 +654,7 @@ def facet_key(
     Examples
     ________
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="keyed_facet", value=AvValue.encode_text("Value"), authorization=authorization)
@@ -702,14 +706,14 @@ def facet_value(
     Examples
     ________
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="valued_facet", value=AvValue.encode_text("Retrieved Value"), authorization=authorization)
     >>> print(facets.facet_value(entity=entity, attribute=AvAttribute.EXAMPLE, name="valued_facet", authorization=authorization).decode_text())
     Retrieved Value
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="indexed_facet", value=AvValue.encode_text("Indexed Value"), authorization=authorization)
@@ -758,7 +762,7 @@ def facet_index(
     Examples
     ________
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="find_my_index", value=AvValue.encode_text("Value"), authorization=authorization)
@@ -806,7 +810,7 @@ def facet_attribute(
     Examples
     ________
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="my_facet", value=AvValue.encode_text("Value"), authorization=authorization)
@@ -849,7 +853,7 @@ def sort_facets(
     Examples
     ________
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="zebra", value=AvValue.encode_text("Last"), authorization=authorization)
@@ -892,7 +896,7 @@ def erase_facets(
     Examples
     ________
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="facet_1", value=AvValue.encode_text("Value 1"), authorization=authorization)
@@ -939,7 +943,7 @@ def retrieve_facets(
     Examples
     ________
 
-    >>> from avial import avesterra as facets
+    >>> from pyks import avesterra as facets
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facets
     >>> authorization: AvAuthorization
     >>> facets.include_facet(entity=entity, attribute=AvAttribute.EXAMPLE, name="facet_1", value=AvValue.encode_text("Value 1"), authorization=authorization)

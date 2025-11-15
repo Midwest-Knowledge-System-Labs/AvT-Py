@@ -8,7 +8,11 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
+<<<<<<<< HEAD:src/avesterra/predefined.py
 from avesterra.avial import entity_of
+========
+from pyks.avesterra.avial import entity_of
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/predefined.py
 
 # -- AvesTerra Registries/Entities (1..9)
 avesterra_registry = entity_of("<0|0|1>")

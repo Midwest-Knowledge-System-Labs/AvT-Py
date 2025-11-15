@@ -9,7 +9,11 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 """
 from typing import Tuple, List, Dict
 
+<<<<<<<< HEAD:src/avesterra/tokens.py
 from avesterra.avial import *
+========
+from pyks.avesterra.avial import *
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/tokens.py
 
 AvToken = AvAuthorization
 
@@ -40,7 +44,7 @@ def instate(
     Examples
     ________
 
-    >>> from avial import avesterra as tokens
+    >>> from pyks import avesterra as tokens
     >>> token: AvAuthorization  # Assume token exists
     >>> authority: AvAuthorization  # Assume authority exists
     >>> auth: AvAuthorization  # Assume authorization exists
@@ -79,7 +83,7 @@ def destate(
     Examples
     ________
 
-    >>> from avial import avesterra as tokens
+    >>> from pyks import avesterra as tokens
     >>> token: AvAuthorization  # Assume token exists
     >>> auth: AvAuthorization  # Assume authorization exists
     >>> tokens.destate(token=token, authorization=auth)
@@ -117,7 +121,7 @@ def retrieve(
     Examples
     ________
 
-    >>> from avial import avesterra as tokens
+    >>> from pyks import avesterra as tokens
     >>> auth: AvAuthorization  # Assume authorization exists
     >>> token_mappings = tokens.retrieve(authorization=auth)
     >>> print(f"Found {len(token_mappings)} token mappings")
@@ -179,7 +183,7 @@ def couple(
     Examples
     ________
 
-    >>> from avial import avesterra as tokens
+    >>> from pyks import avesterra as tokens
     >>> network: AvEntity  # Assume network entity exists
     >>> token: AvToken  # Assume token exists
     >>> authority: AvAuthorization  # Assume authority exists
@@ -222,7 +226,7 @@ def decouple(
     Examples
     ________
 
-    >>> from avial import avesterra as tokens
+    >>> from pyks import avesterra as tokens
     >>> network: AvEntity  # Assume network entity exists
     >>> token: AvToken  # Assume token exists
     >>> auth: AvAuthorization  # Assume authorization exists
@@ -267,7 +271,7 @@ def pair(
     Examples
     ________
 
-    >>> from avial import avesterra as tokens
+    >>> from pyks import avesterra as tokens
     >>> host: AvEntity  # Assume host entity exists
     >>> token: AvToken  # Assume token exists
     >>> authority: AvAuthorization  # Assume authority exists
@@ -310,7 +314,7 @@ def unpair(
     Examples
     ________
 
-    >>> from avial import avesterra as tokens
+    >>> from pyks import avesterra as tokens
     >>> host: AvEntity  # Assume host entity exists
     >>> token: AvToken  # Assume token exists
     >>> auth: AvAuthorization  # Assume authorization exists
@@ -356,7 +360,7 @@ def map(
     Examples
     ________
 
-    >>> from avial import avesterra as tokens
+    >>> from pyks import avesterra as tokens
     >>> token: AvToken  # Assume token exists
     >>> mask: AvMask  # Assume mask exists
     >>> authority: AvAuthorization  # Assume authority exists
@@ -401,7 +405,7 @@ def unmap(
     Examples
     ________
 
-    >>> from avial import avesterra as tokens
+    >>> from pyks import avesterra as tokens
     >>> token: AvToken  # Assume token exists
     >>> authority: AvAuthorization  # Assume authority exists
     >>> auth: AvAuthorization  # Assume authorization exists
@@ -445,7 +449,7 @@ def resolve(
     Examples
     ________
 
-    >>> from avial import avesterra as tokens
+    >>> from pyks import avesterra as tokens
     >>> token: AvAuthorization  # Assume token exists
     >>> auth: AvAuthorization  # Assume authorization exists
     >>> resolved_auth = tokens.resolve(token=token, authorization=auth)
@@ -494,7 +498,7 @@ def display(token_map: List[Tuple[AvAuthorization, AvAuthorization]]) -> Dict[st
     Examples
     ________
 
-    >>> from avial import avesterra as tokens
+    >>> from pyks import avesterra as tokens
     >>> auth: AvAuthorization  # Assume authorization exists
     >>> token_mappings = tokens.retrieve(authorization=auth)
     >>> mapping_dict = tokens.display(token_mappings)

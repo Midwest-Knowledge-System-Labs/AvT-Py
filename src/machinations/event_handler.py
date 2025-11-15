@@ -15,10 +15,16 @@ from threading import Event
 from abc import ABCMeta, abstractmethod
 import signal
 from midwksl import avtc_init, avtc_fin
+<<<<<<<< HEAD:src/machinations/event_handler.py
 from avesterra import avial as av
 from avesterra import av_log
 from avesterra.avesterra import AvAuthorization
 from avesterra.avial import AvValue, NULL_ENTITY
+========
+from pyks.avesterra import avial as av, av_log
+from pyks.avesterra.avesterra import AvAuthorization
+from pyks.avesterra.avial import AvValue, NULL_ENTITY
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/machinations/event_handler.py
 
 SLEEP_ON_ERROR_SECONDS = 5
 

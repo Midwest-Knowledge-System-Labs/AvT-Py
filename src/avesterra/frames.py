@@ -8,7 +8,11 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
+<<<<<<<< HEAD:src/avesterra/frames.py
 from avesterra.avial import *
+========
+from pyks.avesterra.avial import *
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/frames.py
 
 
 def insert_frame(
@@ -46,7 +50,7 @@ def insert_frame(
     Examples
     ________
 
-    >>> from avial import avesterra as frames
+    >>> from pyks import avesterra as frames
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports facts
     >>> authorization: AvAuthorization
     >>> frames.insert_frame(entity=entity, attribute=AvAttribute.DATA, key="row_1", authorization=authorization)
@@ -95,7 +99,7 @@ def remove_frame(
     Examples
     ________
 
-    >>> from avial import avesterra as frames
+    >>> from pyks import avesterra as frames
     >>> entity: AvEntity # Assume entity has existing frames
     >>> authorization: AvAuthorization
     >>> frames.remove_frame(entity=entity, attribute=AvAttribute.DATA, index=1, authorization=authorization)
@@ -146,7 +150,7 @@ def replace_frame(
     Examples
     ________
 
-    >>> from avial import avesterra as frames
+    >>> from pyks import avesterra as frames
     >>> entity: AvEntity # Assume entity has existing frames
     >>> authorization: AvAuthorization
     >>> frames.replace_frame(entity=entity, attribute=AvAttribute.DATA, index=1, key="new_row_1", authorization=authorization)
@@ -209,7 +213,7 @@ def find_frame(
     Examples
     ________
 
-    >>> from avial import avesterra as frames
+    >>> from pyks import avesterra as frames
     >>> entity: AvEntity # Assume entity has frames with data
     >>> authorization: AvAuthorization
     >>> frame_index = frames.find_frame(entity=entity, attribute=AvAttribute.DATA, value=AvValue.encode_text("search_value"), authorization=authorization)
@@ -259,7 +263,7 @@ def include_frame(
     Examples
     ________
 
-    >>> from avial import avesterra as frames
+    >>> from pyks import avesterra as frames
     >>> entity: AvEntity # Assume entity has frames
     >>> authorization: AvAuthorization
     >>> frames.include_frame(entity=entity, attribute=AvAttribute.DATA, key="row_1", authorization=authorization)
@@ -303,7 +307,7 @@ def exclude_frame(
     Examples
     ________
 
-    >>> from avial import avesterra as frames
+    >>> from pyks import avesterra as frames
     >>> entity: AvEntity # Assume entity has frames
     >>> authorization: AvAuthorization
     >>> frames.exclude_frame(entity=entity, attribute=AvAttribute.DATA, key="row_1", authorization=authorization)
@@ -362,7 +366,7 @@ def set_frame(
     Examples
     ________
 
-    >>> from avial import avesterra as frames
+    >>> from pyks import avesterra as frames
     >>> entity: AvEntity # Assume entity has a tabular structure
     >>> authorization: AvAuthorization
     >>> frames.set_frame(entity=entity, attribute=AvAttribute.DATA, name="column_1", key="row_1", value=AvValue.encode_text("cell_value"), authorization=authorization)
@@ -425,7 +429,7 @@ def get_frame(
     Examples
     ________
 
-    >>> from avial import avesterra as frames
+    >>> from pyks import avesterra as frames
     >>> entity: AvEntity # Assume entity has a tabular structure with data
     >>> authorization: AvAuthorization
     >>> cell_value = frames.get_frame(entity=entity, attribute=AvAttribute.DATA, name="column_1", key="row_1", authorization=authorization)
@@ -487,7 +491,7 @@ def clear_frame(
     Examples
     ________
 
-    >>> from avial import avesterra as frames
+    >>> from pyks import avesterra as frames
     >>> entity: AvEntity # Assume entity has a tabular structure with data
     >>> authorization: AvAuthorization
     >>> frames.clear_frame(entity=entity, attribute=AvAttribute.DATA, name="column_1", key="row_1", authorization=authorization)
@@ -537,7 +541,7 @@ def frame_count(
     Examples
     ________
 
-    >>> from avial import avesterra as frames
+    >>> from pyks import avesterra as frames
     >>> entity: AvEntity # Assume entity has frames
     >>> authorization: AvAuthorization
     >>> count = frames.frame_count(entity=entity, attribute=AvAttribute.DATA, authorization=authorization)
@@ -587,7 +591,7 @@ def frame_member(
     Examples
     ________
 
-    >>> from avial import avesterra as frames
+    >>> from pyks import avesterra as frames
     >>> entity: AvEntity # Assume entity has frames
     >>> authorization: AvAuthorization
     >>> exists = frames.frame_member(entity=entity, attribute=AvAttribute.DATA, key="row_1", authorization=authorization)
@@ -638,7 +642,7 @@ def frame_name(
     Examples
     ________
 
-    >>> from avial import avesterra as frames
+    >>> from pyks import avesterra as frames
     >>> entity: AvEntity # Assume entity has a tabular structure
     >>> authorization: AvAuthorization
     >>> column_name = frames.frame_name(entity=entity, attribute=AvAttribute.DATA, offset=1, authorization=authorization)
@@ -689,7 +693,7 @@ def frame_key(
     Examples
     ________
 
-    >>> from avial import avesterra as frames
+    >>> from pyks import avesterra as frames
     >>> entity: AvEntity # Assume entity has frames
     >>> authorization: AvAuthorization
     >>> row_key = frames.frame_key(entity=entity, attribute=AvAttribute.DATA, index=1, authorization=authorization)
@@ -749,7 +753,7 @@ def frame_value(
     Examples
     ________
 
-    >>> from avial import avesterra as frames
+    >>> from pyks import avesterra as frames
     >>> entity: AvEntity # Assume entity has a tabular structure
     >>> authorization: AvAuthorization
     >>> value = frames.frame_value(entity=entity, attribute=AvAttribute.DATA, name="column_1", key="row_1", authorization=authorization)
@@ -802,7 +806,7 @@ def frame_index(
     Examples
     ________
 
-    >>> from avial import avesterra as frames
+    >>> from pyks import avesterra as frames
     >>> entity: AvEntity # Assume entity has frames
     >>> authorization: AvAuthorization
     >>> index = frames.frame_index(entity=entity, attribute=AvAttribute.DATA, key="row_1", authorization=authorization)
@@ -853,7 +857,7 @@ def frame_attribute(
     Examples
     ________
 
-    >>> from avial import avesterra as frames
+    >>> from pyks import avesterra as frames
     >>> entity: AvEntity # Assume entity has frames
     >>> authorization: AvAuthorization
     >>> attr = frames.frame_attribute(entity=entity, key="row_1", authorization=authorization)
@@ -899,7 +903,7 @@ def sort_frames(
     Examples
     ________
 
-    >>> from avial import avesterra as frames
+    >>> from pyks import avesterra as frames
     >>> entity: AvEntity # Assume entity has frames
     >>> authorization: AvAuthorization
     >>> frames.sort_frames(entity=entity, attribute=AvAttribute.DATA, authorization=authorization)
@@ -943,7 +947,7 @@ def erase_frames(
     Examples
     ________
 
-    >>> from avial import avesterra as frames
+    >>> from pyks import avesterra as frames
     >>> entity: AvEntity # Assume entity has frames
     >>> authorization: AvAuthorization
     >>> frames.erase_frames(entity=entity, attribute=AvAttribute.DATA, authorization=authorization)
@@ -989,7 +993,7 @@ def retrieve_frames(
     Examples
     ________
 
-    >>> from avial import avesterra as frames
+    >>> from pyks import avesterra as frames
     >>> entity: AvEntity # Assume entity has frames with data
     >>> authorization: AvAuthorization
     >>> frames_data = frames.retrieve_frames(entity=entity, attribute=AvAttribute.DATA, authorization=authorization)

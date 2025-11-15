@@ -131,7 +131,11 @@ class AvEntity:
         Examples
         ________
 
+<<<<<<<< HEAD:src/avesterra/avesterra.py
         >>> from avesterra import AvEntity
+========
+        >>> from pyks.avesterra import AvEntity
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/avesterra.py
         >>> entity = AvEntity.from_str("<0|1020|1048302>")
         >>> print(entity)
         >>> print(f"PID: {entity.pid}, HID: {entity.hid}, UID: {entity.uid}")
@@ -156,7 +160,11 @@ class AvEntity:
         Examples
         ________
 
+<<<<<<<< HEAD:src/avesterra/avesterra.py
         >>> from avesterra import AvEntity
+========
+        >>> from pyks.avesterra import AvEntity
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/avesterra.py
         >>> entity = AvEntity.from_str("<0|1020|1048302>")
         >>> repr(entity)
         AvEntity(0, 1020, 1048302)

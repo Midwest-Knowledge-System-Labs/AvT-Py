@@ -10,9 +10,15 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 
 from dataclasses import dataclass
 from typing import Union
+<<<<<<<< HEAD:src/orchestra/interface.py
 from avial import avesterra as av
 from avesterra import AvDate, AvAttribute, AvValue, NULL_ENTITY
 from avesterra import AvEntity
+========
+from pyks import avesterra as av
+from pyks.avesterra import AvDate, AvAttribute, AvValue, NULL_ENTITY
+from pyks.avesterra import AvEntity
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/orchestra/interface.py
 
 
 class ValueType:

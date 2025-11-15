@@ -8,8 +8,13 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
+<<<<<<<< HEAD:src/avesterra/attributions.py
 from avesterra.avial import *
 from avesterra.taxonomy import AvAttribute, AvAspect
+========
+from pyks.avesterra.avial import *
+from pyks.avesterra.taxonomy import AvAttribute, AvAspect
+>>>>>>>> cdcaf9e1d0dca3f93db58b9530632296467cc5db:pyks/avesterra/attributions.py
 
 
 def insert_attribution(
@@ -40,12 +45,12 @@ def insert_attribution(
     Examples
     ________
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.insert_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(4), authorization=authorization)
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.insert_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
@@ -92,14 +97,14 @@ def remove_attribution(
     Examples
     ________
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.insert_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(4), authorization=authorization)
     >>> attributions.remove_attribution(entity=entity, authorization=authorization)
 
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.insert_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(4), authorization=authorization)
@@ -150,7 +155,7 @@ def replace_attribution(
     Examples
     ________
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.insert_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
@@ -199,7 +204,7 @@ def find_attribution(
     Examples
     ________
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.insert_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
@@ -208,7 +213,7 @@ def find_attribution(
     >>> print(attributions.find_attribution(entity=entity, index=2, value=AvValue.encode_integer(2), authorization=authorization))
     2
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.insert_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
@@ -252,14 +257,14 @@ def include_attribution(
     Examples
     ________
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.include_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
     >>> attributions.include_attribution(entity=entity, attribute=AvAttribute.WEIGHT, value=AvValue.encode_integer(2), authorization=authorization)
     >>> attributions.include_attribution(entity=entity, attribute=AvAttribute.WIDTH, value=AvValue.encode_integer(3), authorization=authorization)
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.include_attribution(entity=entity, attribute=AvAttribute.WEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
@@ -298,7 +303,7 @@ def exclude_attribution(
     Examples
     ________
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.include_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
@@ -339,12 +344,12 @@ def set_attribution(
     Examples
     ________
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.set_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.set_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
@@ -380,14 +385,14 @@ def get_attribution(
     Examples
     ________
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.set_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
     >>> print(attributions.get_attribution(entity=entity, attribute=AvAttribute.HEIGHT, authorization=authorization).decode_integer())
     1
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.set_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
@@ -425,7 +430,7 @@ def clear_attribution(
     Examples
     ________
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.set_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
@@ -459,14 +464,14 @@ def attribute_count(
     Examples
     ________
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.set_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
     >>> print(attributions.attribute_count(entity=entity, authorization=authorization))
     1
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> print(attributions.attribute_count(entity=entity, authorization=authorization))
@@ -499,21 +504,21 @@ def attribute_member(
     Examples
     ________
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.set_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
     >>> print(attributions.attribute_member(entity=entity, attribute=AvAttribute.HEIGHT, authorization=authorization))
     True
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.set_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
     >>> print(attributions.attribute_member(entity=entity, attribute=AvAttribute.HEAT, authorization=authorization))
     False
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> print(attributions.attribute_member(entity=entity, attribute=AvAttribute.HEIGHT, authorization=authorization))
@@ -550,14 +555,14 @@ def attribute_name(
     Examples
     ________
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.set_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
     >>> print(attributions.attribute_name(entity=entity, attribute=AvAttribute.HEIGHT, authorization=authorization))
     ATTRIBUTE_HEIGHT
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.set_attribution(entity=entity, attribute=AvAttribute.ATTRIBUTE, value=AvValue.encode_integer(1), authorization=authorization)
@@ -596,14 +601,14 @@ def attribute_key(
     Examples
     ________
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.set_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
     >>> print(attributions.attribute_key(entity=entity, attribute=AvAttribute.HEIGHT, authorization=authorization))
     ATTRIBUTE_HEIGHT
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.set_attribution(entity=entity, attribute=AvAttribute.ATTRIBUTE, value=AvValue.encode_integer(1), authorization=authorization)
@@ -642,14 +647,14 @@ def attribute_value(
     Examples
     ________
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.set_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
     >>> print(attributions.attribute_value(entity=entity, attribute=AvAttribute.HEIGHT, authorization=authorization).decode_integer())
     1
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.set_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
@@ -690,7 +695,7 @@ def attribute_index(
     Examples
     ________
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.set_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
@@ -699,7 +704,7 @@ def attribute_index(
     >>> print(attributions.attribute_index(entity=entity, attribute=AvAttribute.WIDTH, authorization=authorization))
     2
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.set_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
@@ -736,7 +741,7 @@ def sort_attributions(
     Examples
     ________
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.set_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
@@ -772,7 +777,7 @@ def erase_attributions(
     Examples
     ________
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.set_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
@@ -807,7 +812,7 @@ def retrieve_attributions(
     Examples
     ________
 
-    >>> from avial import avesterra as attributions
+    >>> from pyks import avesterra as attributions
     >>> entity: AvEntity # Assume entity is connected to an outlet that supports attributions
     >>> authorization: AvAuthorization
     >>> attributions.set_attribution(entity=entity, attribute=AvAttribute.HEIGHT, value=AvValue.encode_integer(1), authorization=authorization)
