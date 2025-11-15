@@ -14,7 +14,7 @@ from avesterra.avial import *
 
 import avesterra.aspects as aspects
 from avesterra.avial import *
-
+import avesterra.aspects as aspects
 
 
 def insert_fact(

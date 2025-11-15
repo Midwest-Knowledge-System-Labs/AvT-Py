@@ -7,18 +7,11 @@ The Orchestra library is distributed in the hope that it will be useful, but WIT
 You should have received a copy of the GNU Lesser General Public License along with the Orchestra library. If not, see <https://www.gnu.org/licenses/>.
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
-from typing import Dict, Tuple
-
-
-from avesterra.avial import *
-from avesterra.predefined import registry_outlet
-
-from avesterra.avial import *
-from avesterra import properties
-from avesterra.predefined import registry_outlet
 
 import json
 import avesterra.properties as properties
+from avesterra.avial import *
+from avesterra.predefined import registry_outlet
 
 AvRegistry = AvEntity
 

@@ -12,7 +12,7 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 from avesterra.avial import *
 
 from avesterra.avial import *
-
+import avesterra.aspects as aspects
 
 
 def insert_frame(

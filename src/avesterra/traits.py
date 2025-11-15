@@ -16,7 +16,7 @@ import avesterra.aspects as aspects
 from avesterra.avial import *
 from avesterra.taxonomy import AvAttribute, AvAspect
 import avesterra.aspects as aspects
-
+import avesterra.aspects as aspects
 
 
 def insert_trait(

@@ -16,7 +16,7 @@ from setuptools import setup
 
 setup(
     name="AvesTerra",
-    version="25.01.3",
+    version="25.3.1",
     description="Python Avial Library",
     author="Midwest Knowledge System Labs",
     author_email="avesterra@georgetown.edu ; dev@midwksl.net ; dev@ledr.io",
@@ -33,12 +33,13 @@ setup(
     package_dir={
         "": "src",
     },
-    packages=["avesterra", "machinations", "orchestra"],
+    packages=["avesterra", "machinations", "orchestra", "avesterra.certificates"],
     package_data={
         "avesterra": ["py.typed"],
         "machinations": ["py.typed"],
         "orchestra": ["py.typed"],
-
+        "avesterra.certificates": ["*.pem"],
     },
+
 
 )

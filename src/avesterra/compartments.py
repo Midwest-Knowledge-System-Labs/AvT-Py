@@ -13,11 +13,9 @@ from avesterra.outlets import delete_outlet
 from avesterra.avial import *
 from avesterra.predefined import access_outlet
 import avesterra.facts as facts
-
-from avesterra.outlets import delete_outlet
-from avesterra.avial import *
-from avesterra.predefined import access_outlet
-import avesterra.facts as facts
+import avesterra.identities as identities
+import avesterra.tokens as tokens
+import avesterra.features as features
 
 
 AvCompartment = AvEntity
