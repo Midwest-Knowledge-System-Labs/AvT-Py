@@ -27,18 +27,15 @@ setup(
         "License :: Proprietary License",
         "Development Status :: Beta",
     ],
-    python_requires=">=3.10",
+    python_requires=">=3.11",
     install_requires=["tabulate"],
     include_package_data=True,
     package_dir={
-        "": "src",
+        "": ".",
     },
-    packages=["avesterra", "orchestra", "midwksl", "machinations"],
+    packages=["avial"],
     package_data={
-        "avesterra": ["py.typed"],
-        "orchestra": ["py.typed"],
-        "midwksl": ["py.typed"],
-        "machinations": ["py.typed"]
+        "avial": ["py.typed"],
     },
 
 )
