@@ -1,0 +1,53 @@
+""" 
+Copyright (c) 2025 Midwest Knowledge System Labs
+Copyright (c) [LEDR Technologies Inc.] [2024-2025]
+This file is part of the Orchestra library, which helps developer use our Orchestra technology which is based on AvesTerra, owned and developed by Georgetown University, under license agreement with LEDR Technologies Inc.
+The Orchestra library is a free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
+The Orchestra library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+You should have received a copy of the GNU Lesser General Public License along with the Orchestra library. If not, see <https://www.gnu.org/licenses/>.
+If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
+"""
+from pyks.avesterra.avial import *
+from pyks import avesterra as avial
+
+# Avial 4.7: Created separate outlets module; create/delete outlet moved to outlets module
+
+AvOutlet = AvEntity
+
+
+def create_outlet(
+    name: AvName = NULL_NAME,
+    key: AvKey = NULL_KEY,
+    context: AvContext = NULL_CONTEXT,
+    category: AvCategory = NULL_CATEGORY,
+    klass: AvClass = NULL_CLASS,
+    server: AvEntity = NULL_ENTITY,
+    authorization: AvAuthorization = NULL_AUTHORIZATION,
+) -> AvOutlet:
+    outlet = avial.create_entity(
+        name=name,
+        key=key,
+        context=context,
+        category=category,
+        klass=klass,
+        server=server,
+        authorization=authorization,
+    )
+    avial.activate_entity(outlet, authorization)
+    avial.reference_entity(outlet, authorization)
+    return outlet
+
+
+def delete_outlet(
+    outlet: AvOutlet,
+    timeout: AvTimeout = NULL_TIMEOUT,
+    authorization: AvAuthorization = NULL_AUTHORIZATION,
+):
+    avial.halt_outlet(outlet, authorization)
+    avial.disarm_outlet(outlet, authorization)
+    avial.flush_outlet(outlet, authorization)
+    avial.unlock_outlet(outlet, authorization)
+    avial.synchronize_outlet(outlet, authorization)
+    avial.deactivate_entity(outlet, authorization)
+    avial.dereference_entity(outlet, authorization)
+    avial.delete_entity(outlet, timeout=timeout, authorization=authorization)

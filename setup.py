@@ -33,9 +33,9 @@ setup(
     package_dir={
         "": ".",
     },
-    packages=["avial"],
+    packages=["pyks"],
     package_data={
-        "avial": ["py.typed"],
+        "pyks": ["py.typed"],
     },
 
 )
