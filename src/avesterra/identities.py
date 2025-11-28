@@ -12,11 +12,9 @@ from avesterra.outlets import delete_outlet, create_outlet
 from avesterra.avial import *
 from avesterra.predefined import access_outlet
 import avesterra.facts as facts
-
-from avesterra.outlets import delete_outlet, create_outlet
-from avesterra.avial import *
-from avesterra.predefined import access_outlet
-import avesterra.facts as facts
+import avesterra.tokens as tokens
+import avesterra.compartments as compartments
+import avesterra.features as features
 
 
 AvIdentity = AvEntity
