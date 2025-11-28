@@ -32,6 +32,41 @@ def issue_credential(
     mask: AvMask,
     authorization: AvAuthorization,
 ):
+    """
+    Issues a credential to an identity within a compartment with specified permissions.
+
+    A credential is essentially a compartment token with permissions (AVESTERRA, READ,
+    WRITE, EXECUTE, DELETE) that enables seamless multi-compartment access without
+    manual token switching. The credential creates a mapping between the identity's
+    authority and the compartment's authority, allowing the identity's token to
+    automatically resolve to the appropriate compartment credential based on the
+    target entity's authority during operations.
+
+    Args:
+        compartment (AvEntity): Target compartment entity for credential issuance.
+        identity (AvEntity): Identity entity receiving the credential.
+        mask (AvMask): Permission mask defining access levels (AVESTERRA, READ,
+                      WRITE, EXECUTE, DELETE) for the credential.
+        authorization (AvAuthorization): Authorization with sufficient privileges
+                                       to issue credentials in the compartment.
+
+    Raises:
+        ValueError: When compartment or identity is invalid for credential issuance.
+        AuthorizationError: When authorization lacks credential issuance privileges.
+        EntityError: When credential mapping fails due to system constraints.
+
+    Example:
+        >>> research_comp = lookup_compartment("research-key", admin_auth)
+        >>> alex_identity = lookup_identity("alex-key", admin_auth)
+        >>> read_write_mask = AvMask.READ | AvMask.WRITE
+        >>> issue_credential(
+        ...     research_comp,
+        ...     alex_identity,
+        ...     read_write_mask,
+        ...     admin_auth
+        ... )
+    """
+
     compartment_key: AvKey = entity_key(entity=compartment, authorization=authorization)
     identity_key: AvKey = entity_key(entity=identity, authorization=authorization)
 
@@ -88,6 +123,27 @@ def issue_credential(
 def retract_credential(
     compartment: AvEntity, identity: AvEntity, authorization: AvAuthorization
 ):
+    """
+    Retracts a credential from an identity within a compartment.
+
+    Removes the credential relationship between an identity and compartment,
+    eliminating the automatic token-to-compartment-authority mapping.
+
+    Args:
+        compartment (AvEntity): Compartment entity to retract credential from.
+        identity (AvEntity): Identity entity losing the credential.
+        authorization (AvAuthorization): Authorization with sufficient privileges
+                                       to retract credentials from the compartment.
+
+    Raises:
+        ValueError: When compartment or identity is invalid for credential retraction.
+        AuthorizationError: When authorization lacks credential retraction privileges.
+        EntityError: When credential unmapping fails due to system constraints.
+
+    Example:
+        >>> retract_credential(research_comp, former_user, admin_auth)
+    """
+
     compartment_key: AvKey = entity_key(entity=compartment, authorization=authorization)
     identity_key: AvKey = entity_key(entity=identity, authorization=authorization)
 
