@@ -1711,7 +1711,7 @@ def entity_attachment(
 #########################
 
 
-def connect_method(
+def connect_outlet(
     entity: AvEntity,
     outlet: AvEntity,
     presence: AvPresence = NULL_PRESENCE,
@@ -1733,7 +1733,7 @@ def connect_method(
     )
 
 
-def disconnect_method(
+def disconnect_outlet(
     entity: AvEntity,
     presence: AvPresence = NULL_PRESENCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
