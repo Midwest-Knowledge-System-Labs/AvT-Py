@@ -52,7 +52,7 @@ build_registry = entity_of("<0|0|29>")
 release_registry = entity_of("<1|1|29>")
 
 # -- Template registries (30..39)
-# Avial 4.11 Predefined registries updated
+
 model_registry = entity_of("<0|0|30>")
 import_registry = entity_of("<0|0|31>")
 export_registry = entity_of("<0|0|32>")
@@ -65,11 +65,11 @@ space_outlet = entity_of("<0|0|40>")
 geo_space = entity_of("<0|0|41>")
 hyper_space = entity_of("<0|0|42>")
 cyber_space = entity_of("<0|0|43>")
-meta_space = entity_of("<0|0|44>")  # Avial 4.11 Added meta_space
+meta_space = entity_of("<0|0|44>")  
 
 boost_outlet = entity_of("<0|0|50>")
 thrust_outlet = entity_of("<0|0|51>")
-tunnel_outlet = entity_of("<0|0|52>")  # Avial 4.7: Tunnel outlet
+tunnel_outlet = entity_of("<0|0|52>")  
 
 # -- AvesTerra System Registries/Outlets (100..999)
 atra_registry = entity_of("<0|0|100>")

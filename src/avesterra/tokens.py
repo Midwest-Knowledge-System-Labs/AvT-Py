@@ -18,7 +18,7 @@ from avesterra.avial import *
 AvToken = AvAuthorization
 
 
-# Avial 4.12: Was called enabled previously
+
 def instate(
     token: AvAuthorization,
     authority: AvAuthorization,
@@ -60,7 +60,7 @@ def instate(
     )
 
 
-# Avial 4.12: Was called disable previously
+
 def destate(
     token: AvAuthorization,
     authorization: AvAuthorization,
@@ -330,7 +330,7 @@ def unpair(
     )
 
 
-# Avial 4.12
+
 def map(
     token: AvToken,
     mask: AvMask,
@@ -378,7 +378,7 @@ def map(
     )
 
 
-# Avial 4.12
+
 def unmap(
     token: AvToken,
     authority: AvAuthorization,

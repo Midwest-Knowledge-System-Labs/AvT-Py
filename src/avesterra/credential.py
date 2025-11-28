@@ -24,8 +24,7 @@ import avesterra.identities as identities
 
 
 
-# Avial 4.12 Added credential module, which issues or retracts credentials
-# for an identity in a compartment.
+
 def issue_credential(
     compartment: AvEntity,
     identity: AvEntity,

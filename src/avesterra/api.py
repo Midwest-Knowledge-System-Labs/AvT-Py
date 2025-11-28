@@ -84,7 +84,7 @@ def max_async_connections() -> int:
 #####################
 
 
-# Avial 4.7: Create entity now routable, by supplying the `server` argument
+
 def create(
     outlet: AvEntity = NULL_ENTITY,
     server: AvEntity = NULL_ENTITY,
@@ -123,7 +123,7 @@ def create(
     return response.entity
 
 
-# Avial 4.7: Delete entity now has a timeout
+
 def delete(
     entity: AvEntity,
     timeout: int,
@@ -906,7 +906,7 @@ def deactivate(
     hgtp.post(frame=frame)
 
 
-# Avial 4.7: Added parameter to call, to support sustained adapts
+
 def adapt(
     outlet: AvEntity,
     timeout: int,
@@ -1461,7 +1461,7 @@ def timestamp(
 ##################
 
 
-# Avial 4.7: Local call now routable using server parameter
+
 def local(server: AvEntity = NULL_ENTITY) -> AvEntity:
     frame = hgtp.HGTPFrame()
     frame.command_code = hgtp.Command.REPORT
@@ -1471,7 +1471,7 @@ def local(server: AvEntity = NULL_ENTITY) -> AvEntity:
     return response.entity
 
 
-# Avial 4.7: Gateway call now routable using server parameter
+
 def server_gateway(server: AvEntity = NULL_ENTITY) -> AvEntity:
     frame = hgtp.HGTPFrame()
     frame.command_code = hgtp.Command.REPORT
@@ -1481,7 +1481,7 @@ def server_gateway(server: AvEntity = NULL_ENTITY) -> AvEntity:
     return response.entity
 
 
-# Avial 4.7: Version call now routable using server parameter
+
 def version(server: AvEntity = NULL_ENTITY) -> bytes:
     frame = hgtp.HGTPFrame()
     frame.command_code = hgtp.Command.REPORT
@@ -1491,7 +1491,7 @@ def version(server: AvEntity = NULL_ENTITY) -> bytes:
     return response._bytes
 
 
-# Avial 4.7: Hostname call now routable using server parameter
+
 def hostname(server: AvEntity = NULL_ENTITY) -> bytes:
     frame = hgtp.HGTPFrame()
     frame.command_code = hgtp.Command.REPORT
@@ -1501,7 +1501,7 @@ def hostname(server: AvEntity = NULL_ENTITY) -> bytes:
     return response._bytes
 
 
-# Avial 4.7: Status call now routable using server parameter
+
 def status(server: AvEntity = NULL_ENTITY) -> bytes:
     frame = hgtp.HGTPFrame()
     frame.command_code = hgtp.Command.REPORT
@@ -1511,7 +1511,7 @@ def status(server: AvEntity = NULL_ENTITY) -> bytes:
     return response._bytes
 
 
-# Avial 4.7: Clock call now routable using server parameter
+
 def clock(server: AvEntity = NULL_ENTITY) -> int:
     frame = hgtp.HGTPFrame()
     frame.command_code = hgtp.Command.REPORT
@@ -1521,7 +1521,7 @@ def clock(server: AvEntity = NULL_ENTITY) -> int:
     return response.time
 
 
-# Avial 4.7: Address call now routable using server parameter
+
 def address(server: AvEntity = NULL_ENTITY) -> IPv4Address | IPv6Address:
     frame = hgtp.HGTPFrame()
     frame.command_code = hgtp.Command.REPORT
@@ -1531,7 +1531,7 @@ def address(server: AvEntity = NULL_ENTITY) -> IPv4Address | IPv6Address:
     return ipaddress.ip_address(response.resultant)
 
 
-# Avial 4.7: Internet call now routable using server parameter
+
 def internet(server: AvEntity = NULL_ENTITY) -> Tuple[int, bytes]:
     frame = hgtp.HGTPFrame()
     frame.command_code = hgtp.Command.REPORT

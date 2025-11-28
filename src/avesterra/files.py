@@ -14,7 +14,7 @@ from avesterra.predefined import file_outlet
 import avesterra.aspects as aspects
 
 
-# Avial 4.10 Added this module
+
 
 AvFile = AvEntity
 
@@ -235,14 +235,14 @@ def upload_file(
             authorization=authorization,
         )
 
-        # Avial 4.10 Calculate hash and set it in the KS
+        
         attributions.set_attribution(
             entity=file,
             attribute=AvAttribute.HASH,
             value=AvValue.encode_string(hash_file_content(data)),
             authorization=authorization,
         )
-        # Avial 4.11 Version attribution can now be set on file uploads
+        
         attributions.set_attribution(
             entity=file,
             attribute=AvAttribute.VERSION,

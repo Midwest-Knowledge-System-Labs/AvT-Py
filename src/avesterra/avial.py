@@ -15,9 +15,11 @@ import dataclasses
 import json
 from dataclasses import dataclass
 from datetime import datetime, date, UTC
+from ipaddress import IPv4Address, IPv6Address
 from typing import Dict, List, Tuple, Callable
 
 from avesterra.avesterra import *
+from avesterra.hgtp import HGTPFrame
 from avesterra.taxonomy import *
 from avesterra.parameters import *
 from avesterra import api
@@ -1063,50 +1065,50 @@ def finalize() -> None:
     api.finalize()
 
 
-# Avial 4.7: Server entity call now routable using server parameter
+
 def server_entity(server: AvEntity) -> AvEntity:
     """Return the server entity"""
     return api.local(server=server)
 
 
-# Avial 4.7: Server gateway call now routable using server parameter
+
 def server_gateway(server: AvEntity) -> AvEntity:
     """Return the local server entity"""
     return api.server_gateway(server=server)
 
 
-# Avial 4.7: Server hostname call now routable using server parameter
+
 def server_hostname(server: AvEntity) -> str:
     """Return the local serve entity"""
     return str(api.hostname(server=server), ENCODING)
 
 
-# Avial 4.7: Server internet call now routable using server parameter
+
 def server_internet(server: AvEntity) -> AvValue:
     """Return the local serve entity"""
     tag_int, _bytes = api.internet(server=server)
     return AvValue(tag=AvTag(tag_int), bytes=_bytes)
 
 
-# Avial 4.7: Server version call now routable using server parameter
+
 def server_version(server: AvEntity) -> str:
     """Return the local serve entity"""
     return str(api.version(server=server), ENCODING)
 
 
-# Avial 4.7: Server status call now routable using server parameter
+
 def server_status(server: AvEntity) -> str:
     """Return the local server entity"""
     return str(api.status(server=server), ENCODING)
 
 
-# Avial 4.7: Server clock call now routable using server parameter
+
 def server_clock(server: AvEntity) -> AvTime:
     """Return the server time"""
     return AvTime.fromtimestamp(api.clock(server=server), tz=UTC).replace(microsecond=0)
 
 
-# Avial 4.7: Server address call now routable using server parameter
+
 def server_address(server: AvEntity) -> IPv4Address | IPv6Address:
     """Return the IPv4/IPv6 address of the server"""
     return api.address(server=server)
@@ -1122,7 +1124,7 @@ def local_time() -> AvTime:
 #####################
 
 
-# Avial 4.7: Create entity now routable, by supplying the `server` argument
+
 def create_entity(
     name: AvName = NULL_NAME,
     key: AvKey = NULL_KEY,
@@ -1173,7 +1175,7 @@ def create_entity(
     return entity
 
 
-# Avial 4.7: Delete entity now has a timeout
+
 def delete_entity(
     entity: AvEntity,
     timeout: AvTimeout = NULL_TIMEOUT,
@@ -1547,7 +1549,7 @@ def restore_entity(
     api.invoke(entity=entity, method=AvMethod.LOAD, authorization=authorization)
 
 
-# Avial 4.11 Erase entity now accepts attribute and aspect
+
 def erase_entity(
     entity: AvEntity,
     attribute: AvAttribute = AvAttribute.NULL,
@@ -1570,7 +1572,7 @@ def erase_entity(
     )
 
 
-# Avial 4.7: Added timeout to call
+
 def store_entity(
     entity: AvEntity,
     mode: AvMode = NULL_MODE,
@@ -1596,7 +1598,7 @@ def store_entity(
     return AvValue(tag=AvTag(result_tag_code), bytes=result_bytes)
 
 
-# Avial 4.7: Added timeout to call
+
 def retrieve_entity(
     entity: AvEntity,
     timeout: AvTimeout = NULL_TIMEOUT,
@@ -2498,8 +2500,6 @@ class InvokeArgs:
     authority: AvAuthorization
 
 
-# Avial 4.7: Added parameter to call, to support sustained adapts
-# Avial 4.12: Adapt now passes permissions to local callback!
 def adapt_outlet(
     outlet: AvEntity,
     callback: Callable[[InvokeArgs], AvValue],

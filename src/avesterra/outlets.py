@@ -11,7 +11,7 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 from avesterra.avial import *
 
 
-# Avial 4.7: Created separate outlets module; create/delete outlet moved to outlets module
+
 
 AvOutlet = AvEntity
 

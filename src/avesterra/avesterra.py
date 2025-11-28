@@ -329,7 +329,7 @@ class AvAuthorization(uuid.UUID):
         return AvAuthorization(str(uuid.uuid4()))
 
 
-# Avial 4.12 Used to represent permissions extracted, or to be applied, to an Permission
+
 class AvMask:
     @property
     def a(self) -> bool:
