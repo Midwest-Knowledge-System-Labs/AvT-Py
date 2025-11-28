@@ -26,6 +26,45 @@ def create_identity(
     email: str,
     authorization: AvAuthorization,
 ) -> AvEntity:
+    """
+    Creates a new identity in the AvesTerra distributed graph database.
+    
+    An identity represents a user account within the AvesTerra system, similar to
+    a user on a computer system. Each identity has an associated identity token mapped to
+    an identity authority, which is the backbone of identity level authorization. Only processes with
+    Root Authority can create identities. The created identity must be validated
+    before it can function properly through RSA keypair generation and password
+    setting via the validation process.
+    
+    Args:
+        name (str): Human-readable name identifier for the identity, stored in
+                   the entity's Name metadata field.
+        key (str): Unique key identifier for identity lookups, cannot be NULL_KEY.
+        email (str): Email address associated with the identity account.
+        authorization (AvAuthorization): Root Authority required
+                                       to create identities.
+    
+    Returns:
+        AvEntity: The newly created identity with unique EUID and
+                 associated token/authority mapping.
+    
+    Raises:
+        ValueError: When identity key is NULL_KEY (not allowed).
+        AuthorizationError: When identity with key already exists or authorization
+                           lacks identity creation privileges.
+        EntityError: When identity creation fails due to system constraints.
+    
+    Example:
+        >>> root_auth = AvAuthorization.simple("root-token")
+        >>> user_identity = create_identity(
+        ...     "John Doe",
+        ...     "john-doe-key",
+        ...     "john@example.com",
+        ...     root_auth
+        ... )
+        >>> print(user_identity)
+        <0|0|234567>
+    """
     token: AvAuthorization = AvAuthorization.random()
     authority: AvAuthorization = AvAuthorization.random()
     validation: str = str(AvAuthorization.random())
@@ -39,7 +78,7 @@ def create_identity(
         key=key,
         authorization=authorization,
     ):
-        # Create identity entity
+        # Create identity
         identity: AvEntity = create_entity(
             name=name,
             key=key,
@@ -157,6 +196,25 @@ def create_identity(
 
 
 def delete_identity(identity: AvEntity, authorization: AvAuthorization):
+    """
+    Permanently deletes an identity from the AvesTerra system.
+    
+    Removes the identity and cleans up all associated resources including associated
+    token mappings, compartment memberships, outlet references, and its authority.
+    
+    Args:
+        identity (AvEntity): Valid identity to delete.
+        authorization (AvAuthorization): Root Authority required
+                                       to delete identities.
+    
+    Raises:
+        AuthorizationError: When identity is invalid or authorization lacks
+                           identity deletion privileges.
+        EntityError: When identity deletion fails due to system constraints.
+    
+    Example:
+        >>> delete_identity(old_identity, root_auth)
+    """
     # Get key of identity
     identity_key: str = entity_key(entity=identity, authorization=authorization)
 
@@ -240,6 +298,26 @@ def delete_identity(identity: AvEntity, authorization: AvAuthorization):
 
 
 def reset_password(identity: AvEntity, authorization: AvAuthorization):
+    """
+    Resets the password for an identity, requiring re-validation.
+    
+    Clears the current password hash and generates a new validation token,
+    putting the identity into WARNING_STATE. The identity must complete
+    the validation process with the new validation token before it can
+    function normally again.
+    
+    Args:
+        identity (AvEntity): Valid identity to reset password for.
+        authorization (AvAuthorization): Authorization with sufficient authorization
+                                       to modify identity password settings.
+    
+    Raises:
+        AuthorizationError: When identity is invalid or authorization lacks
+                           password reset privileges.
+    
+    Example:
+        >>> reset_password(user_identity, admin_auth)
+    """
     validation: str = str(AvAuthorization.random())
 
     if identity_valid(identity=identity, authorization=authorization):
@@ -274,6 +352,29 @@ def reset_password(identity: AvEntity, authorization: AvAuthorization):
 def identity_authority(
     identity: AvEntity, authorization: AvAuthorization
 ) -> AvAuthorization:
+    """
+    Retrieves the Authority for an identity.
+    
+    Returns the 128-bit Authority that represents the identity's
+    access privileges within the AvesTerra system. This authority is used
+    when the identity's token is resolved during server-side operations.
+    
+    Args:
+        identity (AvEntity): identity to query for authority information.
+        authorization (AvAuthorization): Authorization with sufficient authorization
+                                       to access the authority of an identity.
+    
+    Returns:
+        AvAuthorization: The Authority for the identity.
+    
+    Raises:
+        AuthorizationError: When identity is invalid or authorization lacks
+                           authority access privileges.
+    
+    Example:
+        >>> authority = identity_authority(user_identity, admin_auth)
+        >>> print(f"Identity authority: {authority}")
+    """
     if identity_valid(identity=identity, authorization=authorization):
         return AvAuthorization(
             facts.fact_value(
@@ -289,6 +390,21 @@ def identity_authority(
 def authenticated_authority(
     identity_key: AvKey, ident_token: AvAuthorization
 ) -> AvAuthorization:
+    """
+    Retrieves the authority for an identity using its token.
+    
+    Returns the Authority of an identity enabling authority resolution through its token
+    
+    Args:
+        identity_key (AvKey): Key identifier for the target identity.
+        ident_token (AvAuthorization): Identity's authentication token.
+    
+    Returns:
+            AvAuthorization: The Authority of the identity
+    
+    Example:
+        >>> auth = authenticated_authority("john-doe-key", user_token)
+    """
     return AvAuthorization(
         invoke_entity(
             entity=access_outlet,
@@ -304,6 +420,26 @@ def authenticated_authority(
 def identity_token(
     identity: AvEntity, authorization: AvAuthorization
 ) -> AvAuthorization:
+    """
+    Retrieves the identity token of an identity.
+    
+    Returns the identity's token stored in the TOKEN fact and maps to the identity's authority.
+   
+    Args:
+        identity (AvEntity): identity to query for token information.
+        authorization (AvAuthorization): Authorization with sufficient authorization
+                                       to access the identity token.
+    
+    Returns:
+        AvAuthorization: The identity token for the identity.
+    
+    Raises:
+        AuthorizationError: When identity is invalid or authorization lacks
+                           token access privileges.
+    
+    Example:
+        >>> token = identity_token(user_identity, admin_auth)
+    """
     if identity_valid(identity=identity, authorization=authorization):
         return AvAuthorization(
             facts.fact_value(
@@ -317,6 +453,27 @@ def identity_token(
 
 
 def authenticated_token(identity_key: AvKey, password: str) -> AvAuthorization:
+    """
+    Authenticates an identity and retrieves its identity token using password verification.
+    
+    Performs password-based authentication against an identity and returns
+    the identity's token if the correct password is provided. This is the
+    primary method for gaining access to an identity's token.
+    
+    Args:
+        identity_key (AvKey): Key identifier for the target identity.
+        password (str): Password for identity authentication.
+    
+    Returns:
+        AvAuthorization: The identity token upon successful authentication.
+    
+    Raises:
+        AuthorizationError: When authentication fails due to invalid password
+                           or identity key.
+    
+    Example:
+        >>> user_token = authenticated_token("john-doe-key", "secret123")
+    """
     return AvAuthorization(
         invoke_entity(
             entity=access_outlet,
@@ -330,6 +487,26 @@ def authenticated_token(identity_key: AvKey, password: str) -> AvAuthorization:
 
 
 def identity_outlet(identity: AvEntity, authorization: AvAuthorization) -> AvEntity:
+    """
+    Retrieves the outlet associated with an identity.
+    
+    Returns the activated outlet stored in the identity's OUTLET fact.
+    
+    Args:
+        identity (AvEntity): identity to query for outlet information.
+        authorization (AvAuthorization): Authorization with sufficient authorization
+                                       to access identity outlet metadata.
+    
+    Returns:
+        AvEntity: The outlet associated with the identity.
+    
+    Raises:
+        AuthorizationError: When identity is invalid or authorization lacks
+                           outlet access privileges.
+    
+    Example:
+        >>> outlet = identity_outlet(user_identity, admin_auth)
+    """
     if identity_valid(identity=identity, authorization=authorization):
         return facts.fact_value(
             entity=identity, attribute=AvAttribute.OUTLET, authorization=authorization
@@ -344,6 +521,32 @@ def change_password(
     new_password: str,
     ident_token: AvAuthorization,
 ):
+    """
+    Changes the password for an identity using token-based authentication.
+    
+    Updates an identity's password by verifying the old password and setting
+    a new password. The current identity token must be provided for authentication purposes
+    and the old password must match the current password for the operation
+    to succeed.
+    
+    Args:
+        identity_key (str): Key identifier for the target identity.
+        old_password (str): Current password for verification (padded to 32 chars).
+        new_password (str): New password to set (padded to 32 chars).
+        ident_token (AvAuthorization): Identity token for authentication.
+    
+    Raises:
+        AuthorizationError: When old password verification fails or token
+                           is invalid.
+    
+    Example:
+        >>> change_password(
+        ...     "john-doe-key",
+        ...     "old_secret",
+        ...     "new_secret123",
+        ...     user_token
+        ... )
+    """
     password = f"{old_password.ljust(32, ' ')}{new_password.ljust(32, ' ')}"
 
     invoke_entity(
@@ -357,6 +560,21 @@ def change_password(
 
 
 def validate_identity_trick(identity: AvEntity, authorization: AvAuthorization):
+    """
+    Administrative function to manually validate an identity.
+    
+    Sets the identity state to GOOD_STATE, bypassing the normal validation
+    process. This is an administrative override function that should be used
+    carefully as it skips the standard RSA keypair validation workflow.
+    
+    Args:
+        identity (AvEntity): identity to validate.
+        authorization (AvAuthorization): Authorization with sufficient authorization
+                                       to modify identity state.
+    
+    Example:
+        >>> validate_identity_trick(user_identity, admin_auth)
+    """
     facts.set_fact(
         entity=identity,
         attribute=AvAttribute.STATE,
@@ -366,6 +584,27 @@ def validate_identity_trick(identity: AvEntity, authorization: AvAuthorization):
 
 
 def lookup_identity(key: str, authorization: AvAuthorization) -> AvEntity:
+    """
+    Searches for an identity by its key identifier.
+    
+    Performs lookup operation to find identity with matching key
+    identifier. Returns the identity if found and accessible,
+    or NULL_ENTITY if no matching identity exists or access is denied.
+    
+    Args:
+        key (str): Key identifier to search for in identity features.
+        authorization (AvAuthorization): Authorization for performing lookup
+                                       operations and accessing found identity.
+    
+    Returns:
+        AvEntity: identity with matching key, or NULL_ENTITY if
+                 not found or inaccessible.
+    
+    Example:
+        >>> identity = lookup_identity("john-doe-key", search_auth)
+        >>> if identity != NULL_ENTITY:
+        ...     print(f"Found identity: {identity}")
+    """
     if features.feature_member(
         entity=access_outlet,
         attribute=AvAttribute.IDENTITY,
@@ -383,6 +622,26 @@ def lookup_identity(key: str, authorization: AvAuthorization) -> AvEntity:
 
 
 def identity_valid(identity: AvEntity, authorization: AvAuthorization) -> bool:
+    """
+    Validates whether an entity is a properly configured identity.
+    
+    Checks if the entity exists as a valid identity by performing key-based
+    lookup verification. Returns True if the entity is found as a registered
+    identity, False otherwise.
+    
+    Args:
+        identity (AvEntity): Entity to validate as an identity.
+        authorization (AvAuthorization): Authorization for accessing and
+                                       validating the identity.
+    
+    Returns:
+        bool: True if entity is valid identity, False otherwise.
+    
+    Example:
+        >>> is_valid = identity_valid(suspected_identity, check_auth)
+        >>> if is_valid:
+        ...     print("Entity is valid identity")
+    """
     return (
         lookup_identity(
             key=entity_key(entity=identity, authorization=authorization),
@@ -393,12 +652,50 @@ def identity_valid(identity: AvEntity, authorization: AvAuthorization) -> bool:
 
 
 def identity_state(identity: AvEntity, authorization: AvAuthorization) -> AvState:
+    """
+    Retrieves the current state of an identity.
+    
+    Returns the identity's validation state, which indicates whether the
+    identity is in GOOD_STATE (validated and functional) or WARNING_STATE
+    (requires validation). Unvalidated identities have tokens that cannot
+    resolve to authority or access compartments.
+    
+    Args:
+        identity (AvEntity): identity to query for state information.
+        authorization (AvAuthorization): Authorization with sufficient authorization
+                                       to access identity state metadata.
+    
+    Returns:
+        AvState: The current state of the identity (GOOD_STATE or WARNING_STATE).
+    
+    Example:
+        >>> state = identity_state(user_identity, admin_auth)
+        >>> if state == AvState.WARNING_STATE:
+        ...     print("Identity requires validation")
+    """
     return AvState[
         facts.fact_value(entity=identity, authorization=authorization).decode_integer()
     ]
 
 
 def authenticated_outlet(identity_key: str, ident_token: AvAuthorization) -> AvEntity:
+    """
+    Retrieves the outlet for an identity using token-based authentication.
+    
+    Returns the outlet associated with an identity, accessed through
+    identity token authentication rather than direct entity reference.
+    Enables outlet access through token-based authentication workflows.
+    
+    Args:
+        identity_key (str): Key identifier for the target identity.
+        ident_token (AvAuthorization): Identity token for authentication.
+    
+    Returns:
+        AvEntity: The outlet for the authenticated identity.
+    
+    Example:
+        >>> outlet = authenticated_outlet("john-doe-key", user_token)
+    """
     return invoke_entity(
         entity=access_outlet,
         method=AvMethod.GET,
