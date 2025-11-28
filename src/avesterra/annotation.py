@@ -81,7 +81,7 @@ import avesterra as annotation
     Raises
     ______
     ApplicationError
-        When property of key/instance doesn't exist in property table
+        When a property of key/instance doesn't exist in a property table
 
     """
     aspects.insert(

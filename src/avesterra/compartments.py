@@ -22,6 +22,39 @@ AvCompartment = AvEntity
 
 
 def create_compartment(name: str, key: str, authorization: AvAuthorization) -> AvEntity:
+    """
+    Creates a new compartment in the AvesTerra distributed graph database.
+    
+    A compartment serves as a security boundary similar to a group on computer systems.
+    The compartment has its own Token and Authority, enabling identities to operate
+    with compartment privileges when granted access. The created compartment enables
+    token-based authorization switching for granted identities.
+    
+    Args:
+        name (str): Human-readable name identifier for the compartment, stored in 
+                   the entity's Name metadata field.
+        key (str): Key identifier for compartment lookups, stored in the entity's 
+                  Key metadata field.
+        authorization (AvAuthorization): Authorization that is able to perform operation.
+    
+    Returns:
+        AvEntity: The newly created compartment with unique EUID.
+    
+    Raises:
+        AvesTerraError: When compartment with the same key already exists.
+        AuthorizationError: When authorization lacks creation privileges.
+        EntityError: When compartment creation fails due to system constraints.
+    
+    Example:
+        >>> admin_auth = AvAuthorization.simple("admin-token")
+        >>> research_comp = create_compartment(
+        ...     "Research Division", 
+        ...     "research-key", 
+        ...     admin_auth
+        ... )
+        >>> print(research_comp)
+        <0|0|123456>
+    """
     if not features.feature_member(
         entity=access_outlet,
         attribute=AvAttribute.COMPARTMENT,
@@ -42,7 +75,7 @@ def create_compartment(name: str, key: str, authorization: AvAuthorization) -> A
             authorization=authorization,
         )
 
-        # Connect compartment entity to compartment adapter
+        # Connect compartment to compartment adapter
         connect_method(
             entity=compartment_entity,
             outlet=access_outlet,
@@ -80,7 +113,7 @@ def create_compartment(name: str, key: str, authorization: AvAuthorization) -> A
         # into oblivion
         reference_entity(entity=comp_outlet, authorization=authorization)
 
-        # Setup compartment fields on compartment entity
+        # Setup compartment fields on compartment
         facts.set_fact(
             entity=compartment_entity,
             attribute=AvAttribute.OUTLET,
@@ -150,6 +183,24 @@ def create_compartment(name: str, key: str, authorization: AvAuthorization) -> A
 
 
 def delete_compartment(compartment: AvEntity, authorization: AvAuthorization):
+    """
+    Permanently deletes a compartment from the AvesTerra system.
+
+    Removes the compartment and cleans up all of its associated tokens and authority.
+
+    Args:
+        compartment (AvEntity): Valid compartment to delete.
+        authorization (AvAuthorization): Authorization that is able to perform operation.
+    
+    Raises:
+        AuthorizationError: When compartment is invalid or authorization lacks 
+                           deletion privileges.
+        EntityError: When compartment deletion fails.
+    
+    Example:
+        >>> delete_compartment(old_compartment, admin_auth)
+    """
+
     comp_key: AvKey = entity_key(entity=compartment, authorization=authorization)
     if compartment_valid(compartment=compartment, authorization=authorization):
         # Get compartment authority
@@ -175,7 +226,7 @@ def delete_compartment(compartment: AvEntity, authorization: AvAuthorization):
         # Delete compartment outlet
         delete_outlet(outlet=comp_outlet, authorization=authorization)
 
-        # Remove identitys from compartment entity
+        # Remove identitys from compartment
         while (
                 features.feature_count(
                 entity=compartment,
@@ -210,10 +261,10 @@ def delete_compartment(compartment: AvEntity, authorization: AvAuthorization):
             authorization=authorization,
         )
 
-        # Dereference compartment entity to enable deletion
+        # Dereference compartment to enable deletion
         dereference_entity(entity=compartment, authorization=authorization)
 
-        # Delete compartment entity from AvesTerra
+        # Delete compartment from AvesTerra
         delete_entity(entity=compartment, authorization=authorization)
     else:
         raise AuthorizationError("invalid compartment")
@@ -222,6 +273,30 @@ def delete_compartment(compartment: AvEntity, authorization: AvAuthorization):
 def grant_compartment(
     compartment: AvEntity, identity: AvEntity, authorization: AvAuthorization
 ):
+    """
+    Grants compartment access to an identity, enabling token switching.
+    
+    The identity can then exchange their token for the compartment token to operate with compartment
+    authority privileges; may not work with all function calls, but will for most.
+    
+    Args:
+        compartment (AvEntity): Target compartment for access grant.
+        identity (AvEntity): Identity entity receiving compartment access.
+        authorization (AvAuthorization): Authorization that is able to perform operation.
+    
+    Raises:
+        AuthorizationError: When compartment or identity is invalid, or 
+                           authorization lacks modification privileges.
+        EntityError: When entities are improperly configured.
+    
+    Example:
+        >>> grant_compartment(
+        ...     research_comp, 
+        ...     user_identity, 
+        ...     admin_auth
+        ... )
+    """
+
     comp_key: str = entity_key(entity=compartment, authorization=authorization)
 
     identity_key: str = entity_key(entity=identity, authorization=authorization)
@@ -312,6 +387,23 @@ def grant_compartment(
 def revoke_compartment(
     compartment: AvEntity, identity: AvEntity, authorization: AvAuthorization
 ):
+    """
+    Revokes compartment access from an identity.
+    
+    The identity loses the ability to exchange their token for the compartment token.
+    
+    Args:
+        compartment (AvEntity): compartment to revoke access from.
+        identity (AvEntity): Identity entity losing compartment access.
+        authorization (AvAuthorization): Authorization that is able to perform operation.
+    
+    Raises:
+        AuthorizationError: When compartment/identity is invalid or authorization 
+                           lacks modification privileges.
+    
+    Example:
+        >>> revoke_compartment(research_comp, former_user, admin_auth)
+    """
     comp_key: str = entity_key(entity=compartment, authorization=authorization)
     identity_key: str = entity_key(entity=identity, authorization=authorization)
 
@@ -389,6 +481,24 @@ def revoke_compartment(
 def enable_privilege(
     compartment: AvEntity, identity: AvEntity, authorization: AvAuthorization
 ):
+    """
+    Enables privileged access for an identity within a compartment.
+    
+    Grants the identity direct access to the compartment's Authority when
+    they exchange tokens. This allows the identity to use all AvesTerra
+    calls that require Authority passing, such as Adapt and Wait operations.
+    WARNING: Use with extreme caution as this grants equivalent powers to
+    the compartment itself.
+    
+    Args:
+        compartment (AvEntity): Target compartment.
+        identity (AvEntity): Identity entity receiving privileged access.
+        authorization (AvAuthorization): Authorization that is able to perform operation.
+    
+    Example:
+        >>> enable_privilege(research_comp, trusted_admin, super_auth)
+    """
+
     identity_key: str = entity_key(entity=identity, authorization=authorization)
 
     features.set_feature(
@@ -403,6 +513,21 @@ def enable_privilege(
 def disable_privilege(
     compartment: AvEntity, identity: AvEntity, authorization: AvAuthorization
 ):
+    """
+    Disables privileged access for an identity within a compartment.
+    
+    Removes the identity's direct access to compartment Authority, restricting
+    them to standard compartment token operations. The identity retains basic
+    compartment access but loses Authority-level privileges.
+    
+    Args:
+        compartment (AvEntity): Target compartment.
+        identity (AvEntity): Identity entity losing privileged access.
+        authorization (AvAuthorization): Authorization that is able to perform operation.
+    
+    Example:
+        >>> disable_privilege(research_comp, former_admin, super_auth)
+    """
     identity_key: str = entity_key(entity=identity, authorization=authorization)
 
     features.exclude_feature(
@@ -416,6 +541,29 @@ def disable_privilege(
 def compartment_authority(
     compartment: AvEntity, authorization: AvAuthorization
 ) -> AvAuthorization:
+    """
+    Retrieves the Authority for a compartment.
+    
+    Returns the 128-bit Authority that has complete control
+    over the compartment. This Authority can modify the compartment's
+    authorization list and perform any operation within the compartment
+    scope.
+    
+    Args:
+        compartment (AvEntity): compartment to query for authority.
+        authorization (AvAuthorization): Authorization that is able to perform operation.
+    
+    Returns:
+        AvAuthorization: The Authority authorization for the compartment.
+    
+    Raises:
+        AuthorizationError: When compartment is invalid or authorization lacks
+                           authority access privileges.
+    
+    Example:
+        >>> authority = compartment_authority(research_comp, view_auth)
+        >>> print(f"Compartment authority: {authority}")
+    """
     if compartment_valid(compartment=compartment, authorization=authorization):
         return AvAuthorization(
             facts.fact_value(
@@ -431,6 +579,21 @@ def compartment_authority(
 def authenticated_authority(
     comp_key: AvKey, identity_key: AvKey, ident_token: AvAuthorization
 ) -> AvAuthorization:
+    """
+    
+    Returns the compartment-specific authority available to an authenticated identity.
+    
+    Args:
+        comp_key (AvKey): Key identifier for the target compartment.
+        identity_key (AvKey): Key identifier for the identity.
+        ident_token (AvAuthorization): Identity's authentication token.
+    
+    Returns:
+        AvAuthorization: The authority authorization for authenticated operations.
+    
+    Example:
+        >>> auth = authenticated_authority("research-key", "user-key", token)
+    """
     return AvAuthorization(
         invoke_entity(
             entity=access_outlet,
@@ -445,6 +608,23 @@ def authenticated_authority(
 
 
 def compartment_key(token: AvAuthorization):
+    """
+    Retrieves the compartment key identifier from a compartment token.
+    
+    Resolves a compartment token back to its associated compartment key,
+    enabling reverse lookup operations for token-based compartment
+    identification.
+    
+    Args:
+        token (AvAuthorization): Compartment token for key lookup.
+    
+    Returns:
+        The key identifier associated with the compartment token.
+    
+    Example:
+        >>> key = compartment_key(comp_token)
+        >>> print(f"Token maps to key: {key}")
+    """
     return invoke_entity(
         entity=access_outlet,
         method=AvMethod.GET,
@@ -459,6 +639,23 @@ def compartment_token(
     compartment: AvEntity,
     authorization: AvAuthorization,
 ):
+    """
+    Returns the compartment's token
+    
+    Args:
+        compartment (AvEntity): compartment to query for token.
+        authorization (AvAuthorization): Authorization that is able to perform operation.
+    
+    Returns:
+        AvAuthorization: The base compartment token.
+    
+    Raises:
+        AuthorizationError: When compartment is invalid or authorization lacks
+                           token access privileges.
+    
+    Example:
+        >>> token = compartment_token(research_comp, admin_auth)
+    """
     if compartment_valid(compartment=compartment, authorization=authorization):
         return AvAuthorization(
             facts.fact_value(
@@ -474,6 +671,23 @@ def compartment_token(
 def authenticated_token(
     comp_key: AvKey, identity_key: AvKey, ident_token: AvAuthorization
 ) -> AvAuthorization:
+    """
+    Retrieves the authenticated compartment token for an identity.
+    
+    Returns the compartment-specific token available to an authenticated
+    identity, who is a member of the compartment.
+    
+    Args:
+        comp_key (AvKey): Key identifier for the target compartment.
+        identity_key (AvKey): Key identifier for the identity.
+        ident_token (AvAuthorization): Identity's authentication token.
+    
+    Returns:
+        AvAuthorization: The compartment access token for the identity.
+    
+    Example:
+        >>> comp_token = authenticated_token("research-key", "user-key", token)
+    """
     return AvAuthorization(
         invoke_entity(
             entity=access_outlet,
@@ -490,6 +704,25 @@ def authenticated_token(
 def compartment_outlet(
     compartment: AvEntity, authorization: AvAuthorization
 ) -> AvEntity:
+    """
+    Retrieves the outlet entity associated with a compartment.
+    
+    Returns the activated outlet of the compartment
+    
+    Args:
+        compartment (AvEntity): compartment to query for outlet.
+        authorization (AvAuthorization): Authorization that is able to perform operation.
+    
+    Returns:
+        AvEntity: The outlet entity associated with the compartment.
+    
+    Raises:
+        AuthorizationError: When compartment is invalid or authorization lacks
+                           outlet access privileges.
+    
+    Example:
+        >>> outlet = compartment_outlet(research_comp, admin_auth)
+    """
     if compartment_valid(compartment=compartment, authorization=authorization):
         return facts.fact_value(
             entity=compartment,
@@ -501,6 +734,27 @@ def compartment_outlet(
 
 
 def lookup_compartment(key: str, authorization: AvAuthorization) -> AvEntity:
+    """
+    Searches for a compartment by its key identifier.
+    
+    Performs lookup operation to find compartment with matching
+    key identifier. Returns the compartment if found and accessible,
+    or NULL_ENTITY if no matching compartment exists.
+    
+    Args:
+        key (str): Key identifier to search for in compartment features.
+        authorization (AvAuthorization): Authorization for performing lookup
+                                       operations.
+    
+    Returns:
+        AvEntity: compartment with matching key, or NULL_ENTITY if
+                 not found.
+    
+    Example:
+        >>> comp = lookup_compartment("research-key", search_auth)
+        >>> if comp != NULL_ENTITY:
+        ...     print(f"Found compartment: {comp}")
+    """
     if features.feature_member(
         entity=access_outlet,
         attribute=AvAttribute.COMPARTMENT,
@@ -518,6 +772,24 @@ def lookup_compartment(key: str, authorization: AvAuthorization) -> AvEntity:
 
 
 def compartment_valid(compartment: AvEntity, authorization: AvAuthorization) -> bool:
+    """
+    Validates whether an entity is a compartment.
+    
+    Checks if the entity exists as a valid compartment. Returns True if the entity is
+    found as a registered compartment, False otherwise.
+    
+    Args:
+        compartment (AvEntity): Entity to validate as a compartment.
+        authorization (AvAuthorization): Authorization capable of performing operation.
+    
+    Returns:
+        bool: True if entity is valid compartment, False otherwise.
+    
+    Example:
+        >>> is_valid = compartment_valid(suspected_comp, check_auth)
+        >>> if is_valid:
+        ...     print("Entity is valid compartment")
+    """
     return (
         lookup_compartment(
             key=entity_key(entity=compartment, authorization=authorization),
@@ -528,6 +800,23 @@ def compartment_valid(compartment: AvEntity, authorization: AvAuthorization) -> 
 
 
 def authenticated_outlet(comp_key: str, comp_token: AvAuthorization) -> AvEntity:
+    """
+    Retrieves the outlet for a compartment using token-based authentication.
+    
+    Returns the outlet entity associated with a compartment, accessed
+    through compartment token authentication rather than direct entity
+    reference. Enables outlet access through token-based workflows.
+    
+    Args:
+        comp_key (str): Key identifier for the compartment.
+        comp_token (AvAuthorization): Compartment token for authentication.
+    
+    Returns:
+        AvEntity: The outlet entity for the authenticated compartment.
+    
+    Example:
+        >>> outlet = authenticated_outlet("research-key", comp_token)
+    """
     return invoke_entity(
         entity=access_outlet,
         method=AvMethod.GET,
@@ -541,6 +830,30 @@ def authenticated_outlet(comp_key: str, comp_token: AvAuthorization) -> AvEntity
 def compartment_granted(compartment_key: str,
                         identity_key: str,
                         identity_token: AvAuthorization) -> bool:
+    """
+    Checks if an identity has been granted access to a compartment.
+    
+    Verifies whether the specified identity has compartment access by
+    checking the compartment membership using identity token authentication.
+    Returns True if access is granted, False otherwise.
+    
+    Args:
+        compartment_key (str): Key identifier for the compartment.
+        identity_key (str): Key identifier for the identity.
+        identity_token (AvAuthorization): Identity's authentication token.
+    
+    Returns:
+        bool: True if identity has compartment access, False otherwise.
+    
+    Example:
+        >>> has_access = compartment_granted(
+        ...     "research-key",
+        ...     "user-key", 
+        ...     user_token
+        ... )
+        >>> if has_access:
+        ...     print("Identity has compartment access")
+    """
     return invoke_entity(
         entity=access_outlet,
         method=AvMethod.MEMBER,

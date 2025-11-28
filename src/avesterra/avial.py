@@ -15,7 +15,7 @@ import dataclasses
 import json
 from dataclasses import dataclass
 from datetime import datetime, date, UTC
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Callable
 
 from avesterra.avesterra import *
 from avesterra.taxonomy import *
@@ -2573,7 +2573,7 @@ def lock_outlet(
     timeout: AvTimeout = NULL_TIMEOUT,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
-    """Lock an outlet semaphore"""
+    """Lock an outlet mutex"""
     Verify.entity(outlet)
     Verify.natural(timeout)
     Verify.authorization(authorization)
@@ -2583,13 +2583,13 @@ def lock_outlet(
 def unlock_outlet(
     outlet: AvEntity, authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> None:
-    """Unlock an outlet semaphore"""
+    """Unlock an outlet mutex"""
     Verify.entity(outlet)
     Verify.authorization(authorization)
     api.unlock(outlet=outlet, authorization=authorization)
 
 
-def arm_outlet(
+def arm_outlet_timer(
     outlet: AvEntity, authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> None:
     """Arm an outlet timer"""
@@ -2598,7 +2598,7 @@ def arm_outlet(
     api.arm(outlet=outlet, authorization=authorization)
 
 
-def disarm_outlet(
+def disarm_outlet_timer(
     outlet: AvEntity, authorization: AvAuthorization = NULL_AUTHORIZATION
 ):
     """Disarm outlet timer"""
@@ -2607,7 +2607,7 @@ def disarm_outlet(
     api.disarm(outlet=outlet, authorization=authorization)
 
 
-def schedule_outlet(
+def schedule_timed_event(
     outlet: AvEntity,
     count: int = NULL_COUNT,
     event: AvEvent = AvEvent.NULL,
@@ -2621,14 +2621,14 @@ def schedule_outlet(
     api.schedule(outlet=outlet, count=count, event=event, authorization=authorization)
 
 
-def start_outlet(outlet: AvEntity, authorization: AvAuthorization = NULL_AUTHORIZATION):
+def start_outlet_timer(outlet: AvEntity, authorization: AvAuthorization = NULL_AUTHORIZATION):
     """Start outlet timer"""
     Verify.entity(outlet)
     Verify.authorization(authorization)
     api.start(outlet=outlet, authorization=authorization)
 
 
-def stop_outlet(
+def stop_outlet_timer(
     outlet: AvEntity, authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> None:
     """Stop outlet timer"""
@@ -2637,7 +2637,7 @@ def stop_outlet(
     api.stop(outlet=outlet, authorization=authorization)
 
 
-def reset_outlet(outlet: AvEntity, authorization: AvAuthorization = NULL_AUTHORIZATION):
+def reset_outlet_timer(outlet: AvEntity, authorization: AvAuthorization = NULL_AUTHORIZATION):
     """Reset outlet timer"""
     Verify.entity(outlet)
     Verify.authorization(authorization)
@@ -2911,10 +2911,18 @@ def entity_armed(
     return api.armed(entity=entity, authorization=authorization)
 
 
+def entity_active(
+    entity: AvEntity, authorization: AvAuthorization = NULL_AUTHORIZATION
+):
+    """Is entity active?"""
+    Verify.entity(entity)
+    Verify.authorization(authorization)
+    return api.active(entity=entity, authorization=authorization)
+
 def entity_busy(
     entity: AvEntity, authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> bool:
-    """Is entity armed?"""
+    """Is entity busy?"""
     Verify.entity(entity)
     Verify.authorization(authorization)
     return api.busy(entity=entity, authorization=authorization)
