@@ -1718,7 +1718,7 @@ def connect_outlet(
     timeout: AvTimeout = NULL_TIMEOUT,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
-    """Connect an outlet to an entity with a particular method."""
+    """Connect an outlet to an entity."""
     Verify.entity(entity)
     Verify.entity(outlet)
     Verify.presence(presence)
@@ -1738,7 +1738,7 @@ def disconnect_outlet(
     presence: AvPresence = NULL_PRESENCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
-    """Disconnect a method from an entity"""
+    """Disconnect an outlet from an entity"""
     Verify.entity(entity)
     Verify.presence(presence)
     Verify.authorization(authorization)
