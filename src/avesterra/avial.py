@@ -3086,7 +3086,7 @@ def entity_rendezvous(
 def entity_timestamp(
     entity: AvEntity, authorization: AvAuthorization = NULL_AUTHORIZATION
 ):
-    """Return the time that the entity was created, as an epoch integer."""
+    """Return the time that the entity was created, in UTC, as an epoch integer."""
     Verify.entity(entity)
     Verify.authorization(authorization)
     return AvTime.fromtimestamp(
@@ -3132,6 +3132,7 @@ def cover(
     timeout: AvTimeout = NULL_TIMEOUT,
     authority: AvAuthorization = NULL_AUTHORIZATION
 ):
+    """Cover an entity with the target entity using the provided presence."""
     api.cover(
         entity=entity,
         auxiliary=target,
@@ -3147,6 +3148,7 @@ def uncover(
     authorization: AvAuthorization,
     presence: AvPresence = NULL_PRESENCE,
 ):
+    """Uncover `entity` from its cover of the provided presence."""
     api.uncover(
         entity=entity,
         auxiliary=target,
@@ -3159,6 +3161,7 @@ def covering(
     index: int,
     authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> Tuple[AvEntity, AvPresence, AvTimeout, AvAuthorization]:
+    """Get the covering specification of the covering at index on `entity`"""
     return api.covering(
         entity=entity,
         index=index,
@@ -3170,6 +3173,7 @@ def covered(
     presence: AvPresence = NULL_PRESENCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> bool:
+    """Determine if `entity` is covered by any cover of the provided presence."""
     return api.covered(
         entity=entity,
         presence=presence,
@@ -3186,6 +3190,7 @@ def fasten(
     timeout: AvTimeout = NULL_TIMEOUT,
     authority: AvAuthorization = NULL_AUTHORIZATION
 ):
+    """Fasten an entity with the target entity using the provided attribute."""
     api.fasten(
         entity=entity,
         auxiliary=target,
@@ -3201,6 +3206,7 @@ def unfasten(
     authorization: AvAuthorization,
     attribute: AvAttribute = NULL_ATTRIBUTE,
 ):
+    """Unfasten `entity` from its fastening of the provided attribute."""
     api.unfasten(
         entity=entity,
         auxiliary=target,
@@ -3213,6 +3219,7 @@ def fastener(
     index: int = NULL_INDEX,
     authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> Tuple[AvEntity, int, AvTimeout, AvAuthorization]:
+    """Get the fastening specification of the fastener at index on `entity`"""
     return api.fastener(
         entity=entity,
         index=index,
@@ -3224,6 +3231,7 @@ def fastened(
     attribute: AvAttribute = NULL_ATTRIBUTE,
     authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> bool:
+    """Determine if `entity` is fastened by any fastening of the provided attribute."""
     return api.fastened(
         entity=entity,
         attribute=attribute,
@@ -3234,6 +3242,7 @@ def fasteners(
     entity: AvEntity,
     authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> int:
+    """Return the number of fastenings on `entity`"""
     return api.fasteners(
         entity=entity,
         authorization=authorization
