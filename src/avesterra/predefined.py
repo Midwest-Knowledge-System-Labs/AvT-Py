@@ -12,7 +12,7 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 from avesterra.avial import entity_of
 
 from avesterra.avial import entity_of
-
+from build.lib.avesterra import avert_registry
 
 # -- AvesTerra Registries/Entities (1..9)
 avesterra_registry = entity_of("<0|0|1>")
@@ -59,6 +59,7 @@ export_registry = entity_of("<0|0|32>")
 configuration_registry = entity_of("<0|0|33>")
 enrichment_registry = entity_of("<0|0|34>")
 relationship_registry = entity_of("<0|0|35>")
+provision_registry = entity_of("<0|0|36>")
 
 # -- Special adapters/subscribers (40..99)
 space_outlet = entity_of("<0|0|40>")
@@ -69,15 +70,28 @@ meta_space = entity_of("<0|0|44>")
 
 boost_outlet = entity_of("<0|0|50>")
 thrust_outlet = entity_of("<0|0|51>")
-tunnel_outlet = entity_of("<0|0|52>")  
+tunnel_outlet = entity_of("<0|0|52>")
+backup_outlet = entity_of("<0|0|53>")
+mirror_outlet = entity_of("<0|0|54>")
+failover_outlet = entity_of("<0|0|55>")
+provision_outlet = entity_of("<0|0|56>")
+test_outlet = entity_of("<0|0|57>")
+monitor_outlet = entity_of("<0|0|58>")
 
 # -- AvesTerra System Registries/Outlets (100..999)
 atra_registry = entity_of("<0|0|100>")
-avert_registry = entity_of("<0|0|101>")
-avian_registry = entity_of("<0|0|102>")
-aware_registry = entity_of("<0|0|103>")
+avian_registry = entity_of("<0|0|101>")
+arvis_registry = entity_of("<0|0|102>")
+assay_registry = entity_of("<0|0|103>")
+atlas_registry = entity_of("<0|0|104>")
+audit_registry = entity_of("<0|0|105>")
+avert_registry = entity_of("<0|0|106>")
+aware_registry = entity_of("<0|0|107>")
+axion_registry = entity_of("<0|0|108>")
+ayana_registry = entity_of("<0|0|109>")
+azura_registry = entity_of("<0|0|110>")
 
-geospace_registry = entity_of("<0|0|111>")
+earth_registry = entity_of("<0|0|111>")
 community_registry = entity_of("<0|0|211>")
 contact_registry = entity_of("<0|0|212>")
 municipal_registry = entity_of("<0|0|311>")
@@ -91,7 +105,8 @@ emergency_registry = entity_of("<0|0|911>")
 
 # -- Reserved Registries (1000..99999)
 orchestra_registry = entity_of("<0|0|01000>")
-sirius_registry = entity_of("<0|0|01001>")
+serius_registry = entity_of("<0|0|01001>")
+sideral_registry = entity_of("<0|0|01002>")
 
 american_registry = entity_of("<0|0|20016>")
 georgetown_registry = entity_of("<0|0|20057>")
