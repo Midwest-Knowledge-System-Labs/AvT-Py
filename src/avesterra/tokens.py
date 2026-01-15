@@ -96,6 +96,21 @@ def destate(
         authorization=authorization,
     )
 
+def instated(
+    token: AvAuthorization,
+    authorization: AvAuthorization,
+    server: AvEntity = NULL_ENTITY,
+) -> bool:
+    invoke_entity(
+        entity=server,
+        method=AvMethod.AVESTERRA,
+        parameter=INSTATED_PARAMETER,
+        value=AvValue.encode_avesterra(
+            str(token)
+        ),
+        authorization=authorization
+    ).decode_boolean()
+
 
 def retrieve(
     authorization: AvAuthorization, server: AvEntity = NULL_ENTITY
@@ -241,6 +256,23 @@ def decouple(
         authorization=authorization,
     )
 
+def coupled(
+    network: AvEntity,
+    token: AvAuthorization,
+    authority: AvAuthorization,
+    authorization: AvAuthorization,
+    server: AvEntity = NULL_ENTITY,
+) -> bool:
+    return invoke_entity(
+        entity=server,
+        method=AvMethod.AVESTERRA,
+        parameter=COUPLED_PARAMETER,
+        value=AvValue.encode_avesterra(str(token)),
+        auxiliary=network,
+        authority=authority,
+        authorization=authorization,
+    ).decode_boolean()
+
 
 def pair(
     host: AvEntity,
@@ -329,6 +361,22 @@ def unpair(
         authorization=authorization,
     )
 
+def paired(
+    host: AvEntity,
+    token: AvAuthorization,
+    authority: AvAuthorization,
+    authorization: AvAuthorization,
+    server: AvEntity = NULL_ENTITY,
+) -> bool:
+    return invoke_entity(
+        entity=server,
+        method=AvMethod.AVESTERRA,
+        parameter=PAIRED_PARAMETER,
+        value=AvValue.encode_avesterra(str(token)),
+        auxiliary=host,
+        authority=authority,
+        authorization=authorization
+    ).decode_boolean()
 
 
 def map(
@@ -420,6 +468,24 @@ def unmap(
         authority=authority,
         authorization=authorization,
     )
+
+def mapped(
+    token: AvAuthorization,
+    mask: AvMask,
+    authority: AvAuthorization,
+    authorization: AvAuthorization,
+    server: AvEntity = NULL_ENTITY,
+) -> bool:
+    credential = encode_credential(token,  mask)
+    return invoke_entity(
+        entity=server,
+        method=AvMethod.AVESTERRA,
+        parameter=MAPPED_PARAMETER,
+        value=AvValue.encode_avesterra(str(credential)),
+        authority=authority,
+        authorization=authorization,
+    ).decode_boolean()
+
 
 
 def resolve(

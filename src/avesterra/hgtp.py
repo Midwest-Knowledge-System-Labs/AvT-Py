@@ -299,6 +299,7 @@ class HGTPFrame:
 
         hgtp_obj.instance = int.from_bytes(frame[32:36], byteorder="little")
         hgtp_obj.offset = int.from_bytes(frame[36:40], byteorder="little")
+
         hgtp_obj.time = int.from_bytes(frame[40:48], byteorder="little")
         hgtp_obj.index = int.from_bytes(frame[48:56], byteorder="little")
         hgtp_obj.count = int.from_bytes(frame[56:64], byteorder="little")

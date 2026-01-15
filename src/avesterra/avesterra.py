@@ -512,79 +512,62 @@ class AvesTerraError(Exception):
     def __init__(self, message):
         self.message = message
 
-
 class MessageError(AvesTerraError):
     pass
-
-
-class AvialError(AvesTerraError):
-    pass
-
 
 class EntityError(AvesTerraError):
     pass
 
-
 class OutletError(AvesTerraError):
     pass
-
 
 class TimeoutError(AvesTerraError):
     pass
 
-
 class AuthorizationError(AvesTerraError):
     pass
-
-
-class ExecutionError(AvesTerraError):
-    pass
-
 
 class AdapterError(AvesTerraError):
     pass
 
-
 class SubscriberError(AvesTerraError):
     pass
-
 
 class NetworkError(AvesTerraError):
     pass
 
+class ExecutionError(AvesTerraError):
+    pass
 
 class ApplicationError(AvesTerraError):
     pass
 
-
 class BypassError(AvesTerraError):
     pass
-
 
 class ForwardError(AvesTerraError):
     pass
 
-
 class ValueError(AvesTerraError):
     pass
 
-
 class ShutdownError(AvesTerraError):
+    pass
+
+class FileError(AvesTerraError):
     pass
 
 
 class TaxonomyError(AvesTerraError):
     pass
 
-
 class CommunicationError(AvesTerraError):
     pass
-
 
 class MessageTooLargeError(AvesTerraError):
     pass
 
-class FileError(AvesTerraError):
+class AvialError(AvesTerraError):
     pass
 
 

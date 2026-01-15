@@ -846,9 +846,6 @@ class AvValue:
         else:
             raise InvalidTagError(AvTag.DATE, self._tag)
 
-    # TODO: Measurement
-    # TODO: Locutor
-    # TODO: VARIABLE
     def decode_variable(self) -> Tuple[str, AvValue]:
         """
         decode the value as a variable.
@@ -889,6 +886,10 @@ class AvValue:
             return values
         else:
             raise InvalidTagError(AvTag.AGGREGATE, self._tag)
+
+    #TODO
+    def decode_measurement(self):
+        pass
 
     def tag(self) -> AvTag:
         return self._tag
