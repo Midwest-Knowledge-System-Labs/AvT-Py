@@ -1,3 +1,5 @@
+import enum
+import sys
 from enum import IntEnum, auto
 
 class AxTaxa(IntEnum):
@@ -2769,3 +2771,16 @@ class AxVersion(IntEnum):
    AVU = auto()
 
 AvVersion = AxVersion
+
+AvTaxon = AvTaxa | AvAvesterra | AvAction | AvAdapter | AvAspect | AvAttribute | AvCategory | AvClass | AvCondition | AvConstant | AvContext | AvError | AvEvent | AvFormat | AvGoal | AvFormat | AvInstallation | AvLanguage | AvLocutor | AvMatch | AvMethod | AvMode | AvModel | AvNotice | AvOperator | AvPattern | AvPercept | AvPermission | AvPlatform | AvPrecedence | AvPrefix | AvPresence | AvScheme | AvState | AvTag | AvTemplate | AvUnit | AvVersion
+
+def taxon(taxon_name, code):
+    current_module = sys.modules[__name__]
+    try:
+        enum_class = getattr(current_module, taxon_name)
+        if issubclass(enum_class, enum.IntEnum):
+            return list(enum_class)[code]
+        else:
+            raise TypeError(f"{taxon_name} is not an Enum class.")
+    except AttributeError as e:
+        raise ValueError(f"Enum class or member not found: {e}")

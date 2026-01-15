@@ -67,6 +67,45 @@ NULL_MODE = AvMode.NULL
 NULL_STATE = AvState.NULL
 NULL_CONDITION = AxCondition.NULL
 
+class AvMeasurement:
+    f: float
+    unit: AvUnit
+    prefix: AvPrefix
+    confidence: float
+    uncertainty: float
+
+    def __init__(
+        self,
+        f: float = 0.0,
+        unit: AvUnit = AvUnit.NULL,
+        prefix: AvPrefix = AvPrefix.NULL,
+        confidence: float = 0.0,
+        uncertainty: float = 0.0
+    ):
+        self.f = f
+        self.unit = unit
+        self.prefix = prefix
+        self.confidence = confidence
+        self.uncertainty = uncertainty
+
+    def to_json(self) -> Dict:
+        return {
+            "FLOAT": self.f,
+            "UNIT": self.unit.name,
+            "PREFIX": self.prefix.name,
+            "CONFIDENCE": self.confidence,
+            "UNCERTAINTY": self.uncertainty
+        }
+
+    @staticmethod
+    def from_json(json_dict: Dict) -> AvMeasurement:
+        return AvMeasurement(
+            f=json_dict["FLOAT"],
+            unit=AvUnit[json_dict["UNIT"]],
+            prefix=AvPrefix[json_dict["PREFIX"]],
+            confidence=json_dict["CONFIDENCE"],
+            uncertainty=json_dict["UNCERTAINTY"]
+        )
 
 class InvalidTagError(Exception):
     def __init__(self, expected: AvTag, actual: AvTag):
@@ -450,6 +489,10 @@ class AvValue:
             return AvValue.encode_data(object)
         elif isinstance(object, BaseException) or isinstance(object, Exception):
             return AvValue.encode_exception(AvError.THROW, str(object))
+        elif isinstance(object, AvMeasurement):
+            return AvValue.encode_measurement(object)
+        elif isinstance(object, AvTaxon):
+            return AvValue.encode_taxon(object)
         else:
             raise ValueError(
                 f"Object of type {type(object)} is currently unsupported for conversion, into an AvValue, in this binding"
@@ -589,6 +632,15 @@ class AvValue:
             values[key] = value.obj()
         return AvValue(AvTag.AGGREGATE, json.dumps(values).encode(ENCODING))
 
+    @staticmethod
+    def encode_measurement(measurement: AvMeasurement):
+        return AvValue(AvTag.MEASUREMENT, json.dumps(measurement.to_json()).encode(ENCODING))
+
+    @staticmethod
+    def encode_taxon(taxon: AvTaxon):
+        return AvValue(AvTag.TAXON, json.dumps({"TAXA": taxon.name, "CODE": taxon.value}).encode(ENCODING))
+
+
     def decode(self):
         if self._tag == AvTag.NULL:
             return self.decode_null()
@@ -630,6 +682,10 @@ class AvValue:
             return self.decode_operator()
         elif self._tag == AvTag.FUNCTION:
             return self.decode_function()
+        elif self._tag == AvTag.MEASUREMENT:
+            return self.decode_measurement()
+        elif self._tag == AvTag.TAXON:
+            return self.decode_taxon()
         elif self._tag == AvTag.EXCEPTION.value:
             return Exception(json.loads(self._bytes.decode(ENCODING))["MESSAGE"])
         else:
@@ -887,9 +943,12 @@ class AvValue:
         else:
             raise InvalidTagError(AvTag.AGGREGATE, self._tag)
 
-    #TODO
-    def decode_measurement(self):
-        pass
+    def decode_measurement(self) -> AvMeasurement:
+        return AvMeasurement.from_json(json.loads(self._bytes.decode(ENCODING)))
+
+    def decode_taxon(self) -> AvTaxon:
+        _d = json.loads(self._bytes.decode(ENCODING))
+        return taxon(taxon_name=_d["TAXA"], code=int(_d["CODE"]))
 
     def tag(self) -> AvTag:
         return self._tag
