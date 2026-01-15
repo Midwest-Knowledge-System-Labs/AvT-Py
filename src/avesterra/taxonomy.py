@@ -1005,6 +1005,29 @@ class AxAttribute(IntEnum):
    SESSION = auto()
    IDEA = auto()
    PROPOSITION = auto()
+   NEXT = auto()
+   PREVIOUS = auto()
+   INPUT = auto()
+   OUTPUT = auto()
+   TRASH = auto()
+   REASON = auto()
+   GRAPHIC = auto()
+   GEOGRAPHIC = auto()
+   CYBERGRAPHIC = auto()
+   METAGRAPHIC = auto()
+   GEOSPATIAL = auto()
+   CYBERSPATIAL = auto()
+   METASPATIAL = auto()
+   ATTACHMENT = auto()
+   CONNECTION = auto()
+   COVERING = auto()
+   FASTENER = auto()
+   SUBSCRIPTION = auto()
+   MEMORY = auto()
+   SOCKET = auto()
+   PARTITION = auto()
+   LOCK = auto()
+   KNOWN = auto()
 
 AvAttribute = AxAttribute
 
@@ -1750,6 +1773,7 @@ class AxMatch(IntEnum):
    OTHER_FIRST = auto()
    OTHER_LAST = auto()
    OTHER_NAME = auto()
+   KNOWN = auto()
 
 AvMatch = AxMatch
 
@@ -2759,6 +2783,8 @@ class AxUnit(IntEnum):
    WORSTEDYARNCOUNT = auto()
    METRICYARNCOUNT = auto()
    JEWLERSPOINT = auto()
+   PART = auto()
+   COUNT = auto()
 
 AvUnit = AxUnit
 
