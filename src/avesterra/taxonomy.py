@@ -43,7 +43,7 @@ class AxTaxa(IntEnum):
 AvTaxa = AxTaxa
 
 
-class AxAvesterra(IntEnum):
+class AxAvesTerran(IntEnum):
    NULL = 0
    AVESTERRA = auto()
    ADDRESS = auto()
@@ -82,7 +82,7 @@ class AxAvesterra(IntEnum):
    TOKEN = auto()
    VALUE = auto()
 
-AvAvesterra = AxAvesterra
+AvAvesTerran = AxAvesTerran
 
 
 class AxAction(IntEnum):
@@ -1498,7 +1498,7 @@ class AxClass(IntEnum):
 AvClass = AxClass
 
 
-class AxCondition(IntEnum):
+class AxConditional(IntEnum):
    NULL = 0
    AVESTERRA = auto()
    READY = auto()
@@ -1513,7 +1513,7 @@ class AxCondition(IntEnum):
    PENDING = auto()
    HOLDING = auto()
 
-AvCondition = AxCondition
+AvConditional = AxConditional
 
 
 class AxConstant(IntEnum):
@@ -1697,7 +1697,7 @@ class AxLanguage(IntEnum):
 AvLanguage = AxLanguage
 
 
-class AxLocutor(IntEnum):
+class AxLocution(IntEnum):
    NULL = 0
    AVESTERRA = auto()
    ENTITY = auto()
@@ -1727,7 +1727,7 @@ class AxLocutor(IntEnum):
    AUTHORITY = auto()
    AUTHORIZATION = auto()
 
-AvLocutor = AxLocutor
+AvLocution = AxLocution
 
 
 class AxMatch(IntEnum):
@@ -2763,16 +2763,16 @@ class AxUnit(IntEnum):
 AvUnit = AxUnit
 
 
-class AxVersion(IntEnum):
+class AxComponent(IntEnum):
    NULL = 0
    AVESTERRA = auto()
    AVIAL = auto()
    AVIONOMY = auto()
    AVU = auto()
 
-AvVersion = AxVersion
+AvComponent = AxComponent
 
-AvTaxon = AvTaxa | AvAvesterra | AvAction | AvAdapter | AvAspect | AvAttribute | AvCategory | AvClass | AvCondition | AvConstant | AvContext | AvError | AvEvent | AvFormat | AvGoal | AvFormat | AvInstallation | AvLanguage | AvLocutor | AvMatch | AvMethod | AvMode | AvModel | AvNotice | AvOperator | AvPattern | AvPercept | AvPermission | AvPlatform | AvPrecedence | AvPrefix | AvPresence | AvScheme | AvState | AvTag | AvTemplate | AvUnit | AvVersion
+AvTaxon = AvTaxa | AvAvesTerran | AvAction | AvAdapter | AvAspect | AvAttribute | AvCategory | AvClass | AvConditional | AvConstant | AvContext | AvError | AvEvent | AvFormat | AvGoal | AvFormat | AvInstallation | AvLanguage | AvLocution | AvMatch | AvMethod | AvMode | AvModel | AvNotice | AvOperator | AvPattern | AvPercept | AvPermission | AvPlatform | AvPrecedence | AvPrefix | AvPresence | AvScheme | AvState | AvTag | AvTemplate | AvUnit | AvComponent
 
 def taxon(taxon_name, code):
     current_module = sys.modules[__name__]

@@ -40,7 +40,6 @@ AvOffset = int
 AvName = str
 AvKey = str
 AvTimeout = int
-AvPresence = int
 AvInterchange = str
 AvText = str
 AvWeb = str
@@ -1659,6 +1658,13 @@ def store_entity(
 
 def retrieve_entity(
     entity: AvEntity,
+    presence: AvPresence,
+    aspect: AvAspect,
+    attribute: AvAttribute,
+    key: AvKey,
+    index: AvIndex,
+    instance: AvInstance,
+    count: AvCount,
     timeout: AvTimeout = NULL_TIMEOUT,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvValue:
@@ -1669,6 +1675,13 @@ def retrieve_entity(
     result_tag_code, result_bytes = api.invoke(
         entity=entity,
         method=AvMethod.RETRIEVE.value,
+        presence=presence.value,
+        aspect=aspect.value,
+        attribute=attribute.value,
+        key=key,
+        index=index,
+        instance=instance,
+        count=count,
         timeout=timeout,
         authorization=authorization,
     )
