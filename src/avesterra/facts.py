@@ -774,7 +774,10 @@ def erase_facts(
 
 
 def retrieve_facts(
-    entity: AvEntity, authorization: AvAuthorization = NULL_AUTHORIZATION
+    entity: AvEntity,
+    attribute: AvAttribute = NULL_ATTRIBUTE,
+    instance: AvInstance = NULL_INSTANCE,
+    authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> AvInterchange:
     """Retrieve all facts from the entity in AvInterchange format
 
@@ -782,6 +785,10 @@ def retrieve_facts(
     __________
     entity : AvEntity
         Target entity euid
+    attribute : AvAttribute
+        Target attribute
+    instance : AvInstance
+        Target instance
     authorization : AvAuthorization
         An authorization that is able to read from the `entity`
 
@@ -804,5 +811,5 @@ def retrieve_facts(
 
     """
     return aspects.retrieve(
-        entity=entity, aspect=AvAspect.FACT, authorization=authorization
+        entity=entity, aspect=AvAspect.FACT, attribute=attribute, instance=instance, authorization=authorization
     )

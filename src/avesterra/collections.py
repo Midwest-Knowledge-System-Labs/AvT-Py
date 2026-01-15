@@ -838,7 +838,6 @@ def retrieve_collections(
     return aspects.retrieve(
         entity=entity,
         aspect=AvAspect.COLLECTION,
-        attribute=NULL_ATTRIBUTE,
         key=key,
         instance=instance,
         authorization=authorization,

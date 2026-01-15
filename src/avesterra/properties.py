@@ -861,7 +861,10 @@ def erase_properties(
 
 
 def retrieve_properties(
-    entity: AvEntity, authorization: AvAuthorization = NULL_AUTHORIZATION
+    entity: AvEntity,
+    key: AvKey = "",
+    index: AvIndex = 0,
+    authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> AvInterchange:
     """Return contents of property table as an Interchange(JSON)
 
@@ -869,6 +872,10 @@ def retrieve_properties(
     __________
     entity : AvEntity
         Target entity euid
+    key: AvKey
+        Key to target
+    index: AvIndex
+        Index to target
     authorization : AvAuthorization
         An authorization that is able to read from the `entity`
 
@@ -886,5 +893,5 @@ def retrieve_properties(
 
     """
     return aspects.retrieve(
-        entity=entity, aspect=AvAspect.PROPERTY, authorization=authorization
+        entity=entity, aspect=AvAspect.PROPERTY, key=key, index=index, authorization=authorization
     )

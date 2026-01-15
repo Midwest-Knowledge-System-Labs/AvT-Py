@@ -963,9 +963,7 @@ def erase_factors(
 def retrieve_factors(
     entity: AvEntity,
     attribute: AvAttribute = NULL_ATTRIBUTE,
-    name: AvName = NULL_NAME,
     instance: AvInstance = NULL_INSTANCE,
-    offset: AvOffset = NULL_OFFSET,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvInterchange:
     """Return contents of factors in a facet as an Interchange(JSON)
@@ -976,12 +974,8 @@ def retrieve_factors(
         Target entity euid
     attribute : AvAttribute
         Attribute of the fact containing the facet
-    name : AvName
-        Name of the facet containing the factors
     instance : AvInstance
         Instance identifier for the fact
-    offset : AvOffset
-        Offset position for the retrieval
     authorization : AvAuthorization
         An authorization that is able to read from the `entity`
 
@@ -993,7 +987,7 @@ def retrieve_factors(
     >>> authorization: AvAuthorization
     >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="key1", value=AvValue.encode_text("Value 1"), authorization=authorization)
     >>> factors.set_factor(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", key="key2", value=AvValue.encode_text("Value 2"), authorization=authorization)
-    >>> print(factors.retrieve_factors(entity=entity, attribute=AvAttribute.EXAMPLE, name="example_facet", authorization=authorization))
+    >>> print(factors.retrieve_factors(entity=entity, attribute=AvAttribute.EXAMPLE, authorization=authorization))
     {"Factors":[["key1",{"TEXT":"Value 1"}],["key2",{"TEXT":"Value 2"}]]}
 
     """
@@ -1001,9 +995,7 @@ def retrieve_factors(
         entity=entity,
         aspect=AvAspect.FACTOR,
         attribute=attribute,
-        name=name,
         instance=instance,
-        offset=offset,
         authorization=authorization,
     )
 

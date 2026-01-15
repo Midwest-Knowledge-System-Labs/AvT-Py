@@ -92,7 +92,7 @@ def create_identity(
         # Authorize identity
 
         # Connect compartment adapter to identity
-        connect_method(
+        connect_outlet(
             entity=identity, outlet=access_outlet, authorization=authorization
         )
 

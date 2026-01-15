@@ -795,7 +795,9 @@ def erase_attributions(
 
 def retrieve_attributions(
     entity: AvEntity,
-    authorization: AvAuthorization,
+    attribute: AvAttribute = NULL_ATTRIBUTE,
+    instance: AvInstance = NULL_INSTANCE,
+    authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvInterchange:
     """Retrieve attreibutes of `entity` in AvInterchange format
 
@@ -803,6 +805,10 @@ def retrieve_attributions(
     __________
     entity : AvEntity
         Target entity euid
+    attribute : AvAttribute
+        Attribute to target
+    instance : AvInstance
+        Instance to target
     authorization : AvAuthorization
         An authorization that is able to read from the `entity`
 
@@ -821,5 +827,7 @@ def retrieve_attributions(
     return aspects.retrieve(
         aspect=AvAspect.ATTRIBUTION,
         entity=entity,
+        attribute=attribute,
+        instance=instance,
         authorization=authorization,
     )

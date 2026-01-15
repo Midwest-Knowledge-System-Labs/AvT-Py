@@ -22,7 +22,7 @@ def create_control_surface(
         klass=AvClass.SUBSYSTEM,
         authorization=auth
     )
-    av.connect_method(
+    av.connect_outlet(
         entity=e,
         outlet=outlet,
         presence=1,

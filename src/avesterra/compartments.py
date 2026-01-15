@@ -7,7 +7,7 @@ The Orchestra library is distributed in the hope that it will be useful, but WIT
 You should have received a copy of the GNU Lesser General Public License along with the Orchestra library. If not, see <https://www.gnu.org/licenses/>.
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
-
+from avesterra import connect_outlet
 
 from avesterra.outlets import delete_outlet
 from avesterra.avial import *
@@ -76,7 +76,7 @@ def create_compartment(name: str, key: str, authorization: AvAuthorization) -> A
         )
 
         # Connect compartment to compartment adapter
-        connect_method(
+        connect_outlet(
             entity=compartment_entity,
             outlet=access_outlet,
             authorization=authorization,
