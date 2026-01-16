@@ -64,7 +64,7 @@ NULL_ATTRIBUTE = AvAttribute.NULL
 NULL_EVENT = AvEvent.NULL
 NULL_MODE = AvMode.NULL
 NULL_STATE = AvState.NULL
-NULL_CONDITION = AxCondition.NULL
+NULL_CONDITION = AxConditional.NULL
 
 class AvMeasurement:
     f: float
@@ -141,7 +141,7 @@ class AvLocutorOpt:
     event: AvEvent | None = None
     mode: AvMode | None = None
     state: AvState | None = None
-    condition: AxCondition | None = None
+    condition: AxConditional | None = None
     presence: AvPresence | None = None
     time: AvTime | None = None
     timeout: AvTimeout | None = None
@@ -294,7 +294,7 @@ class AvLocutor:
     event: AvEvent = AvEvent.NULL
     mode: AvMode = AvMode.NULL
     state: AvState = AvState.NULL
-    condition: AxCondition = AxCondition.NULL
+    condition: AxConditional = AxConditional.NULL
     presence: AvPresence = NULL_PRESENCE
     time: AvTime = AvTime.fromtimestamp(0, tz=UTC)
     timeout: AvTimeout = NULL_TIMEOUT
@@ -1265,7 +1265,7 @@ def invoke_entity(
     event: AvEvent = AvEvent.NULL,
     mode: AvMode = AvMode.NULL,
     state: AvState = AvState.NULL,
-    condition: AxCondition = AxCondition.NULL,
+    condition: AxConditional = AxConditional.NULL,
     presence: AvPresence = NULL_PRESENCE,
     time: AvTime = NULL_TIME,
     timeout: AvTimeout = NULL_TIMEOUT,
@@ -1356,7 +1356,7 @@ def invoke_entity_retry_bo(
     event: AvEvent = AvEvent.NULL,
     mode: AvMode = AvMode.NULL,
     state: AvState = AvState.NULL,
-    condition: AxCondition = AxCondition.NULL,
+    condition: AxConditional = AxConditional.NULL,
     presence: AvPresence = NULL_PRESENCE,
     time: AvTime = NULL_TIME,
     timeout: AvTimeout = 30,
@@ -1429,7 +1429,7 @@ def inquire_entity(
     event: AvEvent = AvEvent.NULL,
     mode: AvMode = AvMode.NULL,
     state: AvState = AvState.NULL,
-    condition: AxCondition = AxCondition.NULL,
+    condition: AxConditional = AxConditional.NULL,
     presence: AvPresence = NULL_PRESENCE,
     time: AvTime = NULL_TIME,
     timeout: AvTimeout = NULL_TIMEOUT,
@@ -1876,7 +1876,7 @@ def entity_connection(
 # AvesTerra 6.0
 def set_condition(
     entity: AvEntity = NULL_ENTITY,
-    condition: AxCondition = AxCondition.NULL,
+    condition: AxConditional = AxConditional.NULL,
     name: AvName = NULL_NAME,
     value: AvValue = NULL_VALUE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
@@ -1900,7 +1900,7 @@ def set_condition(
 # AvesTerra 6.0
 def clear_condition(
     entity: AvEntity = NULL_ENTITY,
-    condition: AxCondition = AxCondition.NULL,
+    condition: AxConditional = AxConditional.NULL,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> None:
     """Clear an entitiy's condition."""
@@ -1913,7 +1913,7 @@ def clear_condition(
 # AvesTerra 6.0
 def test_condition(
     entity: AvEntity = NULL_ENTITY,
-    condition: AxCondition = AxCondition.NULL,
+    condition: AxConditional = AxConditional.NULL,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> bool:
     """Test an entity's condition."""
@@ -1943,7 +1943,7 @@ def condition_count(
 # AvesTerra 6.0
 def condition_name(
     entity: AvEntity = NULL_ENTITY,
-    condition: AxCondition = AxCondition.NULL,
+    condition: AxConditional = AxConditional.NULL,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvName:
     """Test an entity's condition."""
@@ -1958,7 +1958,7 @@ def condition_name(
 # AvesTerra 6.0
 def condition_value(
     entity: AvEntity = NULL_ENTITY,
-    condition: AxCondition = AxCondition.NULL,
+    condition: AxConditional = AxConditional.NULL,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvValue:
     """Test an entity's condition."""
@@ -2117,7 +2117,7 @@ def publish_event(
     event: AvEvent = AvEvent.NULL,
     mode: AvMode = AvMode.NULL,
     state: AvState = AvState.NULL,
-    condition: AxCondition = AxCondition.NULL,
+    condition: AxConditional = AxConditional.NULL,
     presence: AvPresence = NULL_PRESENCE,
     time: AvTime = NULL_TIME,
     timeout: AvTimeout = NULL_TIMEOUT,

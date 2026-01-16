@@ -17,7 +17,7 @@ from avesterra.taxonomy import (
     AvCategory,
     AvClass,
     AxState,
-    AxCondition,
+    AxConditional,
     AvMethod,
 )
 
@@ -72,7 +72,7 @@ def include_entity(
     name: str = "",
     key: str = "",
     state: AxState = AxState.NULL,
-    condition: AxCondition = AxCondition.NULL,
+    condition: AxConditional = AxConditional.NULL,
     context: AvContext = AvContext.NULL,
     category: AvCategory = AvCategory.NULL,
     klass: AvClass = AvClass.NULL,
@@ -124,7 +124,7 @@ def retrieve_in_space(
         AvKey,
         AvEntity,
         AxState,
-        AxCondition,
+        AxConditional,
         AvContext,
         AvCategory,
         AvClass,

@@ -1,7 +1,7 @@
-from avesterra.taxonomy import AvTaxa, AvClass
+import avesterra.avial as av
 
-bob = AvTaxa.AVESTERRA
-bill = AvClass.FILE
+av.initialize(
+    "avesterra.net",
+)
 
-print(bob.name)
-print(bill.name)
+av.finalize()
