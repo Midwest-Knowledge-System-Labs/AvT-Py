@@ -15,7 +15,7 @@ https://blog.ian.stapletoncordas.co/2019/02/distributing-python-libraries-with-t
 from setuptools import setup
 
 setup(
-    name="MidWKSL KSI",
+    name="midwksl_ksi",
     version="25.7.2",
     description="Python Knowledge Space Interaction Library",
     author="Midwest Knowledge System Labs",
@@ -24,8 +24,6 @@ setup(
         "Programming Language :: Python :: 3.13",
         "Intended Audience :: Developers",
         "Topic :: Internet",
-        "License :: Proprietary License",
-        "Development Status :: Beta",
     ],
     python_requires=">=3.12",
     install_requires=["tabulate"],
@@ -40,6 +38,7 @@ setup(
         "orchestra": ["py.typed"],
         "avesterra.certificates": ["*.pem"],
     },
+    license="GPL 3.0"
 
 
 )
