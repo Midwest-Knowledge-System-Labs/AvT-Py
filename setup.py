@@ -15,11 +15,11 @@ https://blog.ian.stapletoncordas.co/2019/02/distributing-python-libraries-with-t
 from setuptools import setup
 
 setup(
-    name="AvesTerra",
-    version="25.3.1",
-    description="Python Avial Library",
+    name="MidWKSL KSI",
+    version="25.7.2",
+    description="Python Knowledge Space Interaction Library",
     author="Midwest Knowledge System Labs",
-    author_email="avesterra@georgetown.edu ; dev@midwksl.net ; dev@ledr.io",
+    author_email="apl@midwksl.net ; avesterra@georgetown.edu ; dev@ledr.io",
     classifiers=[
         "Programming Language :: Python :: 3.13",
         "Intended Audience :: Developers",
@@ -27,7 +27,7 @@ setup(
         "License :: Proprietary License",
         "Development Status :: Beta",
     ],
-    python_requires=">=3.11",
+    python_requires=">=3.12",
     install_requires=["tabulate"],
     include_package_data=True,
     package_dir={
