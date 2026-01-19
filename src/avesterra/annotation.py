@@ -1,5 +1,5 @@
 """ 
-Copyright (c) [Midwest Knowledge System Labs] [2025-2026]
+Copyright (c) [Midwest Knowledge System Labs & Plex - Alexander Larkin] [2025-2026]
 Copyright (c) [LEDR Technologies Inc.] [2024-2025]
 This file is part of the Orchestra library, which helps developer use our Orchestra technology which is based on AvesTerra, owned and developed by Georgetown University, under license agreement with LEDR Technologies Inc.
 The Orchestra library is a free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
@@ -8,6 +8,7 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
+# Copyright (c) [Midwest Knowledge System Labs & Plex - Alexander Larkin] [2025-2026]
 
 from avesterra.avial import *
 import avesterra.aspects as aspects

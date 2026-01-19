@@ -1,0 +1,26 @@
+You can find the below list of AxTag values in taxonomy.py as well!
+
+Null
+Avesterra
+Boolean
+Character
+String
+Text
+Integer
+Float
+Entity
+Time
+Web
+Interchange
+Data
+Exception
+Operator
+Function
+Measurement
+Locutor
+Authorization
+Date
+Variable
+Aggregate
+Array
+Taxon

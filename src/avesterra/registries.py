@@ -1,4 +1,4 @@
-"""Copyright (c) [Midwest Knowledge System Labs] [2025-2026]
+"""Copyright (c) [Midwest Knowledge System Labs & Plex - Alexander Larkin] [2025-2026]
 Copyright (c) [LEDR Technologies Inc.] [2024-2025]
 Copyright (c) [LEDR Technologies Inc.] [2024-2025]
 This file is part of the Orchestra library, which helps developer use our Orchestra technology which is based on AvesTerra, owned and developed by Georgetown University, under license agreement with LEDR Technologies Inc.
