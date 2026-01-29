@@ -1856,7 +1856,6 @@ def entity_connection(
     Verify.authorization(authorization)
     (
         result_outlet,
-        result_method_code,
         result_presence_code,
         result_time,
     ) = api.connection(entity=entity, index=index, authorization=authorization)
