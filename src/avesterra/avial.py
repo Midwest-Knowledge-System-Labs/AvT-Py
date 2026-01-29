@@ -200,7 +200,7 @@ class AvLocutorOpt:
         if "EVENT" in d: loc.event = AvEvent[d["EVENT"].removesuffix("_EVENT")]
         if "MODE" in d: loc.mode = AvMode[d["MODE"].removesuffix("_MODE")]
         if "STATE" in d: loc.state = AvState[d["STATE"].removesuffix("_STATE")]
-        if "CONDITION" in d: loc.condition = AxCondition[d["CONDITION"].removesuffix("_CONDITION")]
+        if "CONDITION" in d: loc.condition = AxConditional[d["CONDITION"].removesuffix("_CONDITION")]
 
         if "PRESENCE" in d: loc.presence = 1 if d["PRESENCE"] == 'AVESTERRA_PRESENCE' else 0 # TODO
 
@@ -1063,7 +1063,7 @@ class Verify:
     @staticmethod
     def condition(obj) -> None:
         """Raise error if obj is not a valid mode."""
-        if not isinstance(obj, AxCondition):
+        if not isinstance(obj, AxConditional):
             raise AvesTerraError("{} is not a valid condition".format(obj))
 
     @staticmethod
@@ -1976,12 +1976,12 @@ def entity_condition(
     entity: AvEntity,
     index: int = NULL_INDEX,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
-) -> AxCondition:
+) -> AxConditional:
     """Get entity condition"""
     Verify.entity(entity)
     Verify.natural(index)
     Verify.authorization(authorization)
-    return AxCondition(
+    return AxConditional(
         api.condition(entity=entity, index=index, authorization=authorization)
     )
 
@@ -2262,7 +2262,7 @@ class EventData:
     event: AvEvent
     mode: AvMode
     state: AvState
-    condition: AxCondition
+    condition: AxConditional
     presence: AvPresence
     time: AvTime
     timeout: AvTimeout
@@ -2347,7 +2347,7 @@ def wait_event(
                         event=AvEvent(event),
                         mode=AvMode(mode),
                         state=AvState(state),
-                        condition=AxCondition(condition),
+                        condition=AxConditional(condition),
                         presence=presence,
                         time=AvTime.fromtimestamp(time, tz=UTC).replace(microsecond=0),
                         timeout=timeout,
@@ -2435,7 +2435,7 @@ def wait_event_sustained(
             event=AvEvent(event),
             mode=AvMode(mode),
             state=AvState(state),
-            condition=AxCondition(condition),
+            condition=AxConditional(condition),
             presence=presence,
             time=AvTime.fromtimestamp(time, tz=UTC).replace(microsecond=0),
             timeout=timeout,
@@ -2559,7 +2559,7 @@ class InvokeArgs:
     event: AvEvent
     mode: AvMode
     state: AvState
-    condition: AxCondition
+    condition: AxConditional
     presence: AvPresence
     time: AvTime
     timeout: AvTimeout
@@ -2609,7 +2609,7 @@ def adapt_outlet(
             event=AvEvent(msg.event_code),
             mode=AvMode(msg.mode_code),
             state=AvState(msg.state_code),
-            condition=AxCondition(msg.condition_code),
+            condition=AxConditional(msg.condition_code),
             presence=msg.presence,
             time=AvTime.fromtimestamp(msg.time, tz=UTC).replace(microsecond=0),
             timeout=msg.timeout,

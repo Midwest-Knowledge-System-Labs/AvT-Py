@@ -153,7 +153,7 @@ def retrieve_in_space(
         annotations = list(record[3].values())
 
         state = AxState[AvValue.from_json(annotations[0]).decode_string().split("_")[0]]
-        condition = AxCondition(
+        condition = AxConditional(
             int(AvValue.from_json(annotations[1]).decode_string().strip())
         )
         context = AvContext[
