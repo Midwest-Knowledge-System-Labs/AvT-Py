@@ -10,7 +10,6 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 
 import json
 from typing import Dict, List
-
 import avesterra.avial as av
 from avesterra.taxonomy import AvAttribute
 
@@ -146,7 +145,13 @@ class AvialModel:
         """
         Convenience method to retrieve an entity and get the result as an AvialModel
         """
-        return AvialModel.from_interchange(av.retrieve_entity(entity, timeout, auth))
+        return AvialModel.from_interchange(
+            av.retrieve_entity(
+                entity,
+                timeout=timeout,
+                authorization=auth
+            )
+        )
 
     def to_interchange(self) -> av.AvValue:
         return av.AvValue.encode_interchange(json.dumps(self.to_json_dict()))

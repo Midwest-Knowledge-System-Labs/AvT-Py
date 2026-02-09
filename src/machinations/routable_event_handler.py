@@ -653,7 +653,7 @@ class RoutableEventHandler:
 
         return decorator
 
-    def condition(self, condition: av.AxCondition):
+    def condition(self, condition: av.AxConditional):
         def decorator(fn: Callable[..., av.AvValue]):
             route = self._route(fn)
             route._method.base.condition = condition

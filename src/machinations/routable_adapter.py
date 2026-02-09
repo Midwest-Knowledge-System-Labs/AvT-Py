@@ -7,10 +7,7 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
-from avesterra import NULL_VALUE, AuthorizationError
-from avesterra import AvAttribute, AvEntity, AvialModel
-from machinations.control_surface import create_control_surface
-
+import avesterra
 from avesterra import NULL_VALUE, AuthorizationError
 from avesterra import AvAttribute, AvEntity, AvialModel
 from machinations.control_surface import create_control_surface
@@ -29,8 +26,6 @@ from typing import Callable, Literal, Dict
 from dotenv import find_dotenv, load_dotenv
 
 from avial import avesterra as av
-from avesterra.avesterra import AdapterError, AvAuthorization
-from adapter.adapter import Adapter
 from orchestra import Interface, Method, ValueType
 
 
@@ -674,7 +669,7 @@ class RoutableAdapter:
 
         return decorator
 
-    def condition(self, condition: av.AxCondition):
+    def condition(self, condition: av.AxConditional):
         def decorator(fn: Callable[..., av.AvValue]):
             route = self._route(fn)
             route._method.base.condition = condition
@@ -749,8 +744,6 @@ class RoutableAdapter:
         """
         Only safe to call once all the routes are properly declared
         """
-
-        import avesterra.objects as objects
 
         import avesterra.objects as objects
 
