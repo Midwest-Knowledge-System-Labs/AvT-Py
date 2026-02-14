@@ -20,6 +20,7 @@ import avesterra.aspects as aspects
 def insert_fact(
     entity: AvEntity,
     attribute: AvAttribute = NULL_ATTRIBUTE,
+    name: AvName = NULL_NAME,
     value: AvValue = NULL_VALUE,
     index: AvIndex = NULL_INDEX,
     parameter: AvParameter = NULL_PARAMETER,
@@ -33,6 +34,8 @@ def insert_fact(
         Target entity euid
     attribute : AvAttribute
         Attribute of the fact to be inserted, must be unique if not null
+    name : str
+        Name of the fact to be inserted, not required
     value : AvValue
         Value of the fact to be inserted
     index : AvIndex
@@ -62,6 +65,7 @@ def insert_fact(
         entity=entity,
         aspect=AvAspect.FACT,
         attribute=attribute,
+        name=name,
         value=value,
         index=index,
         parameter=parameter,
@@ -119,6 +123,7 @@ def replace_fact(
     entity: AvEntity,
     attribute: AvAttribute = NULL_ATTRIBUTE,
     value: AvValue = NULL_VALUE,
+    name: AvName = NULL_NAME,
     index: AvIndex = NULL_INDEX,
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
@@ -131,6 +136,8 @@ def replace_fact(
         Target entity euid
     attribute : AvAttribute
         New attribute for the fact, must be unique if not null
+    name : AvName
+        Name of the fact to be replaced, not required
     value : AvValue
         New value for the fact
     index : AvIndex
@@ -154,6 +161,7 @@ def replace_fact(
         entity=entity,
         aspect=AvAspect.FACT,
         attribute=attribute,
+        name=name,
         value=value,
         index=index,
         parameter=parameter,
@@ -209,6 +217,7 @@ def find_fact(
 def include_fact(
     entity: AvEntity,
     attribute: AvAttribute = NULL_ATTRIBUTE,
+    name: AvName = NULL_NAME,
     value: AvValue = NULL_VALUE,
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
@@ -221,6 +230,8 @@ def include_fact(
         Target entity euid
     attribute : AvAttribute
         Attribute of the fact to be included, must be unique if not null
+    name : AvName
+        Name of the fact to be included, not required
     value : AvValue
         Value of the fact to be included
     parameter : AvParameter
@@ -242,6 +253,7 @@ def include_fact(
         entity=entity,
         aspect=AvAspect.FACT,
         attribute=attribute,
+        name=name,
         value=value,
         parameter=parameter,
         authorization=authorization,
@@ -289,6 +301,7 @@ def exclude_fact(
 def set_fact(
     entity: AvEntity,
     attribute: AvAttribute = NULL_ATTRIBUTE,
+    name: AvName = NULL_NAME,
     value: AvValue = NULL_VALUE,
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
@@ -301,6 +314,8 @@ def set_fact(
         Target entity euid
     attribute : AvAttribute
         Attribute of the fact to be set, must be unique if not null
+    name : AvName
+        Name of the fact to be set, not required
     value : AvValue
         Value to set for the fact
     parameter : AvParameter
@@ -322,6 +337,7 @@ def set_fact(
         entity=entity,
         aspect=AvAspect.FACT,
         attribute=attribute,
+        name=name,
         value=value,
         parameter=parameter,
         authorization=authorization,
