@@ -16,7 +16,7 @@ from setuptools import setup
 
 setup(
     name="midwksl_ksi",
-    version="25.7.7",
+    version="25.7.8",
     description="Python Knowledge Space Interaction Library",
     author="Midwest Knowledge System Labs",
     author_email="apl@midwksl.net ; avesterra@georgetown.edu ; dev@ledr.io",
