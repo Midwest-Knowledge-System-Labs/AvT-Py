@@ -22,7 +22,7 @@ class AxTaxa(IntEnum):
    PRESENCE = auto()
    CATEGORY = auto()
    CLASS = auto()
-   CONDITION = auto()
+   CONDITIONAL = auto()
    CONSTANT = auto()
    CONTEXT = auto()
    ERROR = auto()
@@ -49,11 +49,12 @@ class AxTaxa(IntEnum):
    TEMPLATE = auto()
    UNIT = auto()
    VERSION = auto()
+   TEST = auto()
 
 AvTaxa = AxTaxa
 
 
-class AxAvesTerra(IntEnum):
+class AxAvesTerran(IntEnum):
    NULL = 0
    AVESTERRA = auto()
    ADDRESS = auto()
@@ -69,10 +70,10 @@ class AxAvesTerra(IntEnum):
    CLASS = auto()
    CONDITION = auto()
    CONNECTION = auto()
-   CONTEXT_AVESTERA = auto()
+   CONTEXT = auto()
    COUNT = auto()
    CREDENTIAL = auto()
-   ENTITY_AVESTERA = auto()
+   ENTITY = auto()
    EVENT = auto()
    INDEX = auto()
    INSTANCE = auto()
@@ -94,7 +95,7 @@ class AxAvesTerra(IntEnum):
    TOKEN = auto()
    VALUE = auto()
 
-AvAvesTerra = AxAvesTerra
+AvAvesTerran = AxAvesTerran
 
 
 class AxAction(IntEnum):
@@ -1019,6 +1020,29 @@ class AxAttribute(IntEnum):
    SESSION = auto()
    IDEA = auto()
    PROPOSITION = auto()
+   NEXT = auto()
+   PREVIOUS = auto()
+   INPUT = auto()
+   OUTPUT = auto()
+   TRASH = auto()
+   REASON = auto()
+   GRAPHIC = auto()
+   GEOGRAPHIC = auto()
+   CYBERGRAPHIC = auto()
+   METAGRAPHIC = auto()
+   GEOSPATIAL = auto()
+   CYBERSPATIAL = auto()
+   METASPATIAL = auto()
+   ATTACHMENT = auto()
+   CONNECTION = auto()
+   COVERING = auto()
+   FASTENER = auto()
+   SUBSCRIPTION = auto()
+   MEMORY = auto()
+   SOCKET = auto()
+   PARTITION = auto()
+   LOCK = auto()
+   KNOWN = auto()
 
 AvAttribute = AxAttribute
 
@@ -1512,7 +1536,17 @@ class AxClass(IntEnum):
 AvClass = AxClass
 
 
-class AxCondition(IntEnum):
+class AxComponent(IntEnum):
+   NULL = 0
+   AVESTERRA = auto()
+   AVIAL = auto()
+   AVIONOMY = auto()
+   AVU = auto()
+
+AvComponent = AxComponent
+
+
+class AxConditional(IntEnum):
    NULL = 0
    AVESTERRA = auto()
    READY = auto()
@@ -1527,7 +1561,7 @@ class AxCondition(IntEnum):
    PENDING = auto()
    HOLDING = auto()
 
-AvCondition = AxCondition
+AvConditional = AxConditional
 
 
 class AxConstant(IntEnum):
@@ -1712,7 +1746,7 @@ class AxLanguage(IntEnum):
 AvLanguage = AxLanguage
 
 
-class AxLocutor(IntEnum):
+class AxLocution(IntEnum):
    NULL = 0
    AVESTERRA = auto()
    ENTITY = auto()
@@ -1742,7 +1776,7 @@ class AxLocutor(IntEnum):
    AUTHORITY = auto()
    AUTHORIZATION = auto()
 
-AvLocutor = AxLocutor
+AvLocution = AxLocution
 
 
 class AxMatch(IntEnum):
@@ -1765,6 +1799,7 @@ class AxMatch(IntEnum):
    OTHER_FIRST = auto()
    OTHER_LAST = auto()
    OTHER_NAME = auto()
+   KNOWN = auto()
 
 AvMatch = AxMatch
 
@@ -2281,6 +2316,17 @@ class AxTemplate(IntEnum):
 AvTemplate = AxTemplate
 
 
+class AxTest(IntEnum):
+   NULL = 0
+   AVESTERRA = auto()
+   AVIAL = auto()
+   SYSTEM = auto()
+   SECURITY = auto()
+   PRIVACY = auto()
+
+AvTest = AxTest
+
+
 class AxUnit(IntEnum):
    NULL = 0
    AVESTERRA = auto()
@@ -2402,7 +2448,7 @@ class AxUnit(IntEnum):
    POUND_FOOT = auto()
    POUND_INCH = auto()
    KELVIN = auto()
-   CELCIUS = auto()
+   CELSIUS = auto()
    FARENHEIT = auto()
    RANKINE = auto()
    REAUMUR = auto()
@@ -2774,21 +2820,13 @@ class AxUnit(IntEnum):
    WORSTEDYARNCOUNT = auto()
    METRICYARNCOUNT = auto()
    JEWLERSPOINT = auto()
+   PART = auto()
+   COUNT = auto()
 
 AvUnit = AxUnit
 
 
-class AxVersion(IntEnum):
-   NULL = 0
-   AVESTERRA = auto()
-   AVIAL = auto()
-   AVIONOMY = auto()
-   AVU = auto()
-
-AvVersion = AxVersion
-
-
-AvTaxon = AvTaxa | AvAvesTerra | AvAction | AvAdapter | AvAspect | AvAttribute | AvCategory | AvClass | AvCondition | AvConstant | AvContext | AvError | AvEvent | AvFormat | AvGoal | AvInstallation | AvLanguage | AvLocutor | AvMatch | AvMethod | AvMode | AvModel | AvNotice | AvOperator | AvPattern | AvPercept | AvPermission | AvPlatform | AvPrecedence | AvPrefix | AvPresence | AvScheme | AvState | AvTag | AvTemplate | AvUnit | AvVersion
+AvTaxon = AvTaxa | AvAvesTerran | AvAction | AvAdapter | AvAspect | AvAttribute | AvCategory | AvClass | AvComponent | AvConditional | AvConstant | AvContext | AvError | AvEvent | AvFormat | AvGoal | AvInstallation | AvLanguage | AvLocution | AvMatch | AvMethod | AvMode | AvModel | AvNotice | AvOperator | AvPattern | AvPercept | AvPermission | AvPlatform | AvPrecedence | AvPrefix | AvPresence | AvScheme | AvState | AvTag | AvTemplate | AvTest | AvUnit
 
 def taxon(taxon_name, code):
     current_module = sys.modules[__name__]

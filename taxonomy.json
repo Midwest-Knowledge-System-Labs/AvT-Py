@@ -9,7 +9,7 @@
     "PRESENCE",
     "CATEGORY",
     "CLASS",
-    "CONDITION",
+    "CONDITIONAL",
     "CONSTANT",
     "CONTEXT",
     "ERROR",
@@ -35,9 +35,10 @@
     "TAXA",
     "TEMPLATE",
     "UNIT",
-    "VERSION"
+    "VERSION",
+    "TEST"
   ],
-  "AvesTerra": [
+  "AvesTerran": [
     "NULL",
     "AVESTERRA",
     "ADDRESS",
@@ -53,10 +54,10 @@
     "CLASS",
     "CONDITION",
     "CONNECTION",
-    "CONTEXT_AVESTERA",
+    "CONTEXT",
     "COUNT",
     "CREDENTIAL",
-    "ENTITY_AVESTERA",
+    "ENTITY",
     "EVENT",
     "INDEX",
     "INSTANCE",
@@ -990,7 +991,30 @@
     "THREAD",
     "SESSION",
     "IDEA",
-    "PROPOSITION"
+    "PROPOSITION",
+    "NEXT",
+    "PREVIOUS",
+    "INPUT",
+    "OUTPUT",
+    "TRASH",
+    "REASON",
+    "GRAPHIC",
+    "GEOGRAPHIC",
+    "CYBERGRAPHIC",
+    "METAGRAPHIC",
+    "GEOSPATIAL",
+    "CYBERSPATIAL",
+    "METASPATIAL",
+    "ATTACHMENT",
+    "CONNECTION",
+    "COVERING",
+    "FASTENER",
+    "SUBSCRIPTION",
+    "MEMORY",
+    "SOCKET",
+    "PARTITION",
+    "LOCK",
+    "KNOWN"
   ],
   "Category": [
     "NULL",
@@ -1475,7 +1499,14 @@
     "IDEA",
     "PROPOSITION"
   ],
-  "Condition": [
+  "Component": [
+    "NULL",
+    "AVESTERRA",
+    "AVIAL",
+    "AVIONOMY",
+    "AVU"
+  ],
+  "Conditional": [
     "NULL",
     "AVESTERRA",
     "READY",
@@ -1648,7 +1679,7 @@
     "C_PLUS_PLUS",
     "C_SHARP"
   ],
-  "Locutor": [
+  "Locution": [
     "NULL",
     "AVESTERRA",
     "ENTITY",
@@ -1697,7 +1728,8 @@
     "PARTIAL_DOB",
     "OTHER_FIRST",
     "OTHER_LAST",
-    "OTHER_NAME"
+    "OTHER_NAME",
+    "KNOWN"
   ],
   "Method": [
     "NULL",
@@ -2163,6 +2195,14 @@
     "ENRICHMENT",
     "PROVISION"
   ],
+  "Test": [
+    "NULL",
+    "AVESTERRA",
+    "AVIAL",
+    "SYSTEM",
+    "SECURITY",
+    "PRIVACY"
+  ],
   "Unit": [
     "NULL",
     "AVESTERRA",
@@ -2284,7 +2324,7 @@
     "POUND_FOOT",
     "POUND_INCH",
     "KELVIN",
-    "CELCIUS",
+    "CELSIUS",
     "FARENHEIT",
     "RANKINE",
     "REAUMUR",
@@ -2655,13 +2695,8 @@
     "LINENYARNCOUNT",
     "WORSTEDYARNCOUNT",
     "METRICYARNCOUNT",
-    "JEWLERSPOINT"
-  ],
-  "Version": [
-    "NULL",
-    "AVESTERRA",
-    "AVIAL",
-    "AVIONOMY",
-    "AVU"
+    "JEWLERSPOINT",
+    "PART",
+    "COUNT"
   ]
 }
