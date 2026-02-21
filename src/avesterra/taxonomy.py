@@ -8,9 +8,9 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
 
-import enum
 import sys
 from enum import IntEnum, auto
+
 
 class AxTaxa(IntEnum):
    NULL = 0
@@ -53,7 +53,7 @@ class AxTaxa(IntEnum):
 AvTaxa = AxTaxa
 
 
-class AxAvesTerran(IntEnum):
+class AxAvesTerra(IntEnum):
    NULL = 0
    AVESTERRA = auto()
    ADDRESS = auto()
@@ -69,8 +69,10 @@ class AxAvesTerran(IntEnum):
    CLASS = auto()
    CONDITION = auto()
    CONNECTION = auto()
+   CONTEXT_AVESTERA = auto()
    COUNT = auto()
    CREDENTIAL = auto()
+   ENTITY_AVESTERA = auto()
    EVENT = auto()
    INDEX = auto()
    INSTANCE = auto()
@@ -92,7 +94,7 @@ class AxAvesTerran(IntEnum):
    TOKEN = auto()
    VALUE = auto()
 
-AvAvesTerran = AxAvesTerran
+AvAvesTerra = AxAvesTerra
 
 
 class AxAction(IntEnum):
@@ -115,6 +117,7 @@ class AxAdapter(IntEnum):
    AGENT = auto()
    TUPLE = auto()
    PRIVACY = auto()
+   SPACE_ADPATER = auto()
    BOOST = auto()
    THRUST = auto()
    BACKUP = auto()
@@ -916,6 +919,7 @@ class AxAttribute(IntEnum):
    SCRIPT = auto()
    HELP = auto()
    PRIMARY = auto()
+   SECONDARY_ATTERIBUTE = auto()
    TERTIARY = auto()
    ALTERNATE = auto()
    CARDINAL = auto()
@@ -1015,29 +1019,6 @@ class AxAttribute(IntEnum):
    SESSION = auto()
    IDEA = auto()
    PROPOSITION = auto()
-   NEXT = auto()
-   PREVIOUS = auto()
-   INPUT = auto()
-   OUTPUT = auto()
-   TRASH = auto()
-   REASON = auto()
-   GRAPHIC = auto()
-   GEOGRAPHIC = auto()
-   CYBERGRAPHIC = auto()
-   METAGRAPHIC = auto()
-   GEOSPATIAL = auto()
-   CYBERSPATIAL = auto()
-   METASPATIAL = auto()
-   ATTACHMENT = auto()
-   CONNECTION = auto()
-   COVERING = auto()
-   FASTENER = auto()
-   SUBSCRIPTION = auto()
-   MEMORY = auto()
-   SOCKET = auto()
-   PARTITION = auto()
-   LOCK = auto()
-   KNOWN = auto()
 
 AvAttribute = AxAttribute
 
@@ -1531,7 +1512,7 @@ class AxClass(IntEnum):
 AvClass = AxClass
 
 
-class AxConditional(IntEnum):
+class AxCondition(IntEnum):
    NULL = 0
    AVESTERRA = auto()
    READY = auto()
@@ -1546,7 +1527,7 @@ class AxConditional(IntEnum):
    PENDING = auto()
    HOLDING = auto()
 
-AvConditional = AxConditional
+AvCondition = AxCondition
 
 
 class AxConstant(IntEnum):
@@ -1562,6 +1543,7 @@ class AxConstant(IntEnum):
    GRAVITATIONAL = auto()
    ASTRONOMICAL_UNIT = auto()
    MOLE = auto()
+   ELEMENTARY_CHARGE = auto()
    ELECTRON_MASS = auto()
    PROTON_MASS = auto()
    NEUTRON_MASS = auto()
@@ -1730,7 +1712,7 @@ class AxLanguage(IntEnum):
 AvLanguage = AxLanguage
 
 
-class AxLocution(IntEnum):
+class AxLocutor(IntEnum):
    NULL = 0
    AVESTERRA = auto()
    ENTITY = auto()
@@ -1760,7 +1742,7 @@ class AxLocution(IntEnum):
    AUTHORITY = auto()
    AUTHORIZATION = auto()
 
-AvLocution = AxLocution
+AvLocutor = AxLocutor
 
 
 class AxMatch(IntEnum):
@@ -1783,7 +1765,6 @@ class AxMatch(IntEnum):
    OTHER_FIRST = auto()
    OTHER_LAST = auto()
    OTHER_NAME = auto()
-   KNOWN = auto()
 
 AvMatch = AxMatch
 
@@ -2411,7 +2392,7 @@ class AxUnit(IntEnum):
    DESYATINA_STATE = auto()
    DESYATINA_FARMERY = auto()
    SQVERST = auto()
-   SQARSHIN_UNIT = auto()
+   SQARSHIN = auto()
    SQFOOT = auto()
    NEWTON = auto()
    JOULE = auto()
@@ -2528,7 +2509,7 @@ class AxUnit(IntEnum):
    ARPENTCAN = auto()
    ARPENTLIN = auto()
    ATMOSPHERE = auto()
-   ATOMIC_MASS_UNIT = auto()
+   ATOMIC_MASS = auto()
    SECONDS_IN_A_YEAR = auto()
    AMU = auto()
    BAG = auto()
@@ -2793,28 +2774,27 @@ class AxUnit(IntEnum):
    WORSTEDYARNCOUNT = auto()
    METRICYARNCOUNT = auto()
    JEWLERSPOINT = auto()
-   PART = auto()
-   COUNT = auto()
 
 AvUnit = AxUnit
 
 
-class AxComponent(IntEnum):
+class AxVersion(IntEnum):
    NULL = 0
    AVESTERRA = auto()
    AVIAL = auto()
    AVIONOMY = auto()
    AVU = auto()
 
-AvComponent = AxComponent
+AvVersion = AxVersion
 
-AvTaxon = AvTaxa | AvAvesTerran | AvAction | AvAdapter | AvAspect | AvAttribute | AvCategory | AvClass | AvConditional | AvConstant | AvContext | AvError | AvEvent | AvFormat | AvGoal | AvFormat | AvInstallation | AvLanguage | AvLocution | AvMatch | AvMethod | AvMode | AvModel | AvNotice | AvOperator | AvPattern | AvPercept | AvPermission | AvPlatform | AvPrecedence | AvPrefix | AvPresence | AvScheme | AvState | AvTag | AvTemplate | AvUnit | AvComponent
+
+AvTaxon = AvTaxa | AvAvesTerra | AvAction | AvAdapter | AvAspect | AvAttribute | AvCategory | AvClass | AvCondition | AvConstant | AvContext | AvError | AvEvent | AvFormat | AvGoal | AvInstallation | AvLanguage | AvLocutor | AvMatch | AvMethod | AvMode | AvModel | AvNotice | AvOperator | AvPattern | AvPercept | AvPermission | AvPlatform | AvPrecedence | AvPrefix | AvPresence | AvScheme | AvState | AvTag | AvTemplate | AvUnit | AvVersion
 
 def taxon(taxon_name, code):
     current_module = sys.modules[__name__]
     try:
         enum_class = getattr(current_module, taxon_name)
-        if issubclass(enum_class, enum.IntEnum):
+        if issubclass(enum_class, IntEnum):
             return list(enum_class)[code]
         else:
             raise TypeError(f"{taxon_name} is not an Enum class.")
