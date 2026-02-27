@@ -313,13 +313,12 @@ class Property:
         self,
         name: str = "",
         key: str = "",
-        value: av.AvValue = av.NULL_VALUE,
-        annotations: AnnotationList | None = None,
+        value: av.AvValue = av.NULL_VALUE
     ):
         self.name = name
         self.key = key
         self.value = value
-        self.annotations = annotations
+        self.annotations = AnnotationList()
 
     def __eq__(self, other):
         return (
@@ -352,12 +351,6 @@ class Property:
 
             p.annotations =  AnnotationList.from_json_list(li[3])
 
-            #for annotation in li[3]:
-            #    attribute_name = annotation[0].removesuffix("_ATTRIBUTE")
-            #    annotation_name = annotation[1]
-            #    p.annotations[AvAttribute[attribute_name]] = av.AvValue.from_json(annotation[2])
-
-
         return p
 
     def to_json_list(self):
@@ -368,7 +361,7 @@ class Property:
         if self.annotations:
             d = {}
             for annotation in self.annotations:
-                d[annotation.name + "_ATTRIBUTE"] = annotation.value.obj()
+                d[annotation.attribute.name + "_ATTRIBUTE"] = annotation.value.obj()
             li.append(d)
         return li
 
