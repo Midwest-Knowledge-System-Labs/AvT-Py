@@ -92,6 +92,9 @@ class AvialModel:
     """
 
     def __init__(self):
+        self.model = "Avial"
+        self.version = "V6.2"
+        self.format = 2
         self.name: str = ""
         self.key: str = ""
         self.data: int = 0
@@ -162,6 +165,9 @@ class AvialModel:
     def from_json_dict(d: Dict):
         model = AvialModel()
 
+        model.model = d.get("Model", "Avial")
+        model.version = d.get("Version", "V6.2")
+        model.format = d.get("Format", 2)
         model.name = d.get("Name", "")
         model.key = d.get("Key", "")
         model.data = d.get("Data", 0)
@@ -174,6 +180,9 @@ class AvialModel:
 
     def to_json_dict(self):
         d = {}
+        d["Model"] = self.model
+        d["Version"] = self.version
+        d["Format"] = self.format
         if self.name:
             d["Name"] = self.name
         if self.key:
