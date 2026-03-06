@@ -9,11 +9,13 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 """
 
 import json
-from typing import Dict, List
+from typing import Dict, List, Any, Tuple, TypeVar
 import avesterra.avial as av
+from avesterra import AvValue
 from avesterra.taxonomy import AvAttribute
-
+from collections import OrderedDict
 from tabulate import tabulate
+from pandas import DataFrame
 
 
 class AvialModel:
@@ -520,6 +522,7 @@ class Fact:
     def to_json_list(self):
         li = []
         li.append(self.attribute.name + "_ATTRIBUTE")
+        li.append(self.name)
         li.append(self.value.obj())
         li.append(self.facets.to_json_list())
         li.append(self.features.to_json_list())
@@ -1440,3 +1443,218 @@ class TraitList:
 
     def to_json_list(self):
         return [f.to_json_list() for f in self.traits]
+
+_KT = TypeVar("_KT")
+_VT = TypeVar("_VT")
+
+class InsertableOrderedDict(OrderedDict[_KT, _VT]):
+
+    def __init__(self):
+        super().__init__()
+
+    def _idx(self, index: int = -1):
+        if index < -1:
+            raise ValueError("Index must be non-negative or -1")
+
+        if index == -1:
+            clean_index = len(self)
+        else:
+            clean_index = index
+
+        if clean_index > len(self):
+            raise IndexError("Index given is out of range")
+
+        return clean_index
+
+    def _build(self, content: List[Tuple[str, Any]]):
+        # Clear container
+        self.clear()
+
+        # Rebuild ordered dict
+        for k, v in content:
+            self[k] = v
+
+
+    def insert(self, key: str, item: Any, index: int = -1):
+        _contents = []
+        i = 0
+
+        clean_idx = self._idx(index)
+
+        # Insert the new item into
+        for k, v in self.items():
+            if i == clean_idx:
+                _contents.append((key, item))
+            _contents.append((k, v))
+            i += 1
+
+        self._build(_contents)
+
+    def reindex(self, key: str, index: int = -1):
+        _contents = []
+        i = 0
+
+        if key not in self:
+            raise KeyError(f"Key {key} not found in dictionary")
+
+        clean_idx = self._idx(index)
+        _save_off = None
+
+        # Extract all items and save off target item
+        for k, v in self.items():
+            if k == key:
+                _save_off = (key, v)
+            else:
+                _contents.append((k, v))
+            i += 1
+        assert _save_off is not None
+        _contents[clean_idx] = _save_off
+        self._build(_contents)
+
+class TableList:
+    pass
+
+class Row:
+    name: str
+    value: str
+
+class Column:
+    name: str
+    value: str
+
+class Cell:
+    _v: AvValue
+    def __init__(self, v: AvValue):
+        self._v = v
+
+class Table:
+
+    name: str
+    key: str
+
+    columns: InsertableOrderedDict[str, Column]
+    rows: InsertableOrderedDict[str, Row]
+
+    _table: List[Cell]
+
+    def __init__(self,
+                 key: str,
+                 name: str = "",
+                 table: List[AvValue] | List[List[AvValue]] = None,
+                 columns: InsertableOrderedDict[str, Column] | None = None,
+                 rows: InsertableOrderedDict[str, Row] | None = None
+                 ):
+
+        if rows is None:
+            self.rows = OrderedDict()
+        if columns is None:
+            self.columns = OrderedDict()
+
+        self.columns = columns
+        self.rows = rows
+
+        if table is None:
+            self._table = []
+        else:
+            if isinstance(table[0], List):
+                self._table = self._load_2d(table)
+            elif isinstance(table[0], AvValue):
+                self._table = self._load_flat(table)
+            else:
+                raise TypeError(f"Invalid type for table: {type(table)}")
+
+    def __eq__(self, other: 'Table'):
+        return self.rows.keys() == other.rows.keys() and self.columns.keys() == other.columns.keys() and self._table == other._table
+
+    def __len__(self):
+        return len(list(self.rows.values()))
+
+    @staticmethod
+    def _load_2d(table: List[List[AvValue]]) -> List[Cell]:
+        output: List[Cell] = []
+        for row in table:
+            for v in row:
+                output.append(Cell(v=v))
+        return output
+
+    @staticmethod
+    def _load_flat(table: List[AvValue]) -> List[Cell]:
+        output: List[Cell] = []
+        for v in table:
+            output.append(Cell(v=v))
+        return output
+
+    def r(self, i: str | int) -> OrderedDict[str, Cell]:
+        out: OrderedDict[str, Cell] = OrderedDict()
+        assert self.rows is not None
+        assert self.columns is not None
+
+        # If 'i' is a string, get i's idx by looking it up
+        if isinstance(i, str):
+            # Get idx of row from the given key
+            idx = list(self.rows.keys()).index(i)
+            if not idx:
+                raise ValueError(f"Row of key '{i}' not found")
+        else:
+            # Just use given i as a row index
+            idx = i
+
+        column_keys = list(self.columns.keys())
+
+        # Get idx of a row in a flat table space
+        start_idx = idx * len(column_keys)
+
+        # Grab items of the row from a flat table space and put them into an ordered
+        # dictionary
+        for _i in range(0, len(column_keys)):
+            out[column_keys[i]] = self._table[start_idx + _i]
+
+        # Return ordered dictionary
+        return out
+
+    def c(self, i: str | int) -> OrderedDict[str, AvValue]:
+        out: OrderedDict[str, Cell] = OrderedDict()
+        assert self.rows is not None
+        assert self.columns is not None
+
+        # If 'i' is a string, get i's idx by looking it up
+        if isinstance(i, str):
+            # Get idx of the column from the given key
+            idx = list(self.columns.keys()).index(i)
+            if not idx:
+                raise ValueError(f"Column of key '{i}' not found")
+        else:
+            # Just use given i as a column index
+            idx = i
+
+        row_keys = list(self.rows.keys())
+
+        # Get idx of a column in a flat table space
+        start_idx = idx * len(row_keys)
+
+        # Grab items of the column from a flat table space and put them into an ordered
+        # dictionary
+        for _i in range(0, len(row_keys)):
+            out[row_keys[i]] = self._table[start_idx + _i]
+
+        # Return ordered dictionary
+        return out
+
+    @staticmethod
+    def from_json_list(li: List):
+        t = Table(
+            key=li[0],
+            name=li[1],
+
+        )
+
+        f.key = li[0]
+        f.values = [av.AvValue.from_json(f) for f in li[1]]
+
+        return f
+
+    def to_json_list(self):
+        li = []
+        li.append(self.key)
+        li.append([f.obj() for f in self.values])
+        return li
