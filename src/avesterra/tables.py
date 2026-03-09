@@ -7,9 +7,6 @@ You should have received a copy of the GNU Lesser General Public License along w
 If you have any questions, feedback or issues about the Midwest Knowledge System Labs library, you can contact us at support@midwksl.net.
 """
 
-
-from avesterra.avial import *
-
 from avesterra.avial import *
 import avesterra.aspects as aspects
 

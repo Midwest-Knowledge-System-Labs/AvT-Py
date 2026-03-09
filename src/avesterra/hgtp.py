@@ -655,7 +655,7 @@ class SocketPool:
 
     host: str
 
-    def __init__(self, host, port, directory, quantity, timeout=360):
+    def __init__(self, host, port, directory, quantity, timeout=30):
         # could check whether host_ip is an string for an IP address,
         # and whether port is a valid port
 

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """ 
 Copyright (c) [Midwest Knowledge System Labs & Plex - Alexander Larkin] [2025-2026]
 Copyright (c) [LEDR Technologies Inc.] [2024-2025]
@@ -9,13 +10,11 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 """
 
 import json
-from typing import Dict, List, Any, Tuple, TypeVar
+from typing import Dict, List, Tuple
 import avesterra.avial as av
-from avesterra import AvValue
+from avesterra import AvValue, NULL_VALUE
 from avesterra.taxonomy import AvAttribute
-from collections import OrderedDict
 from tabulate import tabulate
-from pandas import DataFrame
 
 
 class AvialModel:
@@ -101,6 +100,7 @@ class AvialModel:
         self.attributions = AttributionList()
         self.facts = FactList()
         self.properties = PropertyList()
+        self.tables = TableList()
 
     def __eq__(self, other):
         return (
@@ -121,9 +121,9 @@ class AvialModel:
         else:
             data_str = ""
         if self.attributions:
-            attributes_str = f"{indent_str}Attributes ({len(self.attributions)}):\n{self.attributions.pretty_str(indent+4)}\n"
+            attributions_str = f"{indent_str}Attributes ({len(self.attributions)}):\n{self.attributions.pretty_str(indent+4)}\n"
         else:
-            attributes_str = ""
+            attributions_str = ""
         if self.facts:
             facts_str = f"{indent_str}Facts ({len(self.facts)}):\n{self.facts.pretty_str(indent+4)}\n"
         else:
@@ -132,9 +132,13 @@ class AvialModel:
             properties_str = f"{indent_str}Properties ({len(self.properties)}):\n{self.properties.pretty_str(indent+4)}\n"
         else:
             properties_str = ""
+        if self.tables:
+            tables_str = f"{indent_str}Tables ({len(self.tables)}):\n{self.tables.pretty_str(indent+4)}\n"
+        else:
+            tables_str = ""
 
         return (
-            f"{name_str}{key_str}{data_str}{attributes_str}{facts_str}{properties_str}"
+            f"{name_str}{key_str}{data_str}{attributions_str}{facts_str}{properties_str}{tables_str}"
         )
 
     @staticmethod
@@ -175,6 +179,7 @@ class AvialModel:
         model.attributions = AttributionList.from_json_list(d.get("Attributions", []))
         model.facts = FactList.from_json_list(d.get("Facts", []))
         model.properties = PropertyList.from_json_list(d.get("Properties", []))
+        model.tables = TableList.from_json_list(d.get("Tables", []))
 
         return model
 
@@ -195,6 +200,8 @@ class AvialModel:
             d["Facts"] = self.facts.to_json_list()
         if self.properties:
             d["Properties"] = self.properties.to_json_list()
+        if self.tables:
+            d["Tables"] = self.tables.to_json_list()
         return d
 
 class Annotation:
@@ -236,11 +243,7 @@ class Annotation:
         return f
 
     def to_json_list(self):
-        li = []
-        li.append(self.attribute.name + "_ATTRIBUTE")
-        li.append(self.name)
-        li.append(self.value.obj())
-        return li
+        return [self.attribute.name + "_ATTRIBUTE", self.name, self.value.obj()]
 
 class AnnotationList:
     def __init__(self):
@@ -1257,12 +1260,7 @@ class Attribution:
         return f
 
     def to_json_list(self):
-        li = []
-        li.append(self.attribute.name + "_ATTRIBUTE")
-        li.append(self.name)
-        li.append(self.value.obj())
-        li.append(self.traits.to_json_list())
-        return li
+        return [self.attribute.name + "_ATTRIBUTE", self.name, self.value.obj(), self.traits.to_json_list()]
 
 
 class AttributionList:
@@ -1453,96 +1451,339 @@ class TraitList:
     def to_json_list(self):
         return [f.to_json_list() for f in self.traits]
 
-_KT = TypeVar("_KT")
-_VT = TypeVar("_VT")
-
-class InsertableOrderedDict(OrderedDict[_KT, _VT]):
-
-    def __init__(self):
-        super().__init__()
-
-    def _idx(self, index: int = -1):
-        if index < -1:
-            raise ValueError("Index must be non-negative or -1")
-
-        if index == -1:
-            clean_index = len(self)
-        else:
-            clean_index = index
-
-        if clean_index > len(self):
-            raise IndexError("Index given is out of range")
-
-        return clean_index
-
-    def _build(self, content: List[Tuple[str, Any]]):
-        # Clear container
-        self.clear()
-
-        # Rebuild ordered dict
-        for k, v in content:
-            self[k] = v
-
-
-    def insert(self, key: str, item: Any, index: int = -1):
-        _contents = []
-        i = 0
-
-        clean_idx = self._idx(index)
-
-        # Insert the new item into
-        for k, v in self.items():
-            if i == clean_idx:
-                _contents.append((key, item))
-            _contents.append((k, v))
-            i += 1
-
-        self._build(_contents)
-
-    def reindex(self, key: str, index: int = -1):
-        _contents = []
-        i = 0
-
-        if key not in self:
-            raise KeyError(f"Key {key} not found in dictionary")
-
-        clean_idx = self._idx(index)
-        _save_off = None
-
-        # Extract all items and save off target item
-        for k, v in self.items():
-            if k == key:
-                _save_off = (key, v)
-            else:
-                _contents.append((k, v))
-            i += 1
-        assert _save_off is not None
-        _contents[clean_idx] = _save_off
-        self._build(_contents)
-
-class TableList:
-    pass
 
 class Row:
     name: str
-    value: str
+    value: AvValue
+
+    def __init__(self, name: str = "", value: AvValue = NULL_VALUE):
+        self.name = name
+        self.value = value
+
+    def set(self, name: str = "", value: AvValue = NULL_VALUE):
+        self.name = name if name else self.name
+        self.value = value if value != NULL_VALUE else self.value
+
+    def to_json_list(self):
+        return [self.name, self.value.obj()]
 
 class Column:
     name: str
-    value: str
+    value: AvValue
+
+    def __init__(self, name: str = "", value: AvValue = NULL_VALUE):
+        self.name = name
+        self.value = value
+
+    def set(self, name: str = "", value: AvValue = NULL_VALUE):
+        self.name = name if name else self.name
+        self.value = value if value != NULL_VALUE else self.value
+
+    def to_json_list(self):
+        return [self.name, self.value.obj()]
+
+
+class Cells:
+
+    _map: Dict[str, int]
+    _cells: List[Cell]
+
+    def __init__(self, pairs: List[Tuple[str, Cell]]):
+        self.map = {}
+        self._cells = []
+        if pairs is not None:
+            for i in range(0, len(pairs)):
+                key, cell = pairs[i]
+                if key:
+                    self.map[key] = i
+                self._cells.append(cell)
+
+    def __getitem__(self, item: int | str):
+        if isinstance(item, str):
+            if item not in self.map:
+                raise KeyError(f"Column '{item}' not found")
+            return self._cells[self.map[item]]
+        elif isinstance(item, int):
+            if item == -1:
+                return self._cells[-1]
+            if item >= len(self._cells):
+                raise IndexError(f"Index {item} out of range in Cells")
+            return self._cells[item]
+        else:
+            raise TypeError(f"Invalid type for item: {type(item)} in trying to access Cell in Cells")
+
+    def __setitem__(self, item: int | str, value: AvValue):
+        if isinstance(item, str):
+            if item not in self.map:
+                raise KeyError(f"'{item}' not found in Cells")
+        elif isinstance(item, int):
+            if item < -1 or item >= len(self._cells):
+                raise IndexError(f"Index {item} out of range in Cells")
+            self._cells[-1].value = value
+        else:
+            raise TypeError(f"Invalid type for item: {type(item)}")
+
+class RowAccessor:
+
+    _table: Table
+
+    def __init__(self, table: Table):
+        self._table = table
+
+    def key_to_idx(self, key: str) -> int:
+        idx = -1
+        for i in range(0, len(self._table._row_list)):
+            row = self._table._row_list[i]
+            if row.name == key:
+                idx = i
+                break
+        return idx
+
+    def __delitem__(self, item: int | str):
+        if isinstance(item, str):
+            idx = self.key_to_idx(item)
+            if idx < 0:
+                raise KeyError(f"Row Deletion Error: Unable to resolve rpw of name '{item}' in Avial Table")
+        else:
+            if item < 0:
+                idx = len(self._table._row_list) - 1
+            else:
+                idx = item
+                if idx >= len(self._table._row_list):
+                    raise IndexError(f"Row Deletion Error: Given index {item} is out of range for the current Avial Table whose length is {len(self._table._row_list)}")
+
+        # Remove row from table
+        for i in range(0, len(self._table._column_list)):
+            del self._table._table[idx + i]
+
+        # Delete row from row list
+        del self._table._row_list[idx]
+
+    def __getitem__(self, item: int | str) -> Cells:
+        row_output: List[Tuple[str, Cell]] = []
+        if isinstance(item, str):
+            idx = self.key_to_idx(item)
+            if idx < 0:
+                raise KeyError(f"Row Get Item Error: Unable to resolve row of name '{item}' in Avial Table")
+        else:
+            if item == -1:
+                idx = len(self._table._row_list) - 1
+            else:
+                idx = item
+                if idx >= len(self._table._row_list):
+                    raise IndexError(f"Row Get Error: Given index {item} is out of range for the current Avial Table whose length is {len(self._table._row_list)}")
+
+        # Get all cells in row of idex
+        for i in range(0, len(self._table._column_list)):
+            column = self._table._column_list[i]
+            row_output.append((column.name, self._table._table[idx + i]))
+
+        return Cells(pairs=row_output)
+
+    def __setitem__(self, item: int | str, value: AvValue | List[AvValue]):
+        name: str = ""
+        if isinstance(item, str):
+            idx = self.key_to_idx(item)
+            name = item
+        elif isinstance(item, int):
+            idx = item
+        else:
+            raise TypeError(f"Invalid type for item: {type(item)}")
+
+        if idx < 0:
+            idx = len(self._table._row_list)
+        else:
+            idx = item
+
+        # If idx is out of range, append a new column to the end of the table
+        # else simply modify one of the currently allocated rows
+        if idx >= len(self._table._row_list):
+            if isinstance(value, AvValue):
+                row = Row(name=name, value=value)
+                values = [value] * len(self._table._column_list)
+                for i in range(0, len(self._table._column_list)):
+                    values[i] = value if self._table._column_list[i].value == NULL_VALUE else self._table._column_list[i].value # Replace columns within row with column specified defaults
+            elif isinstance(value, list):
+                row = Row(name=name, value=NULL_VALUE)
+                # Setup a new row on the table if values were given
+                if len(value) != len(self._table._column_list):
+                    raise ValueError(f"Row Set Error: Given value list is not the same length as the number of columns in the current Avial Table whose length is {len(self._table._column_list)}")
+                values = [Cell(value=val) for val in value]
+            else:
+                raise TypeError(f"Invalid type for value: {type(value)}")
+
+            # Add the new row to the flat table
+            self._table._table.extend(values)
+
+            # Add the new row to the row list
+            self._table._row_list.append(row)
+
+        else:
+            if isinstance(value, AvValue):
+                self._table._row_list[idx].set(name=name, value=value)
+            elif isinstance(value, list):
+                base = idx * len(self._table._column_list)
+                for i in range(0, len(self._table._column_list)):
+                    self._table._table[base + i].value = value[i]
+            else:
+                raise TypeError(f"Invalid type for value: {type(value)}")
+
+    def __len__(self):
+        return len(self._table._row_list)
+
+    def __contains__(self, item: str):
+        for row in self._table._row_list:
+            if row.name == item:
+                return True
+        return False
+
+class ColumnAccessor:
+
+    _table: Table
+
+    def __init__(self, table: Table):
+        self._table = table
+
+    def key_to_idx(self, key: str) -> int:
+        idx = -1
+        for i in range(0, len(self._table._column_list)):
+            column = self._table._column_list[i]
+            if column.name == key:
+                idx = i
+                break
+        return idx
+
+    def __delitem__(self, item: int | str):
+        if isinstance(item, str):
+            idx = self.key_to_idx(item)
+            if idx < 0:
+                raise KeyError(f"Column Deletion Error: Unable to resolve column of name '{item}' in Avial Table")
+        else:
+            if item < 0:
+                idx = len(self._table._column_list) - 1
+            else:
+                idx = item
+                if idx >= len(self._table._column_list):
+                    raise IndexError(f"Column Deletion Error: Given index {item} is out of range for the current Avial Table whose length is {len(self._table._column_list)}")
+
+        # Remove column from table...reversed prevents deletion from bottom...
+        # which would effect future deletions...deleting in reverse order solves the problem
+        for i in reversed(range(0, len(self._table._row_list))):
+            del self._table._table[idx + (i * len(self._table._column_list))]
+
+        # Delete column from column list
+        del self._table._column_list[idx]
+
+    def __getitem__(self, item: int | str) -> Cells:
+        column_output: List[Tuple[str, Cell]] = []
+        if isinstance(item, str):
+            idx = self.key_to_idx(item)
+            if idx < 0:
+                raise KeyError(f"Column Get Item Error: Unable to resolve column of name '{item}' in Avial Table")
+        else:
+            if item == -1:
+                idx = len(self._table._column_list) - 1
+            else:
+                idx = item
+                if idx >= len(self._table._column_list):
+                    raise IndexError(f"Column Get Error: Given index {item} is out of range for the current Avial Table whose length is {len(self._table._column_list)}")
+
+        # Get all cells in column of idx
+        for i in range(0, len(self._table._row_list)):
+            row = self._table._row_list[i]
+            column_output.append((row.name, self._table._table[idx + (i * len(self._table._column_list))]))
+
+        return Cells(pairs=column_output)
+
+    def __setitem__(self, item: int | str, value: AvValue | List[AvValue]):
+        name: str = ""
+        if isinstance(item, str):
+            idx = self.key_to_idx(item)
+            name = item
+        elif isinstance(item, int):
+            idx = item
+        else:
+            raise TypeError(f"Invalid type for item: {type(item)}")
+
+        # If idx is negative, convert to positive index of EOL
+        if idx < 0:
+            idx = len(self._table._column_list)
+
+        # If idx is out of range, append a new column to the table
+        # else simply modify one of the currently allocated columns
+        if idx >= len(self._table._column_list):
+            if isinstance(value, AvValue):
+                column = Column(name=name, value=value)
+
+                # Create a new column across all rows with cells of the default value given
+                for i in range(0, len(self._table._row_list)):
+                    _jump = i * (len(self._table._column_list) + 1)
+                    self._table._table.insert(idx + _jump, Cell(value))
+
+            elif isinstance(value, list):
+                column = Column(name=name, value=NULL_VALUE)
+                if len(value) != len(self._table._row_list):
+                    raise ValueError(f"Column Set Error: Given value list is not the same length as the number of rows in the current Avial Table whose length is {len(self._table._row_list)}")
+
+                # Create a new column in the table using the given values
+                for i in range(0, len(self._table._row_list)):
+                    _jump = i * (len(self._table._column_list) + 1)
+                    self._table._table.insert(idx + _jump, Cell(value=value[i]))
+
+            else:
+                raise TypeError(f"Invalid type for value: {type(value)}")
+
+            # Add the new column to column list
+            self._table._column_list.append(column)
+
+        else:
+            if isinstance(value, AvValue):
+                # Update rows default column values if applicable
+                for i in range(0, len(self._table._row_list)):
+                    _jump = i * len(self._table._column_list)
+                    # Only update a row's cell if it is the same as the column's default value
+                    if self._table._table[idx + _jump].value == self._table._column_list[idx].value:
+                        self._table._table[idx + _jump].value = value
+
+                # Update default after values update...otherwise the above update will not work!
+                self._table._column_list[idx].set(name=name, value=value)
+            elif isinstance(value, list):
+
+                # Replace all values in the designated column with now values
+                for i in range(0, len(self._table._row_list)):
+                    _jump = i * len(self._table._column_list)
+                    self._table._table[idx + _jump].value = Cell(value[i])
+            else:
+                raise TypeError(f"Invalid type for value: {type(value)}")
+
+    def __len__(self):
+        return len(self._table._column_list)
+
+    def __contains__(self, item: str):
+        for column in self._table._column_list:
+            if column.name == item:
+                return True
+        return False
 
 class Cell:
-    _v: AvValue
-    def __init__(self, v: AvValue):
-        self._v = v
+    value: AvValue
+
+    def __init__(self, value: AvValue):
+        self.value = value
+
+    def obj(self):
+        return self.value.obj()
 
 class Table:
 
     name: str
     key: str
 
-    columns: InsertableOrderedDict[str, Column]
-    rows: InsertableOrderedDict[str, Row]
+    columns: ColumnAccessor
+    rows: RowAccessor
+
+    _column_list: List[Column]
+    _row_list: List[Row]
 
     _table: List[Cell]
 
@@ -1550,17 +1791,23 @@ class Table:
                  key: str,
                  name: str = "",
                  table: List[AvValue] | List[List[AvValue]] = None,
-                 columns: InsertableOrderedDict[str, Column] | None = None,
-                 rows: InsertableOrderedDict[str, Row] | None = None
+                 columns: List[Column] | None = None,
+                 rows: List[Row] | None = None
                  ):
 
-        if rows is None:
-            self.rows = OrderedDict()
-        if columns is None:
-            self.columns = OrderedDict()
+        self.key = key
+        self.name = name
 
-        self.columns = columns
-        self.rows = rows
+        if rows is None:
+            self._row_list = []
+        else:
+            self._row_list = rows
+        
+        if columns is None:
+            self._column_list = []
+        else:
+            self._column_list = columns
+
 
         if table is None:
             self._table = []
@@ -1572,98 +1819,184 @@ class Table:
             else:
                 raise TypeError(f"Invalid type for table: {type(table)}")
 
+        self.columns = ColumnAccessor(self)
+        self.rows = RowAccessor(self)
+
     def __eq__(self, other: 'Table'):
-        return self.rows.keys() == other.rows.keys() and self.columns.keys() == other.columns.keys() and self._table == other._table
+        return self._row_list == other._row_list and self._column_list == other._column_list and self._table == other._table
 
     def __len__(self):
-        return len(list(self.rows.values()))
+        return len(self._table)
 
     @staticmethod
     def _load_2d(table: List[List[AvValue]]) -> List[Cell]:
         output: List[Cell] = []
         for row in table:
             for v in row:
-                output.append(Cell(v=v))
+                output.append(Cell(value=v))
         return output
 
     @staticmethod
     def _load_flat(table: List[AvValue]) -> List[Cell]:
         output: List[Cell] = []
         for v in table:
-            output.append(Cell(v=v))
+            output.append(Cell(value=v))
         return output
-
-    def r(self, i: str | int) -> OrderedDict[str, Cell]:
-        out: OrderedDict[str, Cell] = OrderedDict()
-        assert self.rows is not None
-        assert self.columns is not None
-
-        # If 'i' is a string, get i's idx by looking it up
-        if isinstance(i, str):
-            # Get idx of row from the given key
-            idx = list(self.rows.keys()).index(i)
-            if not idx:
-                raise ValueError(f"Row of key '{i}' not found")
-        else:
-            # Just use given i as a row index
-            idx = i
-
-        column_keys = list(self.columns.keys())
-
-        # Get idx of a row in a flat table space
-        start_idx = idx * len(column_keys)
-
-        # Grab items of the row from a flat table space and put them into an ordered
-        # dictionary
-        for _i in range(0, len(column_keys)):
-            out[column_keys[i]] = self._table[start_idx + _i]
-
-        # Return ordered dictionary
-        return out
-
-    def c(self, i: str | int) -> OrderedDict[str, AvValue]:
-        out: OrderedDict[str, Cell] = OrderedDict()
-        assert self.rows is not None
-        assert self.columns is not None
-
-        # If 'i' is a string, get i's idx by looking it up
-        if isinstance(i, str):
-            # Get idx of the column from the given key
-            idx = list(self.columns.keys()).index(i)
-            if not idx:
-                raise ValueError(f"Column of key '{i}' not found")
-        else:
-            # Just use given i as a column index
-            idx = i
-
-        row_keys = list(self.rows.keys())
-
-        # Get idx of a column in a flat table space
-        start_idx = idx * len(row_keys)
-
-        # Grab items of the column from a flat table space and put them into an ordered
-        # dictionary
-        for _i in range(0, len(row_keys)):
-            out[row_keys[i]] = self._table[start_idx + _i]
-
-        # Return ordered dictionary
-        return out
 
     @staticmethod
     def from_json_list(li: List):
-        t = Table(
-            key=li[0],
-            name=li[1],
+        name=li[0]
+        key=li[1]
+        column_specs = li[2]
+        row_specs = li[3]
 
+        columns: List[Column] = []
+        for column_spec in column_specs:
+            col_name = column_spec[0]
+            columns.append(
+                Column(name=col_name, value=AvValue.from_json(column_spec[1]))
+            )
+
+        rows: List[Row] = []
+        table_values: List[AvValue] = []
+        for row_spec in row_specs:
+            row_name = row_spec[0]
+            rows.append(
+                Row(name=row_name, value=AvValue.from_json(row_spec[1]))
+            )
+            row_values = row_spec[2]
+            for cell_value in row_values:
+                table_values.append(AvValue.from_json(cell_value))
+
+        t = Table(
+            name=name,
+            key=key,
+            columns=columns,
+            rows=rows,
+            table=table_values
         )
 
-        f.key = li[0]
-        f.values = [av.AvValue.from_json(f) for f in li[1]]
-
-        return f
+        return t
 
     def to_json_list(self):
-        li = []
-        li.append(self.key)
-        li.append([f.obj() for f in self.values])
-        return li
+        col_length = len(self.columns)
+        columns = []
+        rows = []
+        for f in self._column_list:
+            columns.append(f.to_json_list())
+        i = 0
+        for r in self._row_list:
+            row = r.to_json_list()
+            vals = []
+            for k in range(i, i+col_length):
+                vals.append(self._table[k].obj())
+            row.append(vals)
+            rows.append(row)
+            i += col_length
+
+        return [self.name, self.key, columns, rows]
+
+    def pretty_str(self, indent: int = 0):
+        indent_str = " " * indent
+
+        header = f"| {indent_str}Table: {self.name} ({self.key}) |"
+
+        columns = f"|"
+
+        rows: List[List[str]] = []
+        rows.append("=================================================================")
+        rows.append(
+            header
+        )
+
+        for column in self._column_list:
+            columns += f"('{column.name}')[{column.value.decode()}] | "
+        rows.append("=================================================================")
+        rows.append(
+            columns
+        )
+        rows.append("_________________________________________________________________")
+        i = 0
+        col_length = len(self.columns)
+        for row in self._row_list:
+            row_vals = []
+            for k in range(i, i+col_length):
+                row_vals.append(str(self._table[k].value.decode()))
+            i += col_length
+            rows.append(f"('{row.name}')[{row.value.decode()}] =>  {' | '.join(row_vals)} |")
+        rows.append("=================================================================")
+        return "\n".join(rows)
+
+class TableList:
+    def __init__(self):
+        self.tables: List[Table] = []
+
+    def __bool__(self):
+        return bool(self.tables)
+
+    def __len__(self):
+        return len(self.tables)
+
+    def __eq__(self, other):
+        return self.tables == other.tables
+
+    def __str__(self):
+        return "[" + ", ".join(str(t) for t in self.tables) + "]"
+
+    def pretty_str(self, indent: int = 0):
+        return "\n".join([f.pretty_str(indent) for f in self.tables])
+
+    def __getitem__(self, item: int | str):
+        res = self.get_opt(item)
+        if res is None:
+            if isinstance(item, int):
+                raise IndexError()
+            res = Table(item)
+            self.tables.append(res)
+        return res
+
+    def get_opt(self, item: int | str) -> Trait | None:
+        """
+        Returns None if the item does not exist
+        """
+        if isinstance(item, str):
+            for f in self.tables:
+                if f.key == item:
+                    return f
+            return None
+        elif isinstance(item, int):
+            try:
+                return self.tables[item]
+            except IndexError:
+                return None
+        else:
+            raise TypeError(f"Invalid type for item: {type(item)}")
+
+    def append(self, item: Table):
+        self.tables.append(item)
+
+    def has(self, item: int | str):
+        return self.get_opt(item) is not None
+
+    def pop(self, item: int | str) -> Table | None:
+        res = self.get_opt(item)
+        if res is None:
+            return None
+        if isinstance(item, str):
+            self.tables.remove(res)
+        else:
+            del self.tables[item]
+        return res
+
+    def remove(self, item: int | str):
+        self.pop(item)
+
+    @staticmethod
+    def from_json_list(li: List):
+        table_list = TableList()
+        for f in li:
+            table_list.tables.append(Table.from_json_list(f))
+        return table_list
+
+    def to_json_list(self):
+        return [f.to_json_list() for f in self.tables]
