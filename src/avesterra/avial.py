@@ -16,12 +16,14 @@ from dataclasses import dataclass
 from datetime import datetime, date, UTC
 from ipaddress import IPv4Address, IPv6Address
 from typing import Dict, List, Tuple, Callable
+
+from dataclass_wizard.serial_json import JSONWizard
+
 from avesterra.avesterra import *
 from avesterra.hgtp import HGTPFrame
 from avesterra.taxonomy import *
 from avesterra.parameters import *
 from avesterra import api
-
 import enum
 
 ENCODING = "utf-8"
@@ -1621,7 +1623,7 @@ def erase_entity(
     Verify.authorization(authorization)
     api.invoke(
         entity=entity,
-        method=AvMethod.PURGE,
+        method=AvMethod.ERASE,
         attribute=attribute,
         instance=instance,
         aspect=aspect,
@@ -1849,7 +1851,7 @@ def entity_connection(
     entity: AvEntity,
     index: int = NULL_INDEX,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
-) -> Tuple[AvEntity, AvMethod, int, AvTime]:
+) -> Tuple[AvEntity, int, AvTime]:
     """Return connection details (outlet, attribute, presence, and expiration)?"""
     Verify.entity(entity)
     Verify.natural(index)
@@ -1861,7 +1863,6 @@ def entity_connection(
     ) = api.connection(entity=entity, index=index, authorization=authorization)
     return (
         result_outlet,
-        AvMethod(result_method_code),
         result_presence_code,
         AvTime.fromtimestamp(result_time, tz=UTC).replace(microsecond=0),
     )
@@ -2196,7 +2197,7 @@ def subscribe_event(
     Verify.entity(outlet)
     Verify.event(event)
     Verify.natural(timeout)
-    Verify.entity(authority)
+    Verify.authorization(authority)
     Verify.authorization(authorization)
     api.subscribe(
         entity=entity,
@@ -2240,7 +2241,7 @@ def flush_events(
 
 
 @dataclass
-class EventData:
+class PublishArgs(JSONWizard):
     entity: AvEntity
     outlet: AvEntity
     method: AvMethod
@@ -2272,7 +2273,7 @@ class EventData:
 
 def wait_event(
     outlet: AvEntity,
-    callback: Callable[[EventData], None],
+    callback: Callable[[PublishArgs], None],
     timeout: AvTimeout = NULL_TIMEOUT,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
@@ -2325,7 +2326,7 @@ def wait_event(
         nonlocal res
 
         callback(
-                EventData(
+                PublishArgs(
                         entity=entity,
                         outlet=outlet,
                         method=AvMethod(method),
@@ -2366,7 +2367,7 @@ def wait_event(
 
 def wait_event_sustained(
     outlet: AvEntity,
-    callback: Callable[[EventData], bool],
+    callback: Callable[[PublishArgs], bool],
     timeout: AvTimeout = NULL_TIMEOUT,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ):
@@ -2413,7 +2414,7 @@ def wait_event_sustained(
         authority: AvAuthorization,
         authorization: AvAuthorization,
     ) -> bool:
-        return callback(EventData(
+        return callback(PublishArgs(
             entity=entity,
             outlet=outlet,
             method=AvMethod(method),
@@ -2537,7 +2538,7 @@ def deactivate_entity(
 
 
 @dataclass
-class InvokeArgs:
+class InvokeArgs(JSONWizard):
     entity: AvEntity
     outlet: AvEntity
     method: AvMethod

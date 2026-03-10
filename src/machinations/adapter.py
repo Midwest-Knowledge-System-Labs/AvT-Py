@@ -13,27 +13,10 @@ from concurrent.futures import ThreadPoolExecutor
 from concurrent import futures
 from threading import Event
 from abc import ABCMeta, abstractmethod
-import signal
-
-from midwksl import avtc_init, avtc_fin
-
-from avesterra import avial as av
-from avesterra import av_log
-
+from avesterra import avial as av, av_log, AvEntity
 from avesterra.avesterra import AvAuthorization
 from avesterra.avial import AvValue, NULL_ENTITY
 from avesterra.taxonomy import AvTag
-
-from avesterra import avial as av, av_log
-
-from avesterra.avesterra import AvAuthorization
-from avesterra.avial import AvValue, NULL_ENTITY
-from avesterra.taxonomy import AvTag
-
-
-SLEEP_ON_ERROR_SECONDS = 5
-
-MAX_CONNECTION_RETRIES_BEFORE_FAILING = 5
 
 
 class Adapter:
@@ -47,56 +30,54 @@ class Adapter:
 
     def __init__(
         self,
+        outlet: AvEntity,
         auth: AvAuthorization,
-        socket_count: int,
-        adapting_threads: int = 1,
+        thread_count: int = 1,
+        sleep_on_error_seconds: float = 1.0
     ):
-
         self._stop = Event()
-
         self.auth = auth
-        self._socket_count = socket_count
-        self._thread_count = adapting_threads
+        self._thread_count = thread_count
+        self.outlet = outlet
+        self.sleep_on_error_seconds = sleep_on_error_seconds
 
-        self.outlet = NULL_ENTITY
-
-        def signal_handler(sig, frame):
-            del sig, frame
-            av_log.fatal("Adapter: Received SIGTERM. Stopping.")
-            self.shutdown()
-
-        try:
-            signal.signal(signal.SIGTERM, signal_handler)
-
-            num_initial_connection_errors = 0
-            while True:
-                try:
-                    avtc_init(
-                        max_socket_count=self._socket_count
-                    )
-                    break
-                except Exception as e:
-                    av_log.error(
-                        f"Adapter: Error during initialization. Retrying in {SLEEP_ON_ERROR_SECONDS} seconds: {repr(e)}"
-                    )
-                    num_initial_connection_errors += 1
-
-                    if (
-                        num_initial_connection_errors
-                        >= MAX_CONNECTION_RETRIES_BEFORE_FAILING
-                    ):
-                        raise ValueError(
-                            f"The maximum number of retries {MAX_CONNECTION_RETRIES_BEFORE_FAILING} to establish an initial connection to AvesTerra server {self.avt_server} has been reached"
-                        )
-
-                    if self._stop.wait(SLEEP_ON_ERROR_SECONDS):
-                        return
-
-            av_log.success("Connected to AvesTerra")
-            self.on_init()
-        except BaseException as e:
-            av_log.fatal(f"Adapter: Received {repr(e)}. Stopping.")
-            self.shutdown()
+        # def signal_handler(sig, frame):
+        #     del sig, frame
+        #     av_log.fatal("Adapter: Received SIGTERM. Stopping.")
+        #     self.shutdown()
+        #
+        # try:
+        #     signal.signal(signal.SIGTERM, signal_handler)
+        #
+        #     num_initial_connection_errors = 0
+        #     while True:
+        #         try:
+        #             avtc_init(
+        #                 max_socket_count=self._socket_count
+        #             )
+        #             break
+        #         except Exception as e:
+        #             av_log.error(
+        #                 f"Adapter: Error during initialization. Retrying in {SLEEP_ON_ERROR_SECONDS} seconds: {repr(e)}"
+        #             )
+        #             num_initial_connection_errors += 1
+        #
+        #             if (
+        #                 num_initial_connection_errors
+        #                 >= MAX_CONNECTION_RETRIES_BEFORE_FAILING
+        #             ):
+        #                 raise ValueError(
+        #                     f"The maximum number of retries {MAX_CONNECTION_RETRIES_BEFORE_FAILING} to establish an initial connection to AvesTerra server {self.avt_server} has been reached"
+        #                 )
+        #
+        #             if self._stop.wait(SLEEP_ON_ERROR_SECONDS):
+        #                 return
+        #
+        #     av_log.success("Connected to AvesTerra")
+        #     self.on_init()
+        # except BaseException as e:
+        #     av_log.fatal(f"Adapter: Received {repr(e)}. Stopping.")
+        #     self.shutdown()
 
     @abstractmethod
     def invoke_callback(self, args: av.InvokeArgs) -> AvValue:
@@ -140,8 +121,11 @@ class Adapter:
         self._stop.set()
         try:
             self.on_shutdown()
-        finally:
-            avtc_fin()
+        except Exception as e:
+            av_log.error(
+                f"Adapter: Error during shutdown. Ignoring: {repr(e)}"
+            )
+
 
     def run(self, *args, **kwargs):
         """
@@ -198,10 +182,16 @@ class Adapter:
             except Exception as e:
                 if self._stop.is_set():
                     break
+                msg = str(e)
+                if msg.find('Did you forget to call `initialize()') != -1:
+                    av_log.fatal("Adapter: Did you forget to call `initialize()` ?")
+                    self.shutdown()
+                    return
+
                 av_log.error(
-                    f"Adapter: adapt error, Retrying in {SLEEP_ON_ERROR_SECONDS} seconds: {repr(e)}"
+                    f"Adapter: adapt error, Retrying in {self.sleep_on_error_seconds} seconds: {repr(e)}"
                 )
-                self._stop.wait(SLEEP_ON_ERROR_SECONDS)
+                self._stop.wait(self.sleep_on_error_seconds)
 
     def _raw_callback(self, args: av.InvokeArgs):
         if self._stop.is_set():

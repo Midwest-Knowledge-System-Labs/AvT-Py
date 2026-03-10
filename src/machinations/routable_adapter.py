@@ -8,8 +8,8 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 """
 
 import avesterra
-from avesterra import NULL_VALUE, AuthorizationError
-from avesterra import AvAttribute, AvEntity, AvialModel
+from avesterra import NULL_VALUE, AuthorizationError, AdapterError
+from avesterra import AvAttribute, AvialModel
 from machinations.control_surface import create_control_surface
 
 
@@ -23,18 +23,11 @@ import inspect
 import time
 from dataclasses import dataclass
 from typing import Callable, Literal, Dict
-from dotenv import find_dotenv, load_dotenv
-
-from avial import avesterra as av
-from orchestra import Interface, Method, ValueType
-
-
-from avesterra.avesterra import AdapterError, AvAuthorization
-from adapter.adapter import Adapter
-from orchestra.interface import Interface, Method, ValueType
-
-import midwksl
-
+import avesterra.avial as av
+from avesterra import AvAuthorization, AvEntity
+from orchestra.interface import Interface, Event, ValueType, Method
+from threading import Thread
+from machinations.adapter import Adapter
 
 class _RoutableAdapter(Adapter):
 
@@ -43,40 +36,39 @@ class _RoutableAdapter(Adapter):
     def __init__(
         self,
         name: str,
-        socket_count: int,
-        adapting_threads: int,
+        outlet: AvEntity,
+        thread_count: int,
         auth: AvAuthorization,
+        sleep_on_error_seconds: float = 1.0,
         self_connect: bool = True
     ):
-        load_dotenv(find_dotenv())
 
         self.name = name
         self.interface: Interface | None = None
         self._on_shutdown: Callable | None = None
         self.self_connect = self_connect
         super().__init__(
-            server=midwksl.env_avt_host(),
-            directory=midwksl.env_avt_verify_chain_dir(),
+            outlet=outlet,
             auth=auth,
-            socket_count=socket_count,
-            adapting_threads=adapting_threads,
+            thread_count=thread_count,
+            sleep_on_error_seconds=sleep_on_error_seconds
         )
 
     def init_outlet(self):
-        # Split name by capital letter and replace spaces after trim
-        self.outlet = midwksl.outlet(name=self.name.strip().replace(" ", "_"), self_connect = self.self_connect)
+        pass
 
     def setup_outlet(self):
-        assert self.interface is not None, "Interface not set"
-        av.exclude_fact(self.outlet, av.AvAttribute.METHOD, authorization=self.auth)
-        av.store_entity(
-            self.outlet,
-            av.AvMode.INTERCHANGE,
-            self.interface.to_avialmodel().to_interchange(),
-            0,
-            self.auth,
-        )
-        avesterra.av_log.success("Successfully stored interface in outlet")
+        # assert self.interface is not None, "Interface not set"
+        # av.exclude_fact(self.outlet, av.AvAttribute.METHOD, authorization=self.auth)
+        # av.store_entity(
+        #     self.outlet,
+        #     av.AvMode.INTERCHANGE,
+        #     self.interface.to_avialmodel().to_interchange(),
+        #     0,
+        #     self.auth,
+        # )
+        # avesterra.av_log.success("Successfully stored interface in outlet")
+        pass
 
     def run(self):
         super().run()
@@ -101,12 +93,12 @@ class RoutableAdapter:
     def __init__(
         self,
         name: str,
+        outlet: AvEntity,
         version: str,
         description: str,
         auth: AvAuthorization,
-        adapting_threads: int = 1,
-        socket_count: int = 32,
-        self_connect: bool = True
+        self_connect: bool = True,
+        thread_count: int = 1
     ):
         """
         Utility class to implement Orchestra adapters respecting the Orchestra
@@ -248,13 +240,14 @@ class RoutableAdapter:
         the adapter's outlet model.
 
         :param name: The human-friendly name of the adapter as it will appear in the interface.
+        :param outlet: The outlet that the adapter will adapt on.
         :param version: The version of the adapter as it will appear in the interface. It should follow the semantic versioning standard. (<https://semver.org/>)
         :param description: A description of the adapter as it will appear in the interface.
-        :param adapting_threads: The number of threads the adapter will use to handle requests. Default is 1. More thread thread can be used to handle more requests concurrently, but then be careful about concurrency issues. If the adapter performs CPU-heavy tasks, increasing the number of thread is not useful. If the adapter takes time to respond without using much CPU (such as waiting for network calls), then increasing the number of thread could increase performance when responding to multiple invokes at the same time.
+        :param thread_count: The number of threads the adapter will use to handle requests. Default is 1. More thread thread can be used to handle more requests concurrently, but then be careful about concurrency issues. If the adapter performs CPU-heavy tasks, increasing the number of thread is not useful. If the adapter takes time to respond without using much CPU (such as waiting for network calls), then increasing the number of thread could increase performance when responding to multiple invokes at the same time.
         :param self_connect: If true, the outlet created to support the adapter will be self connected; default is True
         """
 
-        self._adapter = _RoutableAdapter(name, socket_count, adapting_threads, self_connect=self_connect, auth=auth)
+        self._adapter = _RoutableAdapter(name=name, outlet=outlet, thread_count=thread_count, self_connect=self_connect, auth=auth)
         self._adapter.invoke_callback = self.invoke_callback
         self._routes: dict[str, OARoute] = {}
         self._version = version
@@ -800,11 +793,21 @@ class RoutableAdapter:
             self._on_outlet_init()
         self._adapter.run()
 
+    def start(self) -> Thread:
+        t = Thread(target=self.run, daemon=True)
+        t.start()
+        return t
+
     def shutdown(self):
         """Will call av.finalize()"""
         self._adapter.shutdown()
 
     def invoke_callback(self, args: av.InvokeArgs) -> av.AvValue:
+
+        if self._routes == {}:
+            print(f"Warning: No routes declared; received Invoke of Args => {args.to_json()}")
+            return NULL_VALUE
+
         for route in self._routes.values():
             base = route._method.base
             if base.method is not None and base.method != args.method:

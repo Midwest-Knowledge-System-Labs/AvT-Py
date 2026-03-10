@@ -10,13 +10,8 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 
 from dataclasses import dataclass
 from typing import Union
-
-from avial import avesterra as av
-from avesterra import AvDate, AvAttribute, AvValue, NULL_ENTITY
-from avesterra import AvEntity
-
-
-from avesterra import AvDate, AvAttribute, AvValue, NULL_ENTITY
+import avesterra.avial as av
+from avesterra import AvDate, AvAttribute, AvValue, NULL_ENTITY, AvialModel
 from avesterra import AvEntity
 
 
@@ -279,7 +274,7 @@ class Interface:
     methods: list[Method]
 
     @staticmethod
-    def from_avialmodel(model: av.AvialModel) -> "Interface":
+    def from_avialmodel(model: AvialModel) -> "Interface":
 
         name = model.facts[av.AvAttribute.NAME].value.decode()
         if not isinstance(name, str):
@@ -324,8 +319,8 @@ class Interface:
 
         return Interface(name, version, description, methods)
 
-    def to_avialmodel(self) -> av.AvialModel:
-        model = av.AvialModel()
+    def to_avialmodel(self) -> AvialModel:
+        model = AvialModel()
         model.facts[av.AvAttribute.NAME].value = av.AvValue.encode_text(self.name)
         model.facts[av.AvAttribute.VERSION].value = av.AvValue.encode_string(
             self.version

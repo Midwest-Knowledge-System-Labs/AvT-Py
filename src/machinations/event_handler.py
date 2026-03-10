@@ -7,28 +7,13 @@ The Orchestra library is distributed in the hope that it will be useful, but WIT
 You should have received a copy of the GNU Lesser General Public License along with the Orchestra library. If not, see <https://www.gnu.org/licenses/>.
 If you have any questions, feedback or issues about the Orchestra library, you can contact us at support@midwksl.net.
 """
-
-import os
 from concurrent.futures import ThreadPoolExecutor
 from concurrent import futures
 from threading import Event
 from abc import ABCMeta, abstractmethod
-import signal
-from midwksl import avtc_init, avtc_fin
-
-from avesterra import avial as av
-from avesterra import av_log
+from avesterra import avial as av, av_log, AvEntity
 from avesterra.avesterra import AvAuthorization
 from avesterra.avial import AvValue, NULL_ENTITY
-
-from avesterra import avial as av, av_log
-from avesterra.avesterra import AvAuthorization
-from avesterra.avial import AvValue, NULL_ENTITY
-
-
-SLEEP_ON_ERROR_SECONDS = 5
-
-MAX_CONNECTION_RETRIES_BEFORE_FAILING = 5
 
 
 class EventHandler:
@@ -42,67 +27,59 @@ class EventHandler:
 
     def __init__(
         self,
-        server: str,
-        directory: str,
+        outlet: AvEntity,
         auth: AvAuthorization,
-        socket_count: int,
-        handling_threads: int = 1,
+        thread_count: int = 1,
+        sleep_on_error_seconds: float = 1.0
     ):
-        if not os.path.exists(directory):
-            raise IOError(
-                f"The given certificate directory '{directory}' doesn't exist"
-            )
-
         self._stop = Event()
-
         self.auth = auth
-        self.avt_server = server
-        self.avt_directory = directory
-        self._socket_count = socket_count
-        self._thread_count = handling_threads
+        self._thread_count = thread_count
+        self.outlet = outlet
+        self.sleep_on_error_seconds = sleep_on_error_seconds
 
-        self.outlet = NULL_ENTITY
+        #def signal_handler(sig, frame):
+        #    del sig, frame
+        #    av_log.fatal("Event_Handler: Received SIGTERM. Stopping.")
+        #    self.shutdown()
 
-        def signal_handler(sig, frame):
-            del sig, frame
-            av_log.fatal("Event_Handler: Received SIGTERM. Stopping.")
-            self.shutdown()
-
-        try:
-            signal.signal(signal.SIGTERM, signal_handler)
-
-            num_initial_connection_errors = 0
-            while True:
-                try:
-                    avtc_init(
-                        max_socket_count=self._socket_count
-                    )
-                    break
-                except Exception as e:
-                    av_log.error(
-                        f"Event_Handler: Error during initialization. Retrying in {SLEEP_ON_ERROR_SECONDS} seconds: {repr(e)}"
-                    )
-                    num_initial_connection_errors += 1
-
-                    if (
-                        num_initial_connection_errors
-                        >= MAX_CONNECTION_RETRIES_BEFORE_FAILING
-                    ):
-                        raise ValueError(
-                            f"The maximum number of retries {MAX_CONNECTION_RETRIES_BEFORE_FAILING} to establish an initial connection to AvesTerra server {self.avt_server} has been reached"
-                        )
-
-                    if self._stop.wait(SLEEP_ON_ERROR_SECONDS):
-                        return
-
-            av_log.success("Connected to AvesTerra")
-            self.on_init()
-        except BaseException as e:
-            av_log.fatal(f"Event_Handler: Received {repr(e)}. Stopping.")
-            self.shutdown()
+        # try:
+        #     signal.signal(signal.SIGTERM, signal_handler)
+        #
+        #     num_initial_connection_errors = 0
+        #     while True:
+        #         try:
+        #             av.initialize(
+        #                 server=self.avt_host,
+        #                 directory=self.avt_cert_directory_path,
+        #                 socket_count=self._socket_count,
+        #             )
+        #             break
+        #         except Exception as e:
+        #             av_log.error(
+        #                 f"Event_Handler: Error during initialization. Retrying in {SLEEP_ON_ERROR_SECONDS} seconds: {repr(e)}"
+        #             )
+        #             num_initial_connection_errors += 1
+        #
+        #             if (
+        #                 num_initial_connection_errors
+        #                 >= MAX_CONNECTION_RETRIES_BEFORE_FAILING
+        #             ):
+        #                 raise ValueError(
+        #                     f"The maximum number of retries {MAX_CONNECTION_RETRIES_BEFORE_FAILING} to establish an initial connection to AvesTerra server {self.avt_host} has been reached"
+        #                 )
+        #
+        #             if self._stop.wait(SLEEP_ON_ERROR_SECONDS):
+        #                 return
+        #
+        #     av_log.success("Connected to AvesTerra")
+        #     self.on_init()
+        # except BaseException as e:
+        #     av_log.fatal(f"Event_Handler: Received {repr(e)}. Stopping.")
+        #     self.shutdown()
 
     @abstractmethod
-    def publish_callback(self, args: av.EventData) -> AvValue:
+    def publish_callback(self, args: av.PublishArgs) -> AvValue:
         """
         This is the callback that will be triggered by the event_handler.
         This is the method that should be implemented by the subclass.
@@ -143,8 +120,10 @@ class EventHandler:
         self._stop.set()
         try:
             self.on_shutdown()
-        finally:
-            avtc_fin()
+        except Exception as e:
+            av_log.error(
+                f"EventHandler: Error during shutdown. Ignoring: {repr(e)}"
+            )
 
     def run(self, *args, **kwargs):
         """
@@ -201,12 +180,19 @@ class EventHandler:
             except Exception as e:
                 if self._stop.is_set():
                     break
-                av_log.error(
-                    f"Event_Handler: wait error, Retrying in {SLEEP_ON_ERROR_SECONDS} seconds: {repr(e)}"
-                )
-                self._stop.wait(SLEEP_ON_ERROR_SECONDS)
+                msg = str(e)
+                if msg.find('Did you forget to call `initialize()') != -1:
+                    av_log.fatal("Event_Handler: Did you forget to call `initialize()` ?")
+                    self.shutdown()
+                    return
 
-    def _raw_callback(self, args: av.EventData):
+                av_log.error(
+                    f"Event_Handler: wait error, Retrying in {self.sleep_on_error_seconds} seconds: {repr(e)}"
+                )
+
+                self._stop.wait(self.sleep_on_error_seconds)
+
+    def _raw_callback(self, args: av.PublishArgs):
         if self._stop.is_set():
             return
 

@@ -13,60 +13,38 @@ RoutableEventHandler aims at implementing all the standard Orchestra behavior of
 event_handler and take care of the boilerplate code.
 See documentation of the `RoutableEventHandler` class
 """
-
 import inspect
 import time
 from dataclasses import dataclass
 from typing import Callable, Literal
-from dotenv import find_dotenv, load_dotenv
-
-from avial import avesterra as av
-from avesterra.avesterra import SubscriberError, AvAuthorization
-from event_handler.event_handler import EventHandler
-from orchestra import Interface, Event, ValueType
-
-
-from avesterra.avesterra import SubscriberError, AvAuthorization
-from event_handler.event_handler import EventHandler
+import avesterra.avial as av
+from avesterra import SubscriberError, AvAuthorization, av_log, AvEntity
 from orchestra.interface import Interface, Event, ValueType
+from threading import Thread
+from machinations.event_handler import EventHandler
 
-import midwksl
 
 class _RoutableEventHandler(EventHandler):
     def __init__(
         self,
         name: str,
-        socket_count: int,
-        waiting_threads: int,
+        outlet: AvEntity,
+        thread_count: int,
         auth: AvAuthorization,
-        self_subscribe: bool = False
+        sleep_on_error_seconds: float = 1.0
     ):
-        load_dotenv(find_dotenv())
         self.name = name
         self.interface: Interface | None = None
         self._on_shutdown: Callable | None = None
-        self.self_subscribe = self_subscribe
         super().__init__(
-            server=midwksl.env_avt_host(),
-            directory=midwksl.env_avt_verify_chain_dir(),
+            outlet=outlet,
             auth=auth,
-            socket_count=socket_count,
-            handling_threads=waiting_threads,
+            thread_count=thread_count,
+            sleep_on_error_seconds=sleep_on_error_seconds
         )
 
     def init_outlet(self):
-        assert self.interface is not None, "Interface not set"
-        # Split name by capital letter and replace spaces after trim
-        self.outlet = midwksl.outlet(self.name.strip().replace(" ", "_"), self_subscribe=self.self_subscribe)
-        av.exclude_fact(self.outlet, av.AvAttribute.METHOD, authorization=self.auth)
-        av.store_entity(
-            self.outlet,
-            av.AvMode.INTERCHANGE,
-            self.interface.to_avialmodel().to_interchange(),
-            0,
-            self.auth,
-        )
-        avesterra.av_log.success("Successfully stored interface in outlet")
+        pass
 
     def run(self):
         super().run()
@@ -79,7 +57,7 @@ class _RoutableEventHandler(EventHandler):
 
 @dataclass
 class OARoute:
-    _method: Event
+    _event: Event
     callback: Callable[..., av.AvValue]
     name_set: bool
 
@@ -88,11 +66,11 @@ class RoutableEventHandler:
     def __init__(
         self,
         name: str,
+        outlet: AvEntity,
         version: str,
         description: str,
-        handling_threads: int = 1,
-        socket_count: int = 32,
-        self_subscribe: bool = False,
+        auth: AvAuthorization,
+        thread_count: int = 1
     ):
         """
         Utility class to implement Orchestra event_handlers respecting the Orchestra
@@ -109,7 +87,7 @@ class RoutableEventHandler:
         not supported and will result in undefined behavior. Adding support for
         it is possible future improvement, but it's unlikely to be useful.
 
-        To make the `adapt` call to the Orchestra server and publish the
+        To make the `wait` call to the Orchestra server and publish the
         interface of the event_handler, remember to call the method `run()` of the
         event_handler after you are done declaring all of the routes.
 
@@ -237,11 +215,10 @@ class RoutableEventHandler:
         :param version: The version of the event_handler as it will appear in the interface. It should follow the semantic versioning standard. (<https://semver.org/>)
         :param description: A description of the event_handler as it will appear in the interface.
         :param handling_threads: The number of threads the event_handler will use to handle requests. Default is 1. More thread thread can be used to handle more requests concurrently, but then be careful about concurrency issues. If the event_handler performs CPU-heavy tasks, increasing the number of thread is not useful. If the event_handler takes time to respond without using much CPU (such as waiting for network calls), then increasing the number of thread could increase performance when responding to multiple invokes at the same time.
-        :param self_subscribe: If true, the outlet created to support the event_handler will be self-subscribed; default is True
         """
 
-        self._event_handler = _RoutableEventHandler(name, socket_count, handling_threads, self_subscribe)
-        self._event_handler.invoke_callback = self.invoke_callback
+        self._event_handler = _RoutableEventHandler(name=name, outlet=outlet, thread_count=thread_count, auth=auth)
+        self._event_handler.publish_callback = self.publish_callback
         self._routes: dict[str, OARoute] = {}
         self._version = version
         self._description = description
@@ -445,13 +422,13 @@ class RoutableEventHandler:
                             f"Function '{fn.__name__}': Argument {param.name} must be a AvTimeout but is {param.annotation}"
                         )
                     args.append(av.AvOperator.TIMEOUT)
-                elif param.name == "mask":
-                    if param.annotation != inspect._empty and not issubclass(
-                        param.annotation, av.AvMask
-                    ):
-                        raise ValueError(
-                            f"Function '{fn.__name__}': Argument {param.name} must be a AvMask but is {param.annotation}"
-                        )
+#                elif param.name == "mask":
+#                    if param.annotation != inspect._empty and not issubclass(
+#                        param.annotation, av.AvMask
+#                    ):
+#                        raise ValueError(
+#                            f"Function '{fn.__name__}': Argument {param.name} must be a AvMask but is {param.annotation}"
+#                        )
                 elif param.name == "auxiliary":
                     if param.annotation != inspect._empty and not issubclass(
                         param.annotation, av.AvEntity
@@ -511,7 +488,7 @@ class RoutableEventHandler:
 
         def decorator(fn: Callable[..., av.AvValue]):
             route = self._route(fn)
-            route._method.name = name
+            route._event.name = name
             route.name_set = True
             return fn
 
@@ -520,7 +497,7 @@ class RoutableEventHandler:
     def method(self, method: av.AvMethod):
         def decorator(fn: Callable[..., av.AvValue]):
             route = self._route(fn)
-            route._method.base.method = method
+            route._event.base.method = method
             return fn
 
         return decorator
@@ -528,7 +505,7 @@ class RoutableEventHandler:
     def attribute(self, attribute: av.AvAttribute):
         def decorator(fn: Callable[..., av.AvValue]):
             route = self._route(fn)
-            route._method.base.attribute = attribute
+            route._event.base.attribute = attribute
             return fn
 
         return decorator
@@ -536,7 +513,7 @@ class RoutableEventHandler:
     def key(self, key: av.AvKey):
         def decorator(fn: Callable[..., av.AvValue]):
             route = self._route(fn)
-            route._method.base.key = key
+            route._event.base.key = key
             return fn
 
         return decorator
@@ -544,7 +521,7 @@ class RoutableEventHandler:
     def name(self, name: av.AvName):
         def decorator(fn: Callable[..., av.AvValue]):
             route = self._route(fn)
-            route._method.base.name = name
+            route._event.base.name = name
             return fn
 
         return decorator
@@ -552,7 +529,7 @@ class RoutableEventHandler:
     def parameter(self, parameter: av.AvParameter):
         def decorator(fn: Callable[..., av.AvValue]):
             route = self._route(fn)
-            route._method.base.parameter = parameter
+            route._event.base.parameter = parameter
             return fn
 
         return decorator
@@ -560,7 +537,7 @@ class RoutableEventHandler:
     def resultant(self, resultant: int):
         def decorator(fn: Callable[..., av.AvValue]):
             route = self._route(fn)
-            route._method.base.resultant = resultant
+            route._event.base.resultant = resultant
             return fn
 
         return decorator
@@ -568,7 +545,7 @@ class RoutableEventHandler:
     def index(self, index: av.AvIndex):
         def decorator(fn: Callable[..., av.AvValue]):
             route = self._route(fn)
-            route._method.base.index = index
+            route._event.base.index = index
             return fn
 
         return decorator
@@ -576,7 +553,7 @@ class RoutableEventHandler:
     def instance(self, instance: av.AvInstance):
         def decorator(fn: Callable[..., av.AvValue]):
             route = self._route(fn)
-            route._method.base.instance = instance
+            route._event.base.instance = instance
             return fn
 
         return decorator
@@ -584,7 +561,7 @@ class RoutableEventHandler:
     def offset(self, offset: av.AvOffset):
         def decorator(fn: Callable[..., av.AvValue]):
             route = self._route(fn)
-            route._method.base.offset = offset
+            route._event.base.offset = offset
             return fn
 
         return decorator
@@ -592,7 +569,7 @@ class RoutableEventHandler:
     def count(self, count: av.AvCount):
         def decorator(fn: Callable[..., av.AvValue]):
             route = self._route(fn)
-            route._method.base.count = count
+            route._event.base.count = count
             return fn
 
         return decorator
@@ -600,7 +577,7 @@ class RoutableEventHandler:
     def aspect(self, aspect: av.AvAspect):
         def decorator(fn: Callable[..., av.AvValue]):
             route = self._route(fn)
-            route._method.base.aspect = aspect
+            route._event.base.aspect = aspect
             return fn
 
         return decorator
@@ -608,7 +585,7 @@ class RoutableEventHandler:
     def context(self, context: av.AvContext):
         def decorator(fn: Callable[..., av.AvValue]):
             route = self._route(fn)
-            route._method.base.context = context
+            route._event.base.context = context
             return fn
 
         return decorator
@@ -616,7 +593,7 @@ class RoutableEventHandler:
     def category(self, category: av.AvCategory):
         def decorator(fn: Callable[..., av.AvValue]):
             route = self._route(fn)
-            route._method.base.category = category
+            route._event.base.category = category
             return fn
 
         return decorator
@@ -624,7 +601,7 @@ class RoutableEventHandler:
     def klass(self, klass: av.AvClass):
         def decorator(fn: Callable[..., av.AvValue]):
             route = self._route(fn)
-            route._method.base.klass = klass
+            route._event.base.klass = klass
             return fn
 
         return decorator
@@ -632,7 +609,7 @@ class RoutableEventHandler:
     def event(self, event: av.AvEvent):
         def decorator(fn: Callable[..., av.AvValue]):
             route = self._route(fn)
-            route._method.base.event = event
+            route._event.base.event = event
             return fn
 
         return decorator
@@ -640,7 +617,7 @@ class RoutableEventHandler:
     def mode(self, mode: av.AvMode):
         def decorator(fn: Callable[..., av.AvValue]):
             route = self._route(fn)
-            route._method.base.mode = mode
+            route._event.base.mode = mode
             return fn
 
         return decorator
@@ -648,7 +625,7 @@ class RoutableEventHandler:
     def state(self, state: av.AvState):
         def decorator(fn: Callable[..., av.AvValue]):
             route = self._route(fn)
-            route._method.base.state = state
+            route._event.base.state = state
             return fn
 
         return decorator
@@ -656,7 +633,7 @@ class RoutableEventHandler:
     def condition(self, condition: av.AxConditional):
         def decorator(fn: Callable[..., av.AvValue]):
             route = self._route(fn)
-            route._method.base.condition = condition
+            route._event.base.condition = condition
             return fn
 
         return decorator
@@ -664,7 +641,7 @@ class RoutableEventHandler:
     def value_in(self, value_type: ValueType):
         def decorator(fn: Callable[..., av.AvValue]):
             route = self._route(fn)
-            route._method.value_in = value_type
+            route._event.value_in = value_type
             return fn
 
         return decorator
@@ -673,8 +650,8 @@ class RoutableEventHandler:
     def on_outlet_init(self, fn: Callable):
         """
         This function will be called after the outlet of the event_handler is fully
-        initialized, but before we call adapt on it.
-        Use this function to do any modication to the outlet
+        initialized, but before we call wait on it.
+        Use this function to do any modification to the outlet
         """
         self._on_outlet_init = fn
         return fn
@@ -708,43 +685,53 @@ class RoutableEventHandler:
         self._health_reporter = fn
         return fn
 
-    def generate_interface(self):
-        """
-        Only safe to call once all the routes are properly declared
-        """
-        for fnname, route in self._routes.items():
-            if not route.name_set:
-                raise ValueError(
-                    f'{fnname}: Name not set, did you forgot to add the decorator `@event_handler.route("<Route name>")` ?'
-                )
-
-            if av.AvOperator.VALUE in route._method.args:
-                if route._method.value_in.tag == av.AvTag.NULL:
-                    raise ValueError(
-                        f"{fnname}: Takes value as parameter but value_in is not set, did you forgot to add the decorator eg. `@event_handler.value_in(<value type>)` ?"
-                    )
-
-        return Interface(
-            self.__class__.__name__,
-            self._version,
-            self._description,
-            [r._method for r in self._routes.values()],
-        )
+    # def generate_interface(self):
+    #     """
+    #     Only safe to call once all the routes are properly declared
+    #     """
+    #     for fnname, route in self._routes.items():
+    #         if not route.name_set:
+    #             raise ValueError(
+    #                 f'{fnname}: Name not set, did you forgot to add the decorator `@event_handler.route("<Route name>")` ?'
+    #             )
+    #
+    #         if av.AvOperator.VALUE in route._event.args:
+    #             if route._event.value_in.tag == av.AvTag.NULL:
+    #                 raise ValueError(
+    #                     f"{fnname}: Takes value as parameter but value_in is not set, did you forgot to add the decorator eg. `@event_handler.value_in(<value type>)` ?"
+    #                 )
+    #
+    #     return Interface(
+    #         self.__class__.__name__,
+    #         self._version,
+    #         self._description,
+    #         [r._event for r in self._routes.values()],
+    #     )
 
     def run(self):
-        self._event_handler.interface = self.generate_interface()
+        #self._event_handler.interface = self.generate_interface()
         self._event_handler.init_outlet()
         if self._on_outlet_init is not None:
             self._on_outlet_init()
         self._event_handler.run()
 
+    def start(self) -> Thread:
+        t = Thread(target=self.run, daemon=True)
+        t.start()
+        return t
+
     def shutdown(self):
         """Will call av.finalize()"""
         self._event_handler.shutdown()
 
-    def invoke_callback(self, args: av.InvokeArgs) -> av.AvValue:
+    def publish_callback(self, args: av.PublishArgs):
+
+        if self._routes == {}:
+            print(f"Warning: No routes declared; received Publish of Args => {args.to_json()}")
+            return
+
         for route in self._routes.values():
-            base = route._method.base
+            base = route._event.base
             if base.method is not None and base.method != args.method:
                 continue
             if base.attribute is not None and base.attribute != args.attribute:
@@ -783,10 +770,10 @@ class RoutableEventHandler:
                 continue
 
             kwargs = {}
-            if "mask" in inspect.signature(route.callback).parameters:
-                kwargs["mask"] = args.mask
+            #if "mask" in inspect.signature(route.callback).parameters:
+            #    kwargs["mask"] = args.mask
 
-            for arg in route._method.args:
+            for arg in route._event.args:
                 match arg:
                     case av.AvOperator.ENTITY:
                         kwargs["entity"] = args.entity
@@ -804,10 +791,14 @@ class RoutableEventHandler:
                         kwargs["value"] = args.value
                     case av.AvOperator.PARAMETER:
                         kwargs["parameter"] = args.parameter
+                    case av.AvOperator.RESULTANT:
+                        kwargs["resultant"] = args.resultant
                     case av.AvOperator.INDEX:
                         kwargs["index"] = args.index
                     case av.AvOperator.INSTANCE:
                         kwargs["instance"] = args.instance
+                    case av.AvOperator.OFFSET:
+                        kwargs["offset"] = args.offset
                     case av.AvOperator.COUNT:
                         kwargs["count"] = args.count
                     case av.AvOperator.ASPECT:
@@ -822,6 +813,10 @@ class RoutableEventHandler:
                         kwargs["event"] = args.event
                     case av.AvOperator.MODE:
                         kwargs["mode"] = args.mode
+                    case av.AvOperator.STATE:
+                        kwargs["state"] = args.state
+                    case av.AvOperator.CONDITION:
+                        kwargs["condition"] = args.condition
                     case av.AvOperator.PRESENCE:
                         kwargs["presence"] = args.presence
                     case av.AvOperator.TIME:
@@ -832,15 +827,15 @@ class RoutableEventHandler:
                         kwargs["auxiliary"] = args.auxiliary
                     case av.AvOperator.ANCILLARY:
                         kwargs["ancillary"] = args.ancillary
-                    case av.AvOperator.AUTHORIZATION:
-                        kwargs["authorization"] = args.authorization
                     case av.AvOperator.AUTHORITY:
                         kwargs["authority"] = args.authority
+                    case av.AvOperator.AUTHORIZATION:
+                        kwargs["authorization"] = args.authorization
 
             start_time = time.time()
             res = route.callback(**kwargs)
             dt = time.time() - start_time
-            avesterra.av_log.info(f"calltimer {route._method.name}: Success in {dt:.3f}s")
+            av_log.info(f"calltimer {route._event.name}: Success in {dt:.3f}s")
             return res
 
         raise SubscriberError(f"No matching route found for request {args=}")
