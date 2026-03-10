@@ -2794,7 +2794,7 @@ def erase_data(
     authorization: AvAuthorization = NULL_AUTHORIZATION
 ) -> None:
     """erase_data(entity, auth"""
-    invoke_entity(entity=entity, method=AvMethod.PURGE, authorization=authorization)
+    invoke_entity(entity=entity, method=AvMethod.ERASE, authorization=authorization)
 
 
 def data_count(

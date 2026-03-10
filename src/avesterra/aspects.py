@@ -480,7 +480,7 @@ def erase(
 ) -> None:
     invoke_entity(
         entity=entity,
-        method=AvMethod.PURGE,
+        method=AvMethod.ERASE,
         aspect=aspect,
         attribute=attribute,
         name=name,
