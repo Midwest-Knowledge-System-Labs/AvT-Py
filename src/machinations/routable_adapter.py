@@ -733,64 +733,67 @@ class RoutableAdapter:
         self._health_reporter = fn
         return fn
 
-    def generate_interface(self):
-        """
-        Only safe to call once all the routes are properly declared
-        """
-
-        import avesterra.objects as objects
-
-
-        model = objects.retrieve_entity(
-            entity=self.outlet,
-            authorization=self.auth
-        )
-
-        # Pull model of adapter
-        model = AvialModel.from_interchange(
-            value=model
-        )
-
-        for fnname, route in self._routes.items():
-            if not route.name_set:
-                raise ValueError(
-                    f'{fnname}: Name not set, did you forgot to add the decorator `@adapter.route("<Route name>")` ?'
-                )
-
-            if not route.value_out_set:
-                raise ValueError(
-                    f"{fnname}: value_out is not set, did you forgot to add the decorator eg. `@adapter.value_out(<value type>)` ?"
-                )
-
-            if av.AvOperator.VALUE in route._method.args:
-                if route._method.value_in.tag == av.AvTag.NULL:
-                    raise ValueError(
-                        f"{fnname}: Takes value as parameter but value_in is not set, did you forgot to add the decorator eg. `@adapter.value_in(<value type>)` ?"
-                    )
-
-            if route.is_control_surface:
-                if model.facts[AvAttribute.METHOD].facets[route._method.name].factors["control_surface"].value == NULL_VALUE:
-                    route._method.control_surface = create_control_surface(
-                        name=route._method.name,
-                        outlet=self.outlet,
-                        auth=self.auth
-                    )
-                else:
-                    route._method.control_surface = model.facts[AvAttribute.METHOD].facets[route._method.name].factors["control_surface"].value.decode_entity()
-
-        return Interface(
-            self.__class__.__name__,
-            self._version,
-            self._description,
-            [r._method for r in self._routes.values()]
-        )
+    # def generate_interface(self):
+    #     """
+    #     Only safe to call once all the routes are properly declared
+    #     """
+    #
+    #     import avesterra.objects as objects
+    #
+    #
+    #     model = objects.retrieve_entity(
+    #         entity=self.outlet,
+    #         authorization=self.auth
+    #     )
+    #
+    #     # Pull model of adapter
+    #     model = AvialModel.from_interchange(
+    #         value=model
+    #     )
+    #
+    #     for fnname, route in self._routes.items():
+    #         if not route.name_set:
+    #             raise ValueError(
+    #                 f'{fnname}: Name not set, did you forgot to add the decorator `@adapter.route("<Route name>")` ?'
+    #             )
+    #
+    #         if not route.value_out_set:
+    #             raise ValueError(
+    #                 f"{fnname}: value_out is not set, did you forgot to add the decorator eg. `@adapter.value_out(<value type>)` ?"
+    #             )
+    #
+    #         if av.AvOperator.VALUE in route._method.args:
+    #             if route._method.value_in.tag == av.AvTag.NULL:
+    #                 raise ValueError(
+    #                     f"{fnname}: Takes value as parameter but value_in is not set, did you forgot to add the decorator eg. `@adapter.value_in(<value type>)` ?"
+    #                 )
+    #
+    #         if route.is_control_surface:
+    #             if model.facts[AvAttribute.METHOD].facets[route._method.name].factors["control_surface"].value == NULL_VALUE:
+    #                 route._method.control_surface = create_control_surface(
+    #                     name=route._method.name,
+    #                     outlet=self.outlet,
+    #                     auth=self.auth
+    #                 )
+    #             else:
+    #                 route._method.control_surface = model.facts[AvAttribute.METHOD].facets[route._method.name].factors["control_surface"].value.decode_entity()
+    #
+    #     return Interface(
+    #         self.__class__.__name__,
+    #         self._version,
+    #         self._description,
+    #         [r._method for r in self._routes.values()]
+    #     )
 
     def run(self):
+
         self._adapter.init_outlet()
-        self._adapter.interface = self.generate_interface()
+        #self._adapter.interface = self.generate_interface()
         self._adapter.setup_outlet()
+        print("TIMMEH")
         if self._on_outlet_init is not None:
             self._on_outlet_init()
+
         self._adapter.run()
 
     def start(self) -> Thread:

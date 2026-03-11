@@ -253,7 +253,6 @@ class Event:
     base: av.AvLocutorOpt
     args: list[str]
     value_in: ValueType = ValueType.null()
-    value_out: ValueType = ValueType.null()
 
 @dataclass
 class Method:

@@ -136,6 +136,7 @@ class Adapter:
         - Call `av.finalize()` from another thread
         - Raise a `BaseException` from the callback
         """
+
         del args, kwargs
         assert (
             not self._stop.is_set()
@@ -148,6 +149,7 @@ class Adapter:
 
         threads = []
         try:
+
             executor = ThreadPoolExecutor(max_workers=self._thread_count)
             av_log.info(f"Adapter: Running with {self._thread_count} thread(s)...")
             for _ in range(self._thread_count):
