@@ -2831,7 +2831,8 @@ AvTaxon = AvTaxa | AvAvesTerran | AvAction | AvAdapter | AvAspect | AvAttribute 
 def taxon(taxon_name, code):
     current_module = sys.modules[__name__]
     try:
-        enum_class = getattr(current_module, taxon_name)
+        _tmp = f"Ax{taxon_name.capitalize()}"
+        enum_class = getattr(current_module, _tmp)
         if issubclass(enum_class, IntEnum):
             return list(enum_class)[code]
         else:

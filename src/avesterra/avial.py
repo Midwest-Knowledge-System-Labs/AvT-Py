@@ -639,7 +639,8 @@ class AvValue:
 
     @staticmethod
     def encode_taxon(taxon: AvTaxon):
-        return AvValue(AvTag.TAXON, json.dumps({"TAXA": taxon.name, "CODE": taxon.value}).encode(ENCODING))
+        return AvValue(AvTag.TAXON, json.dumps({"TAXA": f"{taxon.__class__.__name__.replace("Ax", "").upper()}_TAXA","CODE": taxon.value}).encode(ENCODING))
+
 
 
     def decode(self):
@@ -949,7 +950,8 @@ class AvValue:
 
     def decode_taxon(self) -> AvTaxon:
         _d = json.loads(self._bytes.decode(ENCODING))
-        return taxon(taxon_name=_d["TAXA"], code=int(_d["CODE"]))
+        _d["TAXA"] = _d["TAXA"].replace("_TAXA", "")
+        return taxon(taxon_name=_d["TAXA"], code=_d["CODE"])
 
     def tag(self) -> AvTag:
         return self._tag
