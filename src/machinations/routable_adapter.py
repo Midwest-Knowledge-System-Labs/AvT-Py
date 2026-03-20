@@ -45,7 +45,7 @@ class _RoutableAdapter(Adapter):
             sleep_on_error_seconds=sleep_on_error_seconds
         )
 
-    def run(self, outlet: AvEntity, auth: AvAuthorization, thread_count: int = 1):
+    def run(self):
         super().run()
 
     def on_shutdown(self):
