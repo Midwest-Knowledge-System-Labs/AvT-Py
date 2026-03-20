@@ -27,13 +27,11 @@ from machinations.event_handler import EventHandler
 class _RoutableEventHandler(EventHandler):
     def __init__(
         self,
-        name: str,
         outlet: AvEntity,
-        thread_count: int,
         auth: AvAuthorization,
+        thread_count: int = 1,
         sleep_on_error_seconds: float = 1.0
     ):
-        self.name = name
         self.interface: Interface | None = None
         self._on_shutdown: Callable | None = None
         super().__init__(
@@ -42,9 +40,6 @@ class _RoutableEventHandler(EventHandler):
             thread_count=thread_count,
             sleep_on_error_seconds=sleep_on_error_seconds
         )
-
-    def init_outlet(self):
-        pass
 
     def run(self):
         super().run()
@@ -65,10 +60,7 @@ class OARoute:
 class RoutableEventHandler:
     def __init__(
         self,
-        name: str,
         outlet: AvEntity,
-        version: str,
-        description: str,
         auth: AvAuthorization,
         thread_count: int = 1
     ):
@@ -211,17 +203,12 @@ class RoutableEventHandler:
         routes of the event_handlers will automatically be monitored and updated in
         the event_handler's outlet model.
 
-        :param name: The human-friendly name of the event_handler as it will appear in the interface.
-        :param version: The version of the event_handler as it will appear in the interface. It should follow the semantic versioning standard. (<https://semver.org/>)
-        :param description: A description of the event_handler as it will appear in the interface.
-        :param handling_threads: The number of threads the event_handler will use to handle requests. Default is 1. More thread thread can be used to handle more requests concurrently, but then be careful about concurrency issues. If the event_handler performs CPU-heavy tasks, increasing the number of thread is not useful. If the event_handler takes time to respond without using much CPU (such as waiting for network calls), then increasing the number of thread could increase performance when responding to multiple invokes at the same time.
+        :param thread_count: The number of threads the event_handler will use to handle requests. Default is 1. More thread thread can be used to handle more requests concurrently, but then be careful about concurrency issues. If the event_handler performs CPU-heavy tasks, increasing the number of thread is not useful. If the event_handler takes time to respond without using much CPU (such as waiting for network calls), then increasing the number of thread could increase performance when responding to multiple invokes at the same time.
         """
 
-        self._event_handler = _RoutableEventHandler(name=name, outlet=outlet, thread_count=thread_count, auth=auth)
+        self._event_handler = _RoutableEventHandler(outlet=outlet, thread_count=thread_count, auth=auth)
         self._event_handler.publish_callback = self.publish_callback
         self._routes: dict[str, OARoute] = {}
-        self._version = version
-        self._description = description
         self._on_outlet_init: Callable | None = None
         self.auth = self._event_handler.auth
         self._health_reporter = lambda: "GREEN"
@@ -685,34 +672,7 @@ class RoutableEventHandler:
         self._health_reporter = fn
         return fn
 
-    # def generate_interface(self):
-    #     """
-    #     Only safe to call once all the routes are properly declared
-    #     """
-    #     for fnname, route in self._routes.items():
-    #         if not route.name_set:
-    #             raise ValueError(
-    #                 f'{fnname}: Name not set, did you forgot to add the decorator `@event_handler.route("<Route name>")` ?'
-    #             )
-    #
-    #         if av.AvOperator.VALUE in route._event.args:
-    #             if route._event.value_in.tag == av.AvTag.NULL:
-    #                 raise ValueError(
-    #                     f"{fnname}: Takes value as parameter but value_in is not set, did you forgot to add the decorator eg. `@event_handler.value_in(<value type>)` ?"
-    #                 )
-    #
-    #     return Interface(
-    #         self.__class__.__name__,
-    #         self._version,
-    #         self._description,
-    #         [r._event for r in self._routes.values()],
-    #     )
-
     def run(self):
-        #self._event_handler.interface = self.generate_interface()
-        self._event_handler.init_outlet()
-        if self._on_outlet_init is not None:
-            self._on_outlet_init()
         self._event_handler.run()
 
     def start(self) -> Thread:
@@ -770,8 +730,6 @@ class RoutableEventHandler:
                 continue
 
             kwargs = {}
-            #if "mask" in inspect.signature(route.callback).parameters:
-            #    kwargs["mask"] = args.mask
 
             for arg in route._event.args:
                 match arg:

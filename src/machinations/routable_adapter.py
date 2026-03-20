@@ -9,9 +9,6 @@ If you have any questions, feedback or issues about the Orchestra library, you c
 
 import avesterra
 from avesterra import NULL_VALUE, AuthorizationError, AdapterError
-from avesterra import AvAttribute, AvialModel
-from machinations.control_surface import create_control_surface
-
 
 """
 RoutableAdapter aims at implementing all the standard Orchestra behavior of an
@@ -22,31 +19,25 @@ See documentation of the `RoutableAdapter` class
 import inspect
 import time
 from dataclasses import dataclass
-from typing import Callable, Literal, Dict
+from typing import Callable, Literal
 import avesterra.avial as av
 from avesterra import AvAuthorization, AvEntity
-from orchestra.interface import Interface, Event, ValueType, Method
+from orchestra.interface import Interface, ValueType, Method
 from threading import Thread
 from machinations.adapter import Adapter
 
 class _RoutableAdapter(Adapter):
 
-    _control_surfaces: Dict[str, AvEntity] = {}
-
     def __init__(
         self,
-        name: str,
         outlet: AvEntity,
         thread_count: int,
         auth: AvAuthorization,
-        sleep_on_error_seconds: float = 1.0,
-        self_connect: bool = True
+        sleep_on_error_seconds: float = 1.0
     ):
 
-        self.name = name
         self.interface: Interface | None = None
         self._on_shutdown: Callable | None = None
-        self.self_connect = self_connect
         super().__init__(
             outlet=outlet,
             auth=auth,
@@ -54,23 +45,7 @@ class _RoutableAdapter(Adapter):
             sleep_on_error_seconds=sleep_on_error_seconds
         )
 
-    def init_outlet(self):
-        pass
-
-    def setup_outlet(self):
-        # assert self.interface is not None, "Interface not set"
-        # av.exclude_fact(self.outlet, av.AvAttribute.METHOD, authorization=self.auth)
-        # av.store_entity(
-        #     self.outlet,
-        #     av.AvMode.INTERCHANGE,
-        #     self.interface.to_avialmodel().to_interchange(),
-        #     0,
-        #     self.auth,
-        # )
-        # avesterra.av_log.success("Successfully stored interface in outlet")
-        pass
-
-    def run(self):
+    def run(self, outlet: AvEntity, auth: AvAuthorization, thread_count: int = 1):
         super().run()
 
     def on_shutdown(self):
@@ -92,12 +67,8 @@ class RoutableAdapter:
 
     def __init__(
         self,
-        name: str,
         outlet: AvEntity,
-        version: str,
-        description: str,
         auth: AvAuthorization,
-        self_connect: bool = True,
         thread_count: int = 1
     ):
         """
@@ -239,19 +210,13 @@ class RoutableAdapter:
         routes of the adapters will automatically be monitored and updated in
         the adapter's outlet model.
 
-        :param name: The human-friendly name of the adapter as it will appear in the interface.
         :param outlet: The outlet that the adapter will adapt on.
-        :param version: The version of the adapter as it will appear in the interface. It should follow the semantic versioning standard. (<https://semver.org/>)
-        :param description: A description of the adapter as it will appear in the interface.
         :param thread_count: The number of threads the adapter will use to handle requests. Default is 1. More thread thread can be used to handle more requests concurrently, but then be careful about concurrency issues. If the adapter performs CPU-heavy tasks, increasing the number of thread is not useful. If the adapter takes time to respond without using much CPU (such as waiting for network calls), then increasing the number of thread could increase performance when responding to multiple invokes at the same time.
-        :param self_connect: If true, the outlet created to support the adapter will be self connected; default is True
         """
 
-        self._adapter = _RoutableAdapter(name=name, outlet=outlet, thread_count=thread_count, self_connect=self_connect, auth=auth)
+        self._adapter = _RoutableAdapter(outlet=outlet, thread_count=thread_count, auth=auth)
         self._adapter.invoke_callback = self.invoke_callback
         self._routes: dict[str, OARoute] = {}
-        self._version = version
-        self._description = description
         self._on_outlet_init: Callable | None = None
         self.auth = self._adapter.auth
         self._health_reporter = lambda: "GREEN"
@@ -733,67 +698,9 @@ class RoutableAdapter:
         self._health_reporter = fn
         return fn
 
-    # def generate_interface(self):
-    #     """
-    #     Only safe to call once all the routes are properly declared
-    #     """
-    #
-    #     import avesterra.objects as objects
-    #
-    #
-    #     model = objects.retrieve_entity(
-    #         entity=self.outlet,
-    #         authorization=self.auth
-    #     )
-    #
-    #     # Pull model of adapter
-    #     model = AvialModel.from_interchange(
-    #         value=model
-    #     )
-    #
-    #     for fnname, route in self._routes.items():
-    #         if not route.name_set:
-    #             raise ValueError(
-    #                 f'{fnname}: Name not set, did you forgot to add the decorator `@adapter.route("<Route name>")` ?'
-    #             )
-    #
-    #         if not route.value_out_set:
-    #             raise ValueError(
-    #                 f"{fnname}: value_out is not set, did you forgot to add the decorator eg. `@adapter.value_out(<value type>)` ?"
-    #             )
-    #
-    #         if av.AvOperator.VALUE in route._method.args:
-    #             if route._method.value_in.tag == av.AvTag.NULL:
-    #                 raise ValueError(
-    #                     f"{fnname}: Takes value as parameter but value_in is not set, did you forgot to add the decorator eg. `@adapter.value_in(<value type>)` ?"
-    #                 )
-    #
-    #         if route.is_control_surface:
-    #             if model.facts[AvAttribute.METHOD].facets[route._method.name].factors["control_surface"].value == NULL_VALUE:
-    #                 route._method.control_surface = create_control_surface(
-    #                     name=route._method.name,
-    #                     outlet=self.outlet,
-    #                     auth=self.auth
-    #                 )
-    #             else:
-    #                 route._method.control_surface = model.facts[AvAttribute.METHOD].facets[route._method.name].factors["control_surface"].value.decode_entity()
-    #
-    #     return Interface(
-    #         self.__class__.__name__,
-    #         self._version,
-    #         self._description,
-    #         [r._method for r in self._routes.values()]
-    #     )
-
     def run(self):
-
-        self._adapter.init_outlet()
-        #self._adapter.interface = self.generate_interface()
-        self._adapter.setup_outlet()
-        print("TIMMEH")
         if self._on_outlet_init is not None:
             self._on_outlet_init()
-
         self._adapter.run()
 
     def start(self) -> Thread:
