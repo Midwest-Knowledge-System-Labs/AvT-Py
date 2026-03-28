@@ -362,9 +362,7 @@ class Property:
         p.value = av.AvValue.from_json(li[2])
 
         if len(li) > 3:
-
             p.annotations =  AnnotationList.from_json_list(li[3])
-
         return p
 
     def to_json_list(self):
@@ -373,10 +371,7 @@ class Property:
         li.append(self.key)
         li.append(self.value.obj())
         if self.annotations:
-            d = {}
-            for annotation in self.annotations:
-                d[annotation.attribute.name + "_ATTRIBUTE"] = annotation.value.obj()
-            li.append(d)
+           li.append(self.annotations.to_json_list())
         return li
 
 
