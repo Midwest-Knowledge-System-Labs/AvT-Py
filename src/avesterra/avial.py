@@ -1108,6 +1108,7 @@ NULL_VALUE = AvValue(AvTag.NULL, b"")
 
 def initialize(
     server: str = "",
+    port: int = 20057,
     directory: str = "",
     socket_count: int = 16,
     max_timeout: AvTimeout = 360,
@@ -1115,6 +1116,7 @@ def initialize(
     """Start an AvesTerra session."""
     api.initialize(
         server=server,
+        port=port,
         directory=directory,
         socket_count=socket_count,
         max_timeout=max_timeout,

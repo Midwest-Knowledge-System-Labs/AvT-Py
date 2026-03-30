@@ -179,8 +179,6 @@ class HGTPException(IntEnum):
     FILE = 16
 
 
-PORT = 20057
-
 MESSAGE_SIZE_LIMIT_IN_BYTES = 1_048_575
 
 class HGTPFrame:
@@ -461,9 +459,10 @@ class HGTPFrame:
 
 
 def initialize(
-    server: str, directory: str, socket_count: int = 16, max_timeout: int = 360
+    server: str, port: int, directory: str, socket_count: int = 16, max_timeout: int = 360
 ):
     # Allocate esources to communicate with AvesTerra server
+    global PORT
     global _socket_pool
     # global _address
     # To do: check whether existing _socket_pool points to same server
@@ -482,6 +481,15 @@ def initialize(
         # convert the IP address of the local host into an int
         # should replace with convert_IP_address_to_int()
         server = "localhost"
+
+    if isinstance(port, int):
+        if port > 0 and port < 65536:
+            PORT = port
+        else:
+            raise ValueError("Port must be between 1 and 65535")
+    else:
+        raise ValueError("Port must be an integer")
+
 
     # If socket pool is not alive or is not defined, define it
     if not socket_pool_alive:

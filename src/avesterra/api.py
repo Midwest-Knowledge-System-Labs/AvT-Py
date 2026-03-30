@@ -57,6 +57,7 @@ socket_max = 16
 
 def initialize(
     server: str = "",
+    port: int = 20057,
     directory: str = "",
     socket_count: int = 16,
     max_timeout: int = 360,
@@ -65,6 +66,7 @@ def initialize(
     socket_max = socket_count
     hgtp.initialize(
         server=server,
+        port=port,
         directory=directory,
         socket_count=socket_count,
         max_timeout=max_timeout,
