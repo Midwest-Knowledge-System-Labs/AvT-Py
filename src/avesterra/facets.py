@@ -20,7 +20,7 @@ def insert_facet(
     attribute: AvAttribute = NULL_ATTRIBUTE,
     name: AvName = NULL_NAME,
     value: AvValue = NULL_VALUE,
-    index: AvIndex = NULL_INDEX,
+    offset: AvOffset = NULL_INDEX,
     instance: AvInstance = NULL_INSTANCE,
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
@@ -40,7 +40,7 @@ def insert_facet(
         Name of the facet to insert
     value : AvValue
         Value to be associated with the facet
-    index : AvIndex
+    offset : AvOffset
         Position at which to insert the facet
     instance : AvInstance
         Instance (fact index) containing the facet
@@ -65,7 +65,7 @@ def insert_facet(
         attribute=attribute,
         name=name,
         value=value,
-        index=index,
+        offset=offset,
         instance=instance,
         parameter=parameter,
         authorization=authorization,
@@ -75,7 +75,7 @@ def insert_facet(
 def remove_facet(
     entity: AvEntity,
     attribute: AvAttribute = NULL_ATTRIBUTE,
-    index: AvIndex = NULL_INDEX,
+    offset: AvOffset = NULL_INDEX,
     instance: AvInstance = NULL_INSTANCE,
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
@@ -88,7 +88,7 @@ def remove_facet(
         Target entity euid
     attribute : AvAttribute
         Attribute of the fact containing the facet
-    index : AvIndex
+    offset : AvOffset
         Position of the facet to remove
     instance : AvInstance
         Instance (fact index) containing the facet
@@ -111,7 +111,7 @@ def remove_facet(
         entity=entity,
         aspect=AvAspect.FACET,
         attribute=attribute,
-        index=index,
+        offset=offset,
         instance=instance,
         parameter=parameter,
         authorization=authorization,
@@ -123,7 +123,7 @@ def replace_facet(
     attribute: AvAttribute = NULL_ATTRIBUTE,
     name: AvName = NULL_NAME,
     value: AvValue = NULL_VALUE,
-    index: AvIndex = NULL_INDEX,
+    offset: AvOffset = NULL_INDEX,
     instance: AvInstance = NULL_INSTANCE,
     parameter: AvParameter = NULL_PARAMETER,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
@@ -140,7 +140,7 @@ def replace_facet(
         New name for the facet
     value : AvValue
         New value for the facet
-    index : AvIndex
+    offset : AvOffset
         Position of the facet to replace
     instance : AvInstance
         Instance (fact index) containing the facet
@@ -165,7 +165,7 @@ def replace_facet(
         attribute=attribute,
         name=name,
         value=value,
-        index=index,
+        offset=offset,
         instance=instance,
         parameter=parameter,
         authorization=authorization,
@@ -176,10 +176,10 @@ def find_facet(
     entity: AvEntity,
     attribute: AvAttribute = NULL_ATTRIBUTE,
     value: AvValue = NULL_VALUE,
-    index: AvIndex = NULL_INDEX,
+    offset: AvOffset = NULL_INDEX,
     instance: AvInstance = NULL_INSTANCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
-) -> AvIndex:
+) -> AvOffset:
     """Find the index of a facet with the specified value in a fact's facet list
 
     Parameters
@@ -190,7 +190,7 @@ def find_facet(
         Attribute of the fact containing the facet
     value : AvValue
         Value to search for
-    index : AvIndex
+    offset : AvOffset
         Index to start searching from (front-to-back)
     instance : AvInstance
         Instance (fact index) containing the facet
@@ -199,7 +199,7 @@ def find_facet(
 
     Returns
     _______
-    AvIndex
+    AvOffset
         Index of the facet with matching value, or 0 if not found
 
     Examples
@@ -226,7 +226,7 @@ def find_facet(
         aspect=AvAspect.FACET,
         attribute=attribute,
         value=value,
-        index=index,
+        offset=offset,
         instance=instance,
         authorization=authorization,
     )
@@ -576,7 +576,7 @@ def facet_member(
 def facet_name(
     entity: AvEntity,
     attribute: AvAttribute = NULL_ATTRIBUTE,
-    index: AvIndex = NULL_INDEX,
+    offset: AvOffset = NULL_INDEX,
     instance: AvInstance = NULL_INSTANCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvName:
@@ -588,7 +588,7 @@ def facet_name(
         Target entity euid
     attribute : AvAttribute
         Attribute of the fact containing the facet
-    index : AvIndex
+    offset : AvOffset
         Index of the facet to get the name from
     instance : AvInstance
         Instance (fact index) containing the facet
@@ -615,7 +615,7 @@ def facet_name(
         entity=entity,
         aspect=AvAspect.FACET,
         attribute=attribute,
-        index=index,
+        offset=offset,
         instance=instance,
         authorization=authorization,
     )
@@ -625,7 +625,7 @@ def facet_key(
     entity: AvEntity,
     attribute: AvAttribute = NULL_ATTRIBUTE,
     name: AvName = NULL_NAME,
-    index: AvIndex = NULL_INDEX,
+    offset: AvOffset = NULL_INDEX,
     instance: AvInstance = NULL_INSTANCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvKey:
@@ -639,7 +639,7 @@ def facet_key(
         Attribute of the fact containing the facet
     name : AvName
         Name of the facet to get the key from
-    index : AvIndex
+    offset : AvOffset
         Index of the facet to get the key from
     instance : AvInstance
         Instance (fact index) containing the facet
@@ -667,7 +667,7 @@ def facet_key(
         aspect=AvAspect.FACET,
         attribute=attribute,
         name=name,
-        index=index,
+        offset=offset,
         instance=instance,
         authorization=authorization,
     )
@@ -677,7 +677,7 @@ def facet_value(
     entity: AvEntity,
     attribute: AvAttribute = NULL_ATTRIBUTE,
     name: AvName = NULL_NAME,
-    index: AvIndex = NULL_INDEX,
+    offset: AvOffset = NULL_INDEX,
     instance: AvInstance = NULL_INSTANCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvValue:
@@ -691,7 +691,7 @@ def facet_value(
         Attribute of the fact containing the facet
     name : AvName
         Name of the facet to get the value from
-    index : AvIndex
+    offset : AvOffset
         Index of the facet to get the value from
     instance : AvInstance
         Instance (fact index) containing the facet
@@ -726,7 +726,7 @@ def facet_value(
         aspect=AvAspect.FACET,
         attribute=attribute,
         name=name,
-        index=index,
+        offset=offset,
         instance=instance,
         authorization=authorization,
     )
@@ -738,7 +738,7 @@ def facet_index(
     name: AvName = NULL_NAME,
     instance: AvInstance = NULL_INSTANCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
-) -> AvIndex:
+) -> AvOffset:
     """Get the index of a facet by name in a fact's facet list
 
     Parameters
@@ -756,7 +756,7 @@ def facet_index(
 
     Returns
     _______
-    AvIndex
+    AvOffset
         Index of the specified facet, or 0 if not found
 
     Examples
@@ -783,7 +783,7 @@ def facet_index(
 def facet_attribute(
     entity: AvEntity,
     name: AvName = NULL_NAME,
-    index: AvIndex = NULL_INDEX,
+    offset: AvOffset = NULL_INDEX,
     instance: AvInstance = NULL_INSTANCE,
     authorization: AvAuthorization = NULL_AUTHORIZATION,
 ) -> AvAttribute:
@@ -795,7 +795,7 @@ def facet_attribute(
         Target entity euid
     name : AvName
         Name of the facet to get the attribute for
-    index : AvIndex
+    offset : AvOffset
         Index of the facet to get the attribute for
     instance : AvInstance
         Instance (fact index) containing the facet
@@ -822,7 +822,7 @@ def facet_attribute(
         entity=entity,
         aspect=AvAspect.FACET,
         name=name,
-        index=index,
+        offset=offset,
         instance=instance,
         authorization=authorization,
     )
